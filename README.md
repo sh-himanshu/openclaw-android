@@ -1,5 +1,7 @@
 # OpenClaw Lite Android
 
+> **This project is under development and does not work yet.**
+
 Run [OpenClaw](https://github.com/openclaw) on Android using Termux — **without proot-distro**.
 
 > [한국어](README.ko.md)

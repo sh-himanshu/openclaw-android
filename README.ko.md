@@ -1,5 +1,7 @@
 # OpenClaw Lite Android
 
+> **이 프로젝트는 개발 중이며 아직 작동하지 않습니다.**
+
 [OpenClaw](https://github.com/openclaw)를 Android Termux에서 실행 — **proot-distro 없이**.
 
 > [English](README.md)
