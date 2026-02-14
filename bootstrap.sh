@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# bootstrap.sh - Download and run OpenClaw Lite Android installer
-# Usage: curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-lite-android/main/bootstrap.sh | bash
+# bootstrap.sh - Download and run OpenClaw for Android installer
+# Usage: curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/bootstrap.sh | bash
 set -euo pipefail
 
-REPO_BASE="https://raw.githubusercontent.com/AidanPark/openclaw-lite-android/main"
-INSTALL_DIR="$HOME/.openclaw-lite/installer"
+REPO_BASE="https://raw.githubusercontent.com/AidanPark/openclaw-android/main"
+INSTALL_DIR="$HOME/.openclaw-android/installer"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -12,7 +12,7 @@ BOLD='\033[1m'
 NC='\033[0m'
 
 echo ""
-echo -e "${BOLD}OpenClaw Lite Android - Bootstrap${NC}"
+echo -e "${BOLD}OpenClaw for Android - Bootstrap${NC}"
 echo ""
 
 # Ensure curl is available
@@ -68,8 +68,8 @@ echo ""
 bash "$INSTALL_DIR/install.sh"
 
 # Keep uninstall.sh accessible, clean up the rest
-cp "$INSTALL_DIR/uninstall.sh" "$HOME/.openclaw-lite/uninstall.sh"
-chmod +x "$HOME/.openclaw-lite/uninstall.sh"
+cp "$INSTALL_DIR/uninstall.sh" "$HOME/.openclaw-android/uninstall.sh"
+chmod +x "$HOME/.openclaw-android/uninstall.sh"
 rm -rf "$INSTALL_DIR"
 
-echo "Uninstaller saved at: ~/.openclaw-lite/uninstall.sh"
+echo "Uninstaller saved at: ~/.openclaw-android/uninstall.sh"

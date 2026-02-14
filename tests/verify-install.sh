@@ -26,7 +26,7 @@ check_warn() {
     WARN=$((WARN + 1))
 }
 
-echo "=== OpenClaw Lite - Installation Verification ==="
+echo "=== OpenClaw for Android - Installation Verification ==="
 echo ""
 
 # 1. Node.js version
@@ -81,7 +81,7 @@ else
 fi
 
 # 5. Patch files
-COMPAT_FILE="$HOME/.openclaw-lite/patches/bionic-compat.js"
+COMPAT_FILE="$HOME/.openclaw-android/patches/bionic-compat.js"
 if [ -f "$COMPAT_FILE" ]; then
     check_pass "bionic-compat.js exists"
 else
@@ -89,7 +89,7 @@ else
 fi
 
 # 6. Directories
-for DIR in "$HOME/.openclaw-lite" "$HOME/.openclaw" "$PREFIX/tmp"; do
+for DIR in "$HOME/.openclaw-android" "$HOME/.openclaw" "$PREFIX/tmp"; do
     if [ -d "$DIR" ]; then
         check_pass "Directory $DIR exists"
     else
@@ -98,7 +98,7 @@ for DIR in "$HOME/.openclaw-lite" "$HOME/.openclaw" "$PREFIX/tmp"; do
 done
 
 # 7. .bashrc contains env block
-if grep -qF "OpenClaw Lite Android" "$HOME/.bashrc" 2>/dev/null; then
+if grep -qF "OpenClaw for Android" "$HOME/.bashrc" 2>/dev/null; then
     check_pass ".bashrc contains environment block"
 else
     check_fail ".bashrc missing environment block"

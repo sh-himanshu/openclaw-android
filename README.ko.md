@@ -1,10 +1,10 @@
-# OpenClaw Lite Android
+# OpenClaw for Android
 
 [OpenClaw](https://github.com/openclaw)를 Android Termux에서 실행 — **proot-distro 없이**.
 
 ## 왜 만들었나?
 
-기존 방식으로 Android에서 OpenClaw를 실행하려면 proot-distro로 Ubuntu를 설치해야 하고, 700MB~1GB의 저장공간이 필요합니다. OpenClaw Lite Android는 호환성 문제를 직접 패치하여 순수 Termux 환경에서 OpenClaw를 실행할 수 있게 합니다.
+기존 방식으로 Android에서 OpenClaw를 실행하려면 proot-distro로 Ubuntu를 설치해야 하고, 700MB~1GB의 저장공간이 필요합니다. OpenClaw for Android는 호환성 문제를 직접 패치하여 순수 Termux 환경에서 OpenClaw를 실행할 수 있게 합니다.
 
 | | 기존 방식 (proot-distro) | Lite (이 프로젝트) |
 |---|---|---|
@@ -94,7 +94,7 @@ termux-wake-lock
 (컴퓨터에서 SSH로 접속하면 명령어 입력이 훨씬 수월합니다. [Termux SSH 접속 가이드](docs/termux-ssh-guide.ko.md)를 참고하세요.)
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-lite-android/main/bootstrap.sh | bash
+curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/bootstrap.sh | bash
 ```
 
 설치는 3~10분 정도 소요됩니다 (네트워크 속도와 기기 성능에 따라 다름). 설치 과정에서 패키지 다운로드, 컴파일이 진행되므로 Wi-Fi 환경을 권장합니다.
@@ -180,7 +180,7 @@ openclaw gateway
 ## 프로젝트 구조
 
 ```
-openclaw-lite-android/
+openclaw-android/
 ├── install.sh                  # 원클릭 설치 스크립트 (진입점)
 ├── uninstall.sh                # 깔끔한 제거
 ├── patches/
@@ -235,7 +235,7 @@ OpenClaw 빌드 및 실행에 필요한 Termux 패키지를 설치합니다.
 Termux에서 필요한 디렉토리 구조를 생성합니다.
 
 - `$PREFIX/tmp/openclaw` — OpenClaw 전용 임시 디렉토리 (`/tmp` 대체)
-- `$HOME/.openclaw-lite/patches` — 패치 파일 저장 위치
+- `$HOME/.openclaw-android/patches` — 패치 파일 저장 위치
 - `$HOME/.openclaw` — OpenClaw 데이터 디렉토리
 - 표준 Linux 경로(`/bin/sh`, `/usr/bin/env`, `/tmp`)가 Termux의 `$PREFIX` 하위 경로로 매핑되는 현황을 표시
 
@@ -243,7 +243,7 @@ Termux에서 필요한 디렉토리 구조를 생성합니다.
 
 `~/.bashrc`에 환경변수 블록을 추가합니다.
 
-- `# >>> OpenClaw Lite Android >>>` / `# <<< OpenClaw Lite Android <<<` 마커로 블록을 감싸서 관리
+- `# >>> OpenClaw for Android >>>` / `# <<< OpenClaw for Android <<<` 마커로 블록을 감싸서 관리
 - 이미 블록이 존재하면 기존 블록을 제거하고 새로 추가 (중복 방지)
 - 설정되는 환경변수:
   - `TMPDIR=$PREFIX/tmp` — `/tmp` 대신 Termux 임시 디렉토리 사용
@@ -255,7 +255,7 @@ Termux에서 필요한 디렉토리 구조를 생성합니다.
 
 OpenClaw을 글로벌로 설치하고 Termux 호환 패치를 적용합니다.
 
-1. `bionic-compat.js`를 `~/.openclaw-lite/patches/`에 복사 (npm install 과정에서도 필요)
+1. `bionic-compat.js`를 `~/.openclaw-android/patches/`에 복사 (npm install 과정에서도 필요)
 2. `npm install -g openclaw@latest` 실행
 3. `patches/apply-patches.sh`가 패치를 일괄 적용:
    - `bionic-compat.js` 최종 복사 확인
@@ -264,7 +264,7 @@ OpenClaw을 글로벌로 설치하고 Termux 호환 패치를 적용합니다.
      - `"/bin/sh"` → `"$PREFIX/bin/sh"`
      - `"/bin/bash"` → `"$PREFIX/bin/bash"`
      - `"/usr/bin/env"` → `"$PREFIX/bin/env"`
-   - 패치 결과를 `~/.openclaw-lite/patch.log`에 기록
+   - 패치 결과를 `~/.openclaw-android/patch.log`에 기록
 
 ### [6/6] 설치 검증 — `tests/verify-install.sh`
 
@@ -278,8 +278,8 @@ OpenClaw을 글로벌로 설치하고 Termux 호환 패치를 적용합니다.
 | TMPDIR | 환경변수 설정됨 |
 | NODE_OPTIONS | 환경변수 설정됨 |
 | CONTAINER | `1`로 설정됨 |
-| bionic-compat.js | `~/.openclaw-lite/patches/`에 파일 존재 |
-| 디렉토리 | `~/.openclaw-lite`, `~/.openclaw`, `$PREFIX/tmp` 존재 |
+| bionic-compat.js | `~/.openclaw-android/patches/`에 파일 존재 |
+| 디렉토리 | `~/.openclaw-android`, `~/.openclaw`, `$PREFIX/tmp` 존재 |
 | .bashrc | 환경변수 블록 포함 |
 
 모든 항목 통과 시 PASSED, 하나라도 실패 시 FAILED를 출력하고 재설치를 안내합니다.

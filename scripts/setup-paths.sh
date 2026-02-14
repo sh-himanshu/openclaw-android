@@ -13,9 +13,9 @@ echo ""
 mkdir -p "$PREFIX/tmp/openclaw"
 echo -e "${GREEN}[OK]${NC}   Created $PREFIX/tmp/openclaw"
 
-# Create openclaw-lite config directory
-mkdir -p "$HOME/.openclaw-lite/patches"
-echo -e "${GREEN}[OK]${NC}   Created $HOME/.openclaw-lite/patches"
+# Create openclaw-android config directory
+mkdir -p "$HOME/.openclaw-android/patches"
+echo -e "${GREEN}[OK]${NC}   Created $HOME/.openclaw-android/patches"
 
 # Create openclaw data directory
 mkdir -p "$HOME/.openclaw"

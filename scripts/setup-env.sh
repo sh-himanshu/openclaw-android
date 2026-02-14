@@ -10,10 +10,10 @@ echo "=== Setting Up Environment Variables ==="
 echo ""
 
 BASHRC="$HOME/.bashrc"
-MARKER_START="# >>> OpenClaw Lite Android >>>"
-MARKER_END="# <<< OpenClaw Lite Android <<<"
+MARKER_START="# >>> OpenClaw for Android >>>"
+MARKER_END="# <<< OpenClaw for Android <<<"
 
-COMPAT_PATH="$HOME/.openclaw-lite/patches/bionic-compat.js"
+COMPAT_PATH="$HOME/.openclaw-android/patches/bionic-compat.js"
 
 ENV_BLOCK="${MARKER_START}
 export TMPDIR=\"\$PREFIX/tmp\"

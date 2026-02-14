@@ -7,8 +7,8 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PATCH_DEST="$HOME/.openclaw-lite/patches"
-LOG_FILE="$HOME/.openclaw-lite/patch.log"
+PATCH_DEST="$HOME/.openclaw-android/patches"
+LOG_FILE="$HOME/.openclaw-android/patch.log"
 
 echo "=== Applying Patches ==="
 echo ""

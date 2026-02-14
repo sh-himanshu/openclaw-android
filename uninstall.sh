@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# uninstall.sh - Remove OpenClaw Lite from Termux
+# uninstall.sh - Remove OpenClaw for Android from Termux
 set -euo pipefail
 
 RED='\033[0;31m'
@@ -10,7 +10,7 @@ NC='\033[0m'
 
 echo ""
 echo -e "${BOLD}========================================${NC}"
-echo -e "${BOLD}  OpenClaw Lite - Uninstaller${NC}"
+echo -e "${BOLD}  OpenClaw for Android - Uninstaller${NC}"
 echo -e "${BOLD}========================================${NC}"
 echo ""
 
@@ -32,18 +32,18 @@ else
     echo -e "${YELLOW}[SKIP]${NC} openclaw not installed"
 fi
 
-# 2. Remove openclaw-lite directory
-if [ -d "$HOME/.openclaw-lite" ]; then
-    rm -rf "$HOME/.openclaw-lite"
-    echo -e "${GREEN}[OK]${NC}   Removed $HOME/.openclaw-lite"
+# 2. Remove openclaw-android directory
+if [ -d "$HOME/.openclaw-android" ]; then
+    rm -rf "$HOME/.openclaw-android"
+    echo -e "${GREEN}[OK]${NC}   Removed $HOME/.openclaw-android"
 else
-    echo -e "${YELLOW}[SKIP]${NC} $HOME/.openclaw-lite not found"
+    echo -e "${YELLOW}[SKIP]${NC} $HOME/.openclaw-android not found"
 fi
 
 # 3. Remove environment block from .bashrc
 BASHRC="$HOME/.bashrc"
-MARKER_START="# >>> OpenClaw Lite Android >>>"
-MARKER_END="# <<< OpenClaw Lite Android <<<"
+MARKER_START="# >>> OpenClaw for Android >>>"
+MARKER_END="# <<< OpenClaw for Android <<<"
 
 if [ -f "$BASHRC" ] && grep -qF "$MARKER_START" "$BASHRC"; then
     sed -i "/${MARKER_START//\//\\/}/,/${MARKER_END//\//\\/}/d" "$BASHRC"

@@ -1,10 +1,10 @@
-# OpenClaw Lite Android
+# OpenClaw for Android
 
 Run [OpenClaw](https://github.com/openclaw) on Android using Termux — **without proot-distro**.
 
 ## Why?
 
-The standard approach to running OpenClaw on Android requires installing proot-distro with Ubuntu, adding 700MB-1GB of overhead. OpenClaw Lite Android eliminates this by patching compatibility issues directly, letting you run OpenClaw in pure Termux.
+The standard approach to running OpenClaw on Android requires installing proot-distro with Ubuntu, adding 700MB-1GB of overhead. OpenClaw for Android eliminates this by patching compatibility issues directly, letting you run OpenClaw in pure Termux.
 
 | | Standard (proot-distro) | Lite (this project) |
 |---|---|---|
@@ -94,7 +94,7 @@ This pins a notification and prevents Android from killing the Termux process.
 (Typing commands is much easier via SSH from a computer. See the [Termux SSH Setup Guide](docs/termux-ssh-guide.md) for details.)
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-lite-android/main/bootstrap.sh | bash
+curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/bootstrap.sh | bash
 ```
 
 This takes 3–10 minutes depending on network speed and device. Package downloads and compilation will occur, so Wi-Fi is recommended.
@@ -180,7 +180,7 @@ However, once the gateway is running, the Node.js process stays in memory with n
 ## Project Structure
 
 ```
-openclaw-lite-android/
+openclaw-android/
 ├── install.sh                  # One-click installer (entry point)
 ├── uninstall.sh                # Clean removal
 ├── patches/
@@ -235,7 +235,7 @@ Installs Termux packages required for building and running OpenClaw.
 Creates the directory structure needed for Termux.
 
 - `$PREFIX/tmp/openclaw` — OpenClaw temp directory (replaces `/tmp`)
-- `$HOME/.openclaw-lite/patches` — Patch file storage location
+- `$HOME/.openclaw-android/patches` — Patch file storage location
 - `$HOME/.openclaw` — OpenClaw data directory
 - Displays how standard Linux paths (`/bin/sh`, `/usr/bin/env`, `/tmp`) map to Termux's `$PREFIX` subdirectories
 
@@ -243,7 +243,7 @@ Creates the directory structure needed for Termux.
 
 Adds an environment variable block to `~/.bashrc`.
 
-- Wraps the block with `# >>> OpenClaw Lite Android >>>` / `# <<< OpenClaw Lite Android <<<` markers for management
+- Wraps the block with `# >>> OpenClaw for Android >>>` / `# <<< OpenClaw for Android <<<` markers for management
 - If the block already exists, removes the old one and adds a fresh one (prevents duplicates)
 - Environment variables set:
   - `TMPDIR=$PREFIX/tmp` — Use Termux temp directory instead of `/tmp`
@@ -255,7 +255,7 @@ Adds an environment variable block to `~/.bashrc`.
 
 Installs OpenClaw globally and applies Termux compatibility patches.
 
-1. Copies `bionic-compat.js` to `~/.openclaw-lite/patches/` (needed during npm install as well)
+1. Copies `bionic-compat.js` to `~/.openclaw-android/patches/` (needed during npm install as well)
 2. Runs `npm install -g openclaw@latest`
 3. `patches/apply-patches.sh` applies all patches:
    - Verifies `bionic-compat.js` final copy
@@ -264,7 +264,7 @@ Installs OpenClaw globally and applies Termux compatibility patches.
      - `"/bin/sh"` → `"$PREFIX/bin/sh"`
      - `"/bin/bash"` → `"$PREFIX/bin/bash"`
      - `"/usr/bin/env"` → `"$PREFIX/bin/env"`
-   - Logs patch results to `~/.openclaw-lite/patch.log`
+   - Logs patch results to `~/.openclaw-android/patch.log`
 
 ### [6/6] Installation Verification — `tests/verify-install.sh`
 
@@ -278,8 +278,8 @@ Checks 7 items to confirm installation completed successfully.
 | TMPDIR | Environment variable is set |
 | NODE_OPTIONS | Environment variable is set |
 | CONTAINER | Set to `1` |
-| bionic-compat.js | File exists in `~/.openclaw-lite/patches/` |
-| Directories | `~/.openclaw-lite`, `~/.openclaw`, `$PREFIX/tmp` exist |
+| bionic-compat.js | File exists in `~/.openclaw-android/patches/` |
+| Directories | `~/.openclaw-android`, `~/.openclaw`, `$PREFIX/tmp` exist |
 | .bashrc | Contains environment variable block |
 
 All items pass → PASSED. Any failure → FAILED with reinstall instructions.

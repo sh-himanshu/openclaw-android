@@ -13,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo ""
 echo -e "${BOLD}========================================${NC}"
-echo -e "${BOLD}  OpenClaw Lite - Android Installer${NC}"
+echo -e "${BOLD}  OpenClaw for Android - Installer${NC}"
 echo -e "${BOLD}========================================${NC}"
 echo ""
 echo "This script installs OpenClaw on Termux without proot-distro."
@@ -45,7 +45,7 @@ bash "$SCRIPT_DIR/scripts/setup-env.sh"
 export TMPDIR="$PREFIX/tmp"
 export TMP="$TMPDIR"
 export TEMP="$TMPDIR"
-export NODE_OPTIONS="-r $HOME/.openclaw-lite/patches/bionic-compat.js ${NODE_OPTIONS:-}"
+export NODE_OPTIONS="-r $HOME/.openclaw-android/patches/bionic-compat.js ${NODE_OPTIONS:-}"
 export CONTAINER=1
 
 # ─────────────────────────────────────────────
@@ -53,8 +53,8 @@ step 5 "Installing OpenClaw"
 
 # Apply bionic-compat.js first (needed for npm install)
 echo "Copying compatibility patches..."
-mkdir -p "$HOME/.openclaw-lite/patches"
-cp "$SCRIPT_DIR/patches/bionic-compat.js" "$HOME/.openclaw-lite/patches/bionic-compat.js"
+mkdir -p "$HOME/.openclaw-android/patches"
+cp "$SCRIPT_DIR/patches/bionic-compat.js" "$HOME/.openclaw-android/patches/bionic-compat.js"
 echo -e "${GREEN}[OK]${NC}   bionic-compat.js installed"
 
 echo ""

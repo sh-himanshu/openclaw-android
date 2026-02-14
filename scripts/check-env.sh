@@ -9,7 +9,7 @@ NC='\033[0m'
 
 ERRORS=0
 
-echo "=== OpenClaw Lite - Environment Check ==="
+echo "=== OpenClaw for Android - Environment Check ==="
 echo ""
 
 # 1. Check if running in Termux
