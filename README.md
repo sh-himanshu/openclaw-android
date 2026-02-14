@@ -2,7 +2,7 @@
 
 <img src="docs/images/openclaw_android.jpg" alt="OpenClaw for Android">
 
-Run [OpenClaw](https://github.com/openclaw) on Android using Termux — **without proot-distro**.
+Because Android deserves a shell.
 
 ## Why?
 
@@ -10,8 +10,10 @@ An Android phone is a great environment for running an OpenClaw server:
 
 - **Sufficient performance** — Even models from a few years ago have more than enough specs to run OpenClaw
 - **Repurpose old phones** — Put that phone sitting in your drawer to good use. No need to buy a mini PC
-- **Low power** — Runs 24/7 on a fraction of the power a PC would consume
-- **Easy sandbox** — Install OpenClaw on a factory-reset phone with no accounts logged in, and you have a clean, isolated environment
+- **Low power + built-in UPS** — Runs 24/7 on a fraction of the power a PC would consume, and the battery keeps it alive through power outages
+- **No personal data at risk** — Install OpenClaw on a factory-reset phone with no accounts logged in, and there's zero personal data on the device. Dedicating a PC to this feels wasteful — a spare phone is perfect
+
+## No Linux install required
 
 The standard approach to running OpenClaw on Android requires installing proot-distro with Ubuntu, adding 700MB-1GB of overhead. OpenClaw for Android eliminates this by patching compatibility issues directly, letting you run OpenClaw in pure Termux.
 
@@ -51,6 +53,15 @@ OpenClaw runs as a server, so the screen turning off can cause Android to thrott
 
 > The screen will still turn off normally when unplugged. Keep the charger connected when running the server for extended periods.
 
+**C. Set Charge Limit (Required)**
+
+Keeping a phone plugged in 24/7 at 100% can cause battery swelling. Limiting the maximum charge to 80% greatly improves battery lifespan and safety.
+
+- **Samsung**: **Settings** > **Battery** > **Battery Protection** → Select **Maximum 80%**
+- **Google Pixel**: **Settings** > **Battery** > **Battery Protection** → ON
+
+> Menu names vary by manufacturer. Search for "battery protection" or "charge limit" in your settings. If your device doesn't have this feature, consider managing the charger manually or using a smart plug.
+
 ### Step 2: Install Termux
 
 > **Important**: The Play Store version of Termux is discontinued and will not work. You must install from F-Droid.
@@ -64,33 +75,17 @@ OpenClaw runs as a server, so the screen turning off can cause Android to thrott
 
 ### Step 3: Initial Termux Setup and Background Kill Prevention
 
-Open the Termux app and run:
-
-(Typing commands is much easier via SSH from a computer. See the [Termux SSH Setup Guide](docs/termux-ssh-guide.md) for details.)
+Open the Termux app and paste the following command. It updates repos, installs curl, and enables background kill prevention — all in one go.
 
 ```bash
-# Update repos (required on first run)
-pkg update -y
-
-# Install curl (needed for bootstrap download)
-pkg install -y curl
+pkg update -y && pkg upgrade -y && pkg install -y curl && termux-wake-lock
 ```
 
-You may be asked to choose a mirror on first run. Pick any — a geographically closer mirror will be faster.
+> You may be asked to choose a mirror on first run. Pick any — a geographically closer mirror will be faster.
 
-Next, protect Termux from being killed during installation. The install takes 3–10 minutes, and if Android kills the process mid-way, it will fail.
+Once `termux-wake-lock` runs, a notification pins in the status bar and prevents Android from killing the Termux process. To release it later, run `termux-wake-unlock` or swipe the notification away.
 
-**A. Enable Termux Wake Lock**
-
-```bash
-termux-wake-lock
-```
-
-This pins a notification and prevents Android from killing the Termux process.
-
-> To release it later, run `termux-wake-unlock` or swipe the notification away.
-
-**B. Disable Battery Optimization for Termux**
+**Disable Battery Optimization for Termux**
 
 1. Go to Android **Settings** > **Battery** (or **Battery and device care**)
 2. Open **Battery optimization** (or **App power management**)
@@ -99,6 +94,8 @@ This pins a notification and prevents Android from killing the Termux process.
 > The exact menu path varies by manufacturer (Samsung, LG, etc.) and Android version. Search your settings for "battery optimization" to find it.
 
 ### Step 4: Install OpenClaw
+
+Once Step 3 finishes, paste the following command.
 
 (Typing commands is much easier via SSH from a computer. See the [Termux SSH Setup Guide](docs/termux-ssh-guide.md) for details.)
 
