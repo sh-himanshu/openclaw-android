@@ -67,11 +67,8 @@ Keeping a phone plugged in 24/7 at 100% can cause battery swelling. Limiting the
 > **Important**: The Play Store version of Termux is discontinued and will not work. You must install from F-Droid.
 
 1. Open your phone's browser and go to [f-droid.org](https://f-droid.org)
-2. Download and install `F-Droid.apk`
+2. Search for `Termux`, then tap **Download APK** to download and install
    - Allow "Install from unknown sources" when prompted
-3. Open F-Droid and search for `Termux`
-4. Install **Termux** (by Fredrik Fornwall)
-5. Also install **Termux:API** (optional but recommended)
 
 ### Step 3: Initial Termux Setup and Background Kill Prevention
 
@@ -193,8 +190,14 @@ openclaw-android/
 │   ├── install-deps.sh         # Install Termux packages
 │   ├── setup-env.sh            # Configure environment variables
 │   └── setup-paths.sh          # Create directories and symlinks
-└── tests/
-    └── verify-install.sh       # Post-install verification
+├── tests/
+│   └── verify-install.sh       # Post-install verification
+└── docs/
+    ├── termux-ssh-guide.md     # Termux SSH setup guide (EN)
+    ├── termux-ssh-guide.ko.md  # Termux SSH setup guide (KO)
+    ├── troubleshooting.md      # Troubleshooting guide (EN)
+    ├── troubleshooting.ko.md   # Troubleshooting guide (KO)
+    └── images/                 # Screenshots and images
 ```
 
 ## Detailed Installation Flow
@@ -227,7 +230,6 @@ Installs Termux packages required for building and running OpenClaw.
 | `cmake` | Cross-platform build system | Some native modules use CMake-based builds instead of Makefiles. Cryptography-related libraries (`argon2`, etc.) often include CMakeLists.txt |
 | `clang` | C/C++ compiler | Default C/C++ compiler in Termux. Used by `node-gyp` to compile C/C++ source of native modules. Termux uses Clang as standard instead of GCC |
 | `tmux` | Terminal multiplexer | Allows running the OpenClaw server in a background session. In Termux, apps going to background may suspend processes, so running inside a tmux session keeps it stable |
-| `termux-api` | Bridge between Termux and Android APIs | Tools for accessing Android system features like network status, notifications, and clipboard. Not directly used by OpenClaw but useful utilities in the Termux environment |
 
 - After installation, verifies Node.js >= 22 and npm presence. Exits on failure
 

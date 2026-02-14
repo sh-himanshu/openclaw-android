@@ -23,7 +23,6 @@ PACKAGES=(
     cmake
     clang
     tmux
-    termux-api
 )
 
 echo "Installing packages: ${PACKAGES[*]}"
