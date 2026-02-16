@@ -57,12 +57,6 @@ mkdir -p "$HOME/.openclaw-android/patches"
 cp "$SCRIPT_DIR/patches/bionic-compat.js" "$HOME/.openclaw-android/patches/bionic-compat.js"
 echo -e "${GREEN}[OK]${NC}   bionic-compat.js installed"
 
-# Copy gateway-start script
-mkdir -p "$HOME/.openclaw-android/scripts"
-cp "$SCRIPT_DIR/scripts/gateway-start.sh" "$HOME/.openclaw-android/scripts/gateway-start.sh"
-chmod +x "$HOME/.openclaw-android/scripts/gateway-start.sh"
-echo -e "${GREEN}[OK]${NC}   gateway-start.sh installed"
-
 # Copy update script
 cp "$SCRIPT_DIR/update.sh" "$HOME/.openclaw-android/update.sh"
 chmod +x "$HOME/.openclaw-android/update.sh"

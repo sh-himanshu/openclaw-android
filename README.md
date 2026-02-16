@@ -137,35 +137,21 @@ Follow the on-screen instructions to complete the initial setup.
 
 ### Step 6: Start the Gateway and Set Up Termux Tabs
 
-Once setup is complete, start the gateway with the following command. It automatically sets up LAN dashboard access so you can open the dashboard from your PC browser.
+Once setup is complete, start the gateway:
 
 ```bash
-oca-gateway
+openclaw gateway
 ```
 
-> If you get `command not found`, run the [update command](#update) first.
+To access the dashboard from your PC, open a new terminal on your PC and set up an SSH tunnel:
 
-The script automatically generates a self-signed HTTPS certificate, detects your phone's IP and dashboard token, then displays a ready-to-use URL:
-
-```
-══════════════════════════════════════════════════
-  PC Dashboard Access (HTTPS)
-══════════════════════════════════════════════════
-
-  Open this URL in your PC browser and bookmark it:
-
-  https://192.168.0.100:18790/#token=40db0363...
-
-  Your browser will show a certificate warning on first
-  visit — click Advanced → Proceed to accept it.
-══════════════════════════════════════════════════
+```bash
+ssh -N -L 18789:127.0.0.1:18789 -p 8022 <phone-ip>
 ```
 
-Open this URL in your PC browser and **bookmark it** for easy access. No SSH tunnel needed. Your browser will show a certificate warning on first visit because it's a self-signed certificate — click **Advanced** → **Proceed** to accept it (one-time only).
+Then open in your PC browser: `http://localhost:18789/`
 
-> `oca-gateway` (**O**pen**C**law on **A**ndroid) runs `socat` with HTTPS in the background to forward port 18790 (LAN) to 18789 (localhost), then starts `openclaw gateway`. When you stop the gateway with `Ctrl+C`, socat is automatically cleaned up. This is a convenience command provided by this project — not an `openclaw` built-in.
->
-> If you don't need PC access, you can still use `openclaw gateway` directly.
+> Run `openclaw dashboard` on the phone to get the full URL with token.
 
 To keep the gateway running while doing other work, use Termux's **tab** feature. Swipe from left to right on the bottom of the screen to open the tab menu. Tap **NEW SESSION** to add a new tab.
 
@@ -173,7 +159,7 @@ To keep the gateway running while doing other work, use Termux's **tab** feature
 
 Recommended tab setup:
 
-- **Tab 1**: `oca-gateway` — Gateway + LAN dashboard access
+- **Tab 1**: `openclaw gateway` — Run the gateway
 
 <img src="docs/images/termux_tab_1.png" width="300" alt="Tab 1 - openclaw gateway">
 
@@ -219,8 +205,7 @@ openclaw-android/
 │   ├── check-env.sh            # Pre-flight environment check
 │   ├── install-deps.sh         # Install Termux packages
 │   ├── setup-env.sh            # Configure environment variables
-│   ├── setup-paths.sh          # Create directories and symlinks
-│   └── gateway-start.sh        # Start gateway with LAN dashboard access
+│   └── setup-paths.sh          # Create directories and symlinks
 ├── tests/
 │   └── verify-install.sh       # Post-install verification
 └── docs/
@@ -261,8 +246,6 @@ Installs Termux packages required for building and running OpenClaw.
 | `cmake` | Cross-platform build system | Some native modules use CMake-based builds instead of Makefiles. Cryptography-related libraries (`argon2`, etc.) often include CMakeLists.txt |
 | `clang` | C/C++ compiler | Default C/C++ compiler in Termux. Used by `node-gyp` to compile C/C++ source of native modules. Termux uses Clang as standard instead of GCC |
 | `tmux` | Terminal multiplexer | Allows running the OpenClaw server in a background session. In Termux, apps going to background may suspend processes, so running inside a tmux session keeps it stable |
-| `socat` | Network relay tool | Used by `oca-gateway` to forward the dashboard port to LAN over HTTPS, allowing PC browser access without SSH tunnels |
-| `openssl-tool` | TLS/SSL toolkit | Used by `oca-gateway` to generate a self-signed HTTPS certificate for secure LAN dashboard access |
 
 - After installation, verifies Node.js >= 22 and npm presence. Exits on failure
 

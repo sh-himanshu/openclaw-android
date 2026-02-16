@@ -20,7 +20,7 @@ echo ""
 
 step() {
     echo ""
-    echo -e "${BOLD}[$1/4] $2${NC}"
+    echo -e "${BOLD}[$1/3] $2${NC}"
     echo "----------------------------------------"
 }
 
@@ -64,38 +64,7 @@ if ! command -v curl &>/dev/null; then
 fi
 
 # ─────────────────────────────────────────────
-step 2 "Installing New Packages"
-
-# Install socat if not present
-if command -v socat &>/dev/null; then
-    echo -e "${YELLOW}[SKIP]${NC} socat already installed"
-else
-    echo "Installing socat..."
-    pkg install -y socat
-    echo -e "${GREEN}[OK]${NC}   socat installed"
-fi
-
-# Install openssl-tool if not present
-if command -v openssl &>/dev/null; then
-    echo -e "${YELLOW}[SKIP]${NC} openssl already installed"
-else
-    echo "Installing openssl-tool..."
-    pkg install -y openssl-tool
-    echo -e "${GREEN}[OK]${NC}   openssl-tool installed"
-fi
-
-# ─────────────────────────────────────────────
-step 3 "Downloading New Scripts"
-
-# Download gateway-start.sh
-mkdir -p "$OPENCLAW_DIR/scripts"
-if curl -sfL "$REPO_BASE/scripts/gateway-start.sh" -o "$OPENCLAW_DIR/scripts/gateway-start.sh"; then
-    chmod +x "$OPENCLAW_DIR/scripts/gateway-start.sh"
-    echo -e "${GREEN}[OK]${NC}   gateway-start.sh updated"
-else
-    echo -e "${RED}[FAIL]${NC} Failed to download gateway-start.sh"
-    exit 1
-fi
+step 2 "Downloading Latest Scripts"
 
 # Download setup-env.sh (needed for .bashrc update)
 TMPFILE=$(mktemp "$PREFIX/tmp/setup-env.XXXXXX.sh")
@@ -116,7 +85,7 @@ else
 fi
 
 # ─────────────────────────────────────────────
-step 4 "Updating Environment Variables"
+step 3 "Updating Environment Variables"
 
 # Run setup-env.sh to refresh .bashrc block
 bash "$TMPFILE"
@@ -126,9 +95,6 @@ echo ""
 echo -e "${BOLD}========================================${NC}"
 echo -e "${GREEN}${BOLD}  Update Complete!${NC}"
 echo -e "${BOLD}========================================${NC}"
-echo ""
-echo "New features:"
-echo "  - oca-gateway: Start gateway with LAN dashboard access"
 echo ""
 echo -e "${YELLOW}Run this to apply changes to the current session:${NC}"
 echo ""

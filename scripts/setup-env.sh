@@ -15,15 +15,12 @@ MARKER_END="# <<< OpenClaw on Android <<<"
 
 COMPAT_PATH="$HOME/.openclaw-android/patches/bionic-compat.js"
 
-GATEWAY_SCRIPT="$HOME/.openclaw-android/scripts/gateway-start.sh"
-
 ENV_BLOCK="${MARKER_START}
 export TMPDIR=\"\$PREFIX/tmp\"
 export TMP=\"\$TMPDIR\"
 export TEMP=\"\$TMPDIR\"
 export NODE_OPTIONS=\"-r $COMPAT_PATH\"
 export CONTAINER=1
-alias oca-gateway='bash $GATEWAY_SCRIPT'
 ${MARKER_END}"
 
 # Create .bashrc if it doesn't exist

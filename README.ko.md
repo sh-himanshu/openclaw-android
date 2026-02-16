@@ -137,35 +137,21 @@ openclaw onboard
 
 ### 6단계: 게이트웨이 실행 및 Termux 탭 구성
 
-설정이 끝나면 아래 명령어로 게이트웨이를 실행합니다. LAN 대시보드 접속이 자동으로 설정되어 PC 브라우저에서 바로 대시보드를 열 수 있습니다.
+설정이 끝나면 게이트웨이를 실행합니다:
 
 ```bash
-oca-gateway
+openclaw gateway
 ```
 
-> `command not found` 오류가 나오면 [업데이트 명령어](#업데이트)를 먼저 실행하세요.
+PC에서 대시보드에 접속하려면, PC의 새 터미널에서 SSH 터널을 설정합니다:
 
-스크립트가 자체 서명 HTTPS 인증서를 자동 생성하고, 폰의 IP와 대시보드 토큰을 감지하여 바로 접속 가능한 URL을 표시합니다:
-
-```
-══════════════════════════════════════════════════
-  PC Dashboard Access (HTTPS)
-══════════════════════════════════════════════════
-
-  Open this URL in your PC browser and bookmark it:
-
-  https://192.168.0.100:18790/#token=40db0363...
-
-  Your browser will show a certificate warning on first
-  visit — click Advanced → Proceed to accept it.
-══════════════════════════════════════════════════
+```bash
+ssh -N -L 18789:127.0.0.1:18789 -p 8022 <폰IP>
 ```
 
-이 URL을 PC 브라우저에서 열고 **즐겨찾기에 등록**해 두면 언제든 바로 접속할 수 있습니다. SSH 터널이 필요 없습니다. 자체 서명 인증서이므로 처음 접속할 때 브라우저가 인증서 경고를 표시합니다 — **고급** → **계속 진행**을 눌러 수락하세요 (최초 1회만).
+그 다음 PC 브라우저에서 `http://localhost:18789/` 을 엽니다.
 
-> `oca-gateway`(**O**pen**C**law on **A**ndroid)는 `socat`을 HTTPS로 백그라운드 실행하여 18790 포트(LAN)를 18789(localhost)로 포워딩한 뒤 `openclaw gateway`를 시작합니다. `Ctrl+C`로 게이트웨이를 종료하면 socat도 자동으로 정리됩니다. 이 명령어는 `openclaw` 내장 명령어가 아니라, 이 프로젝트에서 제공하는 편의 명령어입니다.
->
-> PC에서 접속할 필요가 없다면 `openclaw gateway`를 직접 실행해도 됩니다.
+> 토큰이 포함된 전체 URL은 폰에서 `openclaw dashboard`를 실행하면 확인할 수 있습니다.
 
 게이트웨이를 유지하면서 다른 작업도 하려면 Termux의 **탭** 기능을 활용하세요. 화면 하단을 왼쪽에서 오른쪽으로 스와이프하면 탭 메뉴가 나타납니다. **NEW SESSION**을 눌러 새 탭을 추가할 수 있습니다.
 
@@ -173,7 +159,7 @@ oca-gateway
 
 권장 탭 구성:
 
-- **탭 1**: `oca-gateway` — 게이트웨이 + LAN 대시보드 접속
+- **탭 1**: `openclaw gateway` — 게이트웨이 실행
 
 <img src="docs/images/termux_tab_1.png" width="300" alt="탭 1 - openclaw gateway">
 
@@ -219,8 +205,7 @@ openclaw-android/
 │   ├── check-env.sh            # 사전 환경 점검
 │   ├── install-deps.sh         # Termux 패키지 설치
 │   ├── setup-env.sh            # 환경변수 설정
-│   ├── setup-paths.sh          # 디렉토리 및 심볼릭 링크 생성
-│   └── gateway-start.sh        # 게이트웨이 + LAN 대시보드 접속 시작
+│   └── setup-paths.sh          # 디렉토리 및 심볼릭 링크 생성
 ├── tests/
 │   └── verify-install.sh       # 설치 후 검증
 └── docs/
@@ -261,8 +246,6 @@ OpenClaw 빌드 및 실행에 필요한 Termux 패키지를 설치합니다.
 | `cmake` | 크로스 플랫폼 빌드 시스템 | 일부 네이티브 모듈이 Makefile 대신 CMake 기반 빌드를 사용. 특히 암호화 관련 라이브러리(`argon2` 등)가 CMakeLists.txt를 포함하는 경우가 많음 |
 | `clang` | C/C++ 컴파일러 | Termux의 기본 C/C++ 컴파일러. `node-gyp`가 네이티브 모듈의 C/C++ 소스를 컴파일할 때 사용. Termux에서는 GCC 대신 Clang이 표준 |
 | `tmux` | 터미널 멀티플렉서 | OpenClaw 서버를 백그라운드 세션에서 실행할 수 있게 해줌. Termux에서는 앱이 백그라운드로 가면 프로세스가 중단될 수 있으므로, tmux 세션 안에서 실행하면 안정적으로 유지 가능 |
-| `socat` | 네트워크 릴레이 도구 | `oca-gateway`에서 대시보드 포트를 HTTPS로 LAN에 포워딩하여 SSH 터널 없이 PC 브라우저에서 접속 가능하게 함 |
-| `openssl-tool` | TLS/SSL 도구 | `oca-gateway`에서 자체 서명 HTTPS 인증서를 생성하여 안전한 LAN 대시보드 접속을 제공 |
 
 - 설치 후 Node.js >= 22 버전 및 npm 존재 여부를 검증. 실패 시 종료
 

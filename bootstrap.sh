@@ -35,7 +35,6 @@ FILES=(
     "scripts/install-deps.sh"
     "scripts/setup-paths.sh"
     "scripts/setup-env.sh"
-    "scripts/gateway-start.sh"
     "tests/verify-install.sh"
     "update.sh"
 )
