@@ -21,7 +21,7 @@ ENV_BLOCK="${MARKER_START}
 export TMPDIR=\"\$PREFIX/tmp\"
 export TMP=\"\$TMPDIR\"
 export TEMP=\"\$TMPDIR\"
-export NODE_OPTIONS=\"-r $COMPAT_PATH \${NODE_OPTIONS:-}\"
+export NODE_OPTIONS=\"-r $COMPAT_PATH\"
 export CONTAINER=1
 alias oca-gateway='bash $GATEWAY_SCRIPT'
 ${MARKER_END}"
@@ -54,7 +54,7 @@ echo "  CONTAINER=1  (suppresses systemd checks)"
 export TMPDIR="$PREFIX/tmp"
 export TMP="$TMPDIR"
 export TEMP="$TMPDIR"
-export NODE_OPTIONS="-r $COMPAT_PATH ${NODE_OPTIONS:-}"
+export NODE_OPTIONS="-r $COMPAT_PATH"
 export CONTAINER=1
 
 echo ""

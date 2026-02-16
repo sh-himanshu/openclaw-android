@@ -45,7 +45,7 @@ bash "$SCRIPT_DIR/scripts/setup-env.sh"
 export TMPDIR="$PREFIX/tmp"
 export TMP="$TMPDIR"
 export TEMP="$TMPDIR"
-export NODE_OPTIONS="-r $HOME/.openclaw-android/patches/bionic-compat.js ${NODE_OPTIONS:-}"
+export NODE_OPTIONS="-r $HOME/.openclaw-android/patches/bionic-compat.js"
 export CONTAINER=1
 
 # ─────────────────────────────────────────────
