@@ -25,18 +25,26 @@
 
 | | 기존 방식 (proot-distro) | 이 프로젝트 |
 |---|---|---|
-| 저장공간 오버헤드 | 700MB - 1GB | ~50MB |
-| 설치 시간 | 10-15분 | 3-5분 |
+| 저장공간 오버헤드 | 1-2GB (Ubuntu + 패키지) | ~50MB |
+| 설치 시간 | 20-30분 | 3-10분 |
 | 성능 | 느림 (proot 레이어) | 네이티브 속도 |
-| 복잡도 | 높음 | 명령어 하나 |
+| 설정 과정 | 디스트로 설치, Linux 설정, Node.js 설치, 경로 수정... | 명령어 하나 실행 |
 
 ## 요구사항
 
-- Android 7.0 이상
+- Android 7.0 이상 (Android 10 이상 권장)
 - 약 500MB 이상의 여유 저장공간
 - Wi-Fi 또는 모바일 데이터 연결
 
 ## 처음부터 설치하기 (초기화된 폰 기준)
+
+1. [개발자 옵션 활성화 및 화면 켜짐 유지 설정](#1단계-개발자-옵션-활성화-및-화면-켜짐-유지-설정)
+2. [Termux 설치](#2단계-termux-설치)
+3. [Termux 초기 설정 및 백그라운드 종료 방지](#3단계-termux-초기-설정-및-백그라운드-종료-방지)
+4. [OpenClaw 설치](#4단계-openclaw-설치) — 명령어 하나
+5. [OpenClaw 설정 시작](#5단계-openclaw-설정-시작)
+6. [OpenClaw(게이트웨이) 실행](#6단계-openclaw게이트웨이-실행)
+7. [PC에서 대시보드 접속](#7단계-pc에서-대시보드-접속)
 
 ### 1단계: 개발자 옵션 활성화 및 화면 켜짐 유지 설정
 
@@ -98,28 +106,16 @@ pkg update -y && pkg upgrade -y && pkg install -y curl && termux-wake-lock
 
 ### 4단계: OpenClaw 설치
 
-3단계가 끝나면, 이어서 아래 명령어를 붙여넣으세요.
+> **팁: SSH로 편하게 입력하기**
+> 이 단계부터는 폰 화면 대신 컴퓨터 키보드로 명령어를 입력할 수 있습니다. 폰에서 `pkg install -y openssh && passwd && sshd`를 실행한 뒤, PC에서 `ssh -p 8022 <폰IP>`로 접속하세요. 자세한 내용은 [Termux SSH 접속 가이드](docs/termux-ssh-guide.ko.md)를 참고하세요.
 
-(컴퓨터에서 SSH로 접속하면 명령어 입력이 훨씬 수월합니다. [Termux SSH 접속 가이드](docs/termux-ssh-guide.ko.md)를 참고하세요.)
+Termux에 아래 명령어를 붙여넣으세요.
 
 ```bash
 curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/bootstrap.sh | bash && source ~/.bashrc
 ```
 
-설치 스크립트가 아래 7단계를 자동으로 처리합니다. 3~10분 정도 소요되며 (네트워크 속도와 기기 성능에 따라 다름), Wi-Fi 환경을 권장합니다.
-
-```
-install.sh (진입점)
-  ├── [1/7] scripts/check-env.sh      # Termux 환경 검증
-  ├── [2/7] scripts/install-deps.sh    # pkg install (nodejs-lts 등)
-  ├── [3/7] scripts/setup-paths.sh     # 디렉토리 생성
-  ├── [4/7] scripts/setup-env.sh       # .bashrc에 환경변수 추가
-  ├── [5/7] patches/apply-patches.sh   # OpenClaw 설치 및 패치 적용
-  │         ├── bionic-compat.js 복사
-  │         └── patches/patch-paths.sh # sed로 하드코딩 경로 치환
-  ├── [6/7] tests/verify-install.sh    # 설치 검증
-  └── [7/7] openclaw update            # 최신 버전으로 업데이트
-```
+명령어 하나로 모든 설치가 자동으로 진행됩니다. 3~10분 정도 소요되며 (네트워크 속도와 기기 성능에 따라 다름), Wi-Fi 환경을 권장합니다.
 
 설치가 완료되면 OpenClaw 버전이 출력되고, `openclaw onboard`로 설정을 시작하라는 안내가 나타납니다.
 
@@ -135,15 +131,35 @@ openclaw onboard
 
 ![openclaw onboard](docs/images/openclaw-onboard.png)
 
-### 6단계: 게이트웨이 실행 및 Termux 탭 구성
+### 6단계: OpenClaw(게이트웨이) 실행
 
 설정이 끝나면 게이트웨이를 실행합니다:
+
+> **중요**: `openclaw gateway`는 SSH가 아닌, 폰의 Termux 앱에서 직접 실행하세요. SSH로 실행하면 SSH 연결이 끊어질 때 게이트웨이도 함께 종료됩니다.
 
 ```bash
 openclaw gateway
 ```
 
-PC에서 대시보드에 접속하려면, 먼저 폰의 IP 주소를 확인합니다. Termux에서 다음을 실행하고 `wlan0` 항목의 `inet` 주소를 확인하세요 (예: `192.168.0.100`).
+게이트웨이를 유지하면서 다른 작업도 하려면 Termux의 **탭** 기능을 활용하세요. 화면 하단을 왼쪽에서 오른쪽으로 스와이프하면 탭 메뉴가 나타납니다. **NEW SESSION**을 눌러 새 탭을 추가할 수 있습니다.
+
+<img src="docs/images/termux_menu.png" width="300" alt="Termux 탭 메뉴">
+
+권장 탭 구성:
+
+- **탭 1**: `openclaw gateway` — 게이트웨이 실행
+
+<img src="docs/images/termux_tab_1.png" width="300" alt="탭 1 - openclaw gateway">
+
+- **탭 2**: 범용 — 필요한 명령어 실행
+
+> 게이트웨이를 중지하려면 탭 1에서 `Ctrl+C`를 누르세요. `Ctrl+Z`는 프로세스를 종료하지 않고 일시 중지만 시키므로, 반드시 `Ctrl+C`를 사용하세요.
+
+### 7단계: PC에서 대시보드 접속
+
+PC 브라우저에서 OpenClaw를 관리하려면 폰에 SSH 연결을 설정해야 합니다. 먼저 [Termux SSH 접속 가이드](docs/termux-ssh-guide.ko.md)를 참고하여 SSH를 설정하세요.
+
+SSH가 준비되면, 폰의 IP 주소를 확인합니다. Termux에서 다음을 실행하고 `wlan0` 항목의 `inet` 주소를 확인하세요 (예: `192.168.0.100`).
 
 ```bash
 ifconfig
@@ -159,24 +175,6 @@ ssh -N -L 18789:127.0.0.1:18789 -p 8022 <폰IP>
 
 > 토큰이 포함된 전체 URL은 폰에서 `openclaw dashboard`를 실행하면 확인할 수 있습니다.
 
-게이트웨이를 유지하면서 다른 작업도 하려면 Termux의 **탭** 기능을 활용하세요. 화면 하단을 왼쪽에서 오른쪽으로 스와이프하면 탭 메뉴가 나타납니다. **NEW SESSION**을 눌러 새 탭을 추가할 수 있습니다.
-
-<img src="docs/images/termux_menu.png" width="300" alt="Termux 탭 메뉴">
-
-권장 탭 구성:
-
-- **탭 1**: `openclaw gateway` — 게이트웨이 실행
-
-<img src="docs/images/termux_tab_1.png" width="300" alt="탭 1 - openclaw gateway">
-
-- **탭 2**: `sshd` — 컴퓨터에서 SSH로 접속하여 명령어 입력 ([SSH 접속 가이드](docs/termux-ssh-guide.ko.md))
-
-<img src="docs/images/termux_tab_2.png" width="300" alt="탭 2 - sshd">
-
-이렇게 두 탭을 유지해 두면 게이트웨이가 안정적으로 동작하면서, 컴퓨터에서 SSH로 접속하여 추가 작업을 할 수 있습니다.
-
-> 게이트웨이를 중지하려면 탭 1에서 `Ctrl+C`를 누르세요. `Ctrl+Z`는 프로세스를 종료하지 않고 일시 중지만 시키므로, 반드시 `Ctrl+C`를 사용하세요.
-
 ## 여러 디바이스 관리
 
 여러 폰에서 OpenClaw를 운영한다면, [Dashboard Connect](https://myopenclawhub.com/tools/connect.html) 도구로 PC에서 편리하게 관리할 수 있습니다.
@@ -184,6 +182,28 @@ ssh -N -L 18789:127.0.0.1:18789 -p 8022 <폰IP>
 - 각 기기의 연결 정보(IP, 토큰, 포트)를 닉네임과 함께 저장
 - SSH 터널 명령어와 대시보드 URL을 자동 생성
 - **데이터는 로컬에만 저장** — 연결 정보(IP, 토큰, 포트)는 브라우저의 localStorage에만 저장되며 어떤 서버로도 전송되지 않습니다.
+
+## 업데이트
+
+이미 OpenClaw on Android가 설치되어 있고, 최신 패치와 환경 설정을 적용하고 싶다면:
+
+```bash
+curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash && source ~/.bashrc
+```
+
+전체 재설치 없이 환경변수와 패치만 갱신하는 경량 업데이터입니다. 여러 번 실행해도 안전합니다.
+
+## 제거
+
+```bash
+bash ~/.openclaw-android/uninstall.sh
+```
+
+OpenClaw 패키지, 패치, 환경변수, 임시 파일이 모두 제거됩니다. OpenClaw 데이터(`~/.openclaw`)는 선택적으로 보존할 수 있습니다.
+
+## 문제 해결
+
+자세한 트러블슈팅 가이드는 [문제 해결 문서](docs/troubleshooting.ko.md)를 참고하세요.
 
 ## 동작 원리
 
@@ -210,6 +230,7 @@ ssh -N -L 18789:127.0.0.1:18789 -p 8022 <폰IP>
 openclaw-android/
 ├── bootstrap.sh                # curl | bash 원라이너 설치 (다운로더)
 ├── install.sh                  # 원클릭 설치 스크립트 (진입점)
+├── update.sh                   # 기존 설치 환경 경량 업데이터
 ├── uninstall.sh                # 깔끔한 제거
 ├── patches/
 │   ├── bionic-compat.js        # 플랫폼 오버라이드 + os.networkInterfaces() 안전 래퍼
@@ -322,18 +343,6 @@ OpenClaw을 글로벌로 설치하고 Termux 호환 패치를 적용합니다.
 `openclaw update`를 실행하여 최신 상태로 업데이트합니다. 완료 후 OpenClaw 버전을 출력하고 `openclaw onboard`로 설정을 시작하라는 안내를 표시합니다.
 
 </details>
-
-## 제거
-
-```bash
-bash ~/.openclaw-android/uninstall.sh
-```
-
-OpenClaw 패키지, 패치, 환경변수, 임시 파일이 모두 제거됩니다. OpenClaw 데이터(`~/.openclaw`)는 선택적으로 보존할 수 있습니다.
-
-## 문제 해결
-
-자세한 트러블슈팅 가이드는 [문제 해결 문서](docs/troubleshooting.ko.md)를 참고하세요.
 
 ## 라이선스
 

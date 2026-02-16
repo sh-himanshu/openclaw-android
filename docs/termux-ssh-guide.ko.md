@@ -33,11 +33,29 @@ Retype new password: 1234   ← 같은 비밀번호 다시 입력
 
 ## 3단계: SSH 서버 시작
 
+> **중요**: `sshd`는 SSH가 아닌, 폰의 Termux 앱에서 직접 실행하세요.
+
+게이트웨이가 이미 탭 1에서 실행 중이라면 새 탭이 필요합니다. Termux 화면 하단을 왼쪽에서 오른쪽으로 스와이프하면 탭 메뉴가 나타납니다. **NEW SESSION**을 눌러 새 탭을 추가하세요.
+
+<img src="images/termux_menu.png" width="300" alt="Termux 탭 메뉴">
+
+새 탭에서 실행합니다:
+
 ```bash
 sshd
 ```
 
 아무 메시지 없이 프롬프트(`$`)가 다시 나오면 정상입니다.
+
+권장 탭 구성:
+
+- **탭 1**: `openclaw gateway` — 게이트웨이 실행
+
+<img src="images/termux_tab_1.png" width="300" alt="탭 1 - openclaw gateway">
+
+- **탭 2**: `sshd` — 컴퓨터에서 SSH 접속용
+
+<img src="images/termux_tab_2.png" width="300" alt="탭 2 - sshd">
 
 ## 4단계: IP 주소 확인
 

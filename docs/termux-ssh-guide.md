@@ -33,11 +33,29 @@ Retype new password: 1234   ← type the same password again
 
 ## Step 3: Start SSH Server
 
+> **Important**: Run `sshd` directly in the Termux app on your phone, not via SSH.
+
+If the gateway is already running in Tab 1, you'll need a new tab. Swipe from left to right on the bottom of the Termux screen to open the tab menu, then tap **NEW SESSION**.
+
+<img src="images/termux_menu.png" width="300" alt="Termux tab menu">
+
+In the new tab, run:
+
 ```bash
 sshd
 ```
 
 If the prompt (`$`) returns with no error message, it's working.
+
+Recommended tab setup:
+
+- **Tab 1**: `openclaw gateway` — Run the gateway
+
+<img src="images/termux_tab_1.png" width="300" alt="Tab 1 - openclaw gateway">
+
+- **Tab 2**: `sshd` — Allow SSH access from your computer
+
+<img src="images/termux_tab_2.png" width="300" alt="Tab 2 - sshd">
 
 ## Step 4: Find the Phone's IP Address
 

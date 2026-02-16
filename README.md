@@ -25,18 +25,26 @@ The standard approach to running OpenClaw on Android requires installing proot-d
 
 | | Standard (proot-distro) | This project |
 |---|---|---|
-| Storage overhead | 700MB - 1GB | ~50MB |
-| Setup time | 10-15 min | 3-5 min |
+| Storage overhead | 1-2GB (Ubuntu + packages) | ~50MB |
+| Setup time | 20-30 min | 3-10 min |
 | Performance | Slower (proot layer) | Native speed |
-| Complexity | High | One command |
+| Setup steps | Install distro, configure Linux, install Node.js, fix paths... | Run one command |
 
 ## Requirements
 
-- Android 7.0 or higher
+- Android 7.0 or higher (Android 10+ recommended)
 - ~500MB free storage
 - Wi-Fi or mobile data connection
 
 ## Step-by-Step Setup (from a fresh phone)
+
+1. [Enable Developer Options and Stay Awake](#step-1-enable-developer-options-and-stay-awake)
+2. [Install Termux](#step-2-install-termux)
+3. [Initial Termux Setup and Background Kill Prevention](#step-3-initial-termux-setup-and-background-kill-prevention)
+4. [Install OpenClaw](#step-4-install-openclaw) — one command
+5. [Start OpenClaw Setup](#step-5-start-openclaw-setup)
+6. [Start OpenClaw (Gateway)](#step-6-start-openclaw-gateway)
+7. [Access the Dashboard from Your PC](#step-7-access-the-dashboard-from-your-pc)
 
 ### Step 1: Enable Developer Options and Stay Awake
 
@@ -98,28 +106,16 @@ Once `termux-wake-lock` runs, a notification pins in the status bar and prevents
 
 ### Step 4: Install OpenClaw
 
-Once Step 3 finishes, paste the following command.
+> **Tip: Use SSH for easier typing**
+> From this step on, you can type commands from your computer keyboard instead of the phone screen. Run `pkg install -y openssh && passwd && sshd` on the phone, then connect from your PC with `ssh -p 8022 <phone-ip>`. See the [Termux SSH Setup Guide](docs/termux-ssh-guide.md) for details.
 
-(Typing commands is much easier via SSH from a computer. See the [Termux SSH Setup Guide](docs/termux-ssh-guide.md) for details.)
+Paste the following command in Termux.
 
 ```bash
 curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/bootstrap.sh | bash && source ~/.bashrc
 ```
 
-The installer automatically handles the following 7 steps. This takes 3–10 minutes depending on network speed and device. Wi-Fi is recommended.
-
-```
-install.sh (entry point)
-  ├── [1/7] scripts/check-env.sh      # Verify Termux environment
-  ├── [2/7] scripts/install-deps.sh    # pkg install (nodejs-lts, etc.)
-  ├── [3/7] scripts/setup-paths.sh     # Create directories
-  ├── [4/7] scripts/setup-env.sh       # Add env vars to .bashrc
-  ├── [5/7] patches/apply-patches.sh   # Install OpenClaw & apply patches
-  │         ├── bionic-compat.js copy
-  │         └── patches/patch-paths.sh # sed hardcoded path replacements
-  ├── [6/7] tests/verify-install.sh    # Verify installation
-  └── [7/7] openclaw update            # Update to latest version
-```
+Everything is installed automatically with a single command. This takes 3–10 minutes depending on network speed and device. Wi-Fi is recommended.
 
 Once complete, the OpenClaw version is displayed along with instructions to run `openclaw onboard`.
 
@@ -135,15 +131,35 @@ Follow the on-screen instructions to complete the initial setup.
 
 ![openclaw onboard](docs/images/openclaw-onboard.png)
 
-### Step 6: Start the Gateway and Set Up Termux Tabs
+### Step 6: Start OpenClaw (Gateway)
 
 Once setup is complete, start the gateway:
+
+> **Important**: Run `openclaw gateway` directly in the Termux app on your phone, not via SSH. If you run it over SSH, the gateway will stop when the SSH session disconnects.
 
 ```bash
 openclaw gateway
 ```
 
-To access the dashboard from your PC, first find your phone's IP address. Run the following in Termux and look for the `inet` address under `wlan0` (e.g. `192.168.0.100`).
+To keep the gateway running while doing other work, use Termux's **tab** feature. Swipe from left to right on the bottom of the screen to open the tab menu. Tap **NEW SESSION** to add a new tab.
+
+<img src="docs/images/termux_menu.png" width="300" alt="Termux tab menu">
+
+Recommended tab setup:
+
+- **Tab 1**: `openclaw gateway` — Run the gateway
+
+<img src="docs/images/termux_tab_1.png" width="300" alt="Tab 1 - openclaw gateway">
+
+- **Tab 2**: General purpose — Run other commands as needed
+
+> To stop the gateway, press `Ctrl+C` in Tab 1. Do not use `Ctrl+Z` — it only suspends the process without terminating it. Always use `Ctrl+C`.
+
+### Step 7: Access the Dashboard from Your PC
+
+To manage OpenClaw from your PC browser, you need to set up an SSH connection to your phone. See the [Termux SSH Setup Guide](docs/termux-ssh-guide.md) to configure SSH access first.
+
+Once SSH is ready, find your phone's IP address. Run the following in Termux and look for the `inet` address under `wlan0` (e.g. `192.168.0.100`).
 
 ```bash
 ifconfig
@@ -159,24 +175,6 @@ Then open in your PC browser: `http://localhost:18789/`
 
 > Run `openclaw dashboard` on the phone to get the full URL with token.
 
-To keep the gateway running while doing other work, use Termux's **tab** feature. Swipe from left to right on the bottom of the screen to open the tab menu. Tap **NEW SESSION** to add a new tab.
-
-<img src="docs/images/termux_menu.png" width="300" alt="Termux tab menu">
-
-Recommended tab setup:
-
-- **Tab 1**: `openclaw gateway` — Run the gateway
-
-<img src="docs/images/termux_tab_1.png" width="300" alt="Tab 1 - openclaw gateway">
-
-- **Tab 2**: `sshd` — Allow SSH access from your computer ([SSH Setup Guide](docs/termux-ssh-guide.md))
-
-<img src="docs/images/termux_tab_2.png" width="300" alt="Tab 2 - sshd">
-
-With these two tabs open, the gateway runs stably while you can SSH in from your computer for additional tasks.
-
-> To stop the gateway, press `Ctrl+C` in Tab 1. Do not use `Ctrl+Z` — it only suspends the process without terminating it. Always use `Ctrl+C`.
-
 ## Managing Multiple Devices
 
 If you run OpenClaw on multiple phones, use the [Dashboard Connect](https://myopenclawhub.com/tools/connect.html) tool to manage them from your PC.
@@ -184,6 +182,28 @@ If you run OpenClaw on multiple phones, use the [Dashboard Connect](https://myop
 - Save connection settings (IP, token, ports) for each device with a nickname
 - Generates the SSH tunnel command and dashboard URL automatically
 - **Your data stays local** — Connection settings (IP, token, ports) are saved only in your browser's localStorage and are never sent to any server.
+
+## Update
+
+If you already have OpenClaw on Android installed and want to apply the latest patches and environment updates:
+
+```bash
+curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash && source ~/.bashrc
+```
+
+This lightweight updater refreshes environment variables and patches without reinstalling everything. Safe to run multiple times.
+
+## Uninstall
+
+```bash
+bash ~/.openclaw-android/uninstall.sh
+```
+
+This removes the OpenClaw package, patches, environment variables, and temp files. Your OpenClaw data (`~/.openclaw`) is optionally preserved.
+
+## Troubleshooting
+
+See the [Troubleshooting Guide](docs/troubleshooting.md) for detailed solutions.
 
 ## What It Does
 
@@ -210,6 +230,7 @@ However, **once the gateway is running, there's no difference**. The process sta
 openclaw-android/
 ├── bootstrap.sh                # curl | bash one-liner installer (downloader)
 ├── install.sh                  # One-click installer (entry point)
+├── update.sh                   # Lightweight updater for existing installations
 ├── uninstall.sh                # Clean removal
 ├── patches/
 │   ├── bionic-compat.js        # Platform override + os.networkInterfaces() safe wrapper
@@ -322,18 +343,6 @@ All items pass → PASSED. Any failure → FAILED with reinstall instructions.
 Runs `openclaw update` to ensure the latest version. On completion, displays the OpenClaw version and instructs the user to run `openclaw onboard` to start setup.
 
 </details>
-
-## Uninstall
-
-```bash
-bash ~/.openclaw-android/uninstall.sh
-```
-
-This removes the OpenClaw package, patches, environment variables, and temp files. Your OpenClaw data (`~/.openclaw`) is optionally preserved.
-
-## Troubleshooting
-
-See the [Troubleshooting Guide](docs/troubleshooting.md) for detailed solutions.
 
 ## License
 
