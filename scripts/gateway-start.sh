@@ -62,8 +62,8 @@ if [ -n "$DASHBOARD_OUTPUT" ]; then
     DASHBOARD_TOKEN=$(echo "$DASHBOARD_OUTPUT" | sed -n 's/.*#token=\([a-f0-9]*\).*/\1/p' | head -1) || true
 fi
 
-# Kill any existing socat on the same port
-pkill -f "socat.*OPENSSL-LISTEN:${SOCAT_PORT}" 2>/dev/null || true
+# Kill any existing socat processes
+pkill -9 socat 2>/dev/null || true
 sleep 0.5
 
 # Start socat with HTTPS in background
