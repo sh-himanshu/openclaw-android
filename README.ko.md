@@ -179,7 +179,7 @@ ssh -N -L 18789:127.0.0.1:18789 -p 8022 <폰IP>
 
 ## 여러 디바이스 관리
 
-여러 폰에서 OpenClaw를 운영한다면, [Dashboard Connect](https://aidanpark.github.io/openclaw-android/tools/connect.html) 도구로 PC에서 편리하게 관리할 수 있습니다.
+여러 폰에서 OpenClaw를 운영한다면, [Dashboard Connect](https://myopenclawhub.com/tools/connect.html) 도구로 PC에서 편리하게 관리할 수 있습니다.
 
 - 각 기기의 연결 정보(IP, 토큰, 포트)를 닉네임과 함께 저장
 - SSH 터널 명령어와 대시보드 URL을 자동 생성

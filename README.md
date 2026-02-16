@@ -179,7 +179,7 @@ With these two tabs open, the gateway runs stably while you can SSH in from your
 
 ## Managing Multiple Devices
 
-If you run OpenClaw on multiple phones, use the [Dashboard Connect](https://aidanpark.github.io/openclaw-android/tools/connect.html) tool to manage them from your PC.
+If you run OpenClaw on multiple phones, use the [Dashboard Connect](https://myopenclawhub.com/tools/connect.html) tool to manage them from your PC.
 
 - Save connection settings (IP, token, ports) for each device with a nickname
 - Generates the SSH tunnel command and dashboard URL automatically
