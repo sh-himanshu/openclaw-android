@@ -30,7 +30,7 @@ fi
 # Get phone's Wi-Fi IP
 PHONE_IP=""
 if command -v ifconfig &>/dev/null; then
-    PHONE_IP=$(ifconfig wlan0 2>/dev/null | grep 'inet ' | awk '{print $2}' | head -1)
+    PHONE_IP=$(ifconfig wlan0 2>/dev/null | grep 'inet ' | awk '{print $2}' | head -1) || true
 fi
 
 # Start socat in background
