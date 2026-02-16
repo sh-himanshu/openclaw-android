@@ -183,7 +183,7 @@ If you run OpenClaw on multiple phones, use the [Dashboard Connect](https://aida
 
 - Save connection settings (IP, token, ports) for each device with a nickname
 - Generates the SSH tunnel command and dashboard URL automatically
-- **Your data stays local** — This is a static page with no server or analytics. All settings are saved in your browser's localStorage and never leave your device.
+- **Your data stays local** — Connection settings (IP, token, ports) are saved only in your browser's localStorage and are never sent to any server.
 
 ## What It Does
 

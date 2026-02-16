@@ -366,6 +366,18 @@
     margin: 0 4px;
   }
 
+  .footer {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .footer img {
+    opacity: 0.4;
+    transition: opacity 0.2s;
+  }
+  .footer img:hover {
+    opacity: 0.7;
+  }
+
   .hidden { display: none; }
 
   @media (max-width: 768px) {
@@ -385,15 +397,15 @@
       <img src="../docs/images/openclaw_android.jpg" alt="OpenClaw on Android">
     </div>
     <div class="card-title-row">
-      <div class="card-title">Saved Devices</div>
-      <button class="btn-new" onclick="showForm(null)">+ New Device</button>
+      <div class="card-title">Saved OpenClaw Connections</div>
+      <button class="btn-new" onclick="showForm(null)">+ New Connection</button>
     </div>
     <!-- Device List -->
     <div class="device-section" id="deviceSection">
       <div class="device-list" id="deviceList"></div>
     </div>
     <div class="storage-info">
-      <p>Settings are saved in your browser's localStorage. Clearing browser data will erase them.</p>
+      <p>Your settings are saved locally in your browser and never sent to any server.</p>
       <div class="storage-actions">
         <a href="#" onclick="exportDevices(); return false;">Export</a>
         <span class="storage-sep">/</span>
@@ -445,6 +457,9 @@
       </div>
     </div>
   </div>
+    <div class="footer">
+      <a href="https://hits.sh/aidanpark.github.io/openclaw-android/tools/connect.html/" target="_blank"><img src="https://hits.sh/aidanpark.github.io/openclaw-android/tools/connect.html.svg?label=views&color=555555&labelColor=333333" alt="views"></a>
+    </div>
   </div>
 </main>
 
@@ -486,7 +501,7 @@
   function renderList() {
     const list = document.getElementById('deviceList');
     if (devices.length === 0) {
-      list.innerHTML = '<div class="empty-msg">No devices saved yet. Click "+ New Device" to add one.</div>';
+      list.innerHTML = '<div class="empty-msg">No connections saved yet. Click "+ New Connection" to add one.</div>';
       return;
     }
     list.innerHTML = devices.map(d => `
