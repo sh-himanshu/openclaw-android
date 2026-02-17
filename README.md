@@ -165,7 +165,7 @@ Then open in your PC browser: `http://localhost:18789/`
 
 ## Managing Multiple Devices
 
-If you run OpenClaw on multiple phones, use the [Dashboard Connect](https://myopenclawhub.com/tools/connect.html) tool to manage them from your PC.
+If you run OpenClaw on multiple devices on the same network, use the [Dashboard Connect](https://myopenclawhub.com) tool to manage them from your PC.
 
 - Save connection settings (IP, token, ports) for each device with a nickname
 - Generates the SSH tunnel command and dashboard URL automatically

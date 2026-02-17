@@ -1,12 +1,1160 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="VpO6muDfaLoGrfoN20KFarcY04oEixrpKSYeJ_jSvN8">
-<meta http-equiv="refresh" content="0; url=tools/connect.html">
-<title>My OpenClaw Hub</title>
+<title>My OpenClaw Hub — Manage OpenClaw Servers from Your Browser</title>
+<meta name="description" content="Manage multiple OpenClaw hosts from one dashboard. Save connections, generate SSH tunnel commands, and open dashboards instantly. No server required — everything stays in your browser.">
+<meta name="keywords" content="OpenClaw, AI agent, self-hosted, Android, Termux, SSH tunnel, dashboard, connection manager, OpenClaw Hub">
+<meta name="author" content="AidanPark">
+<link rel="canonical" href="https://myopenclawhub.com/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="My OpenClaw Hub — Manage OpenClaw Servers from Your Browser">
+<meta property="og:description" content="Manage multiple OpenClaw hosts from one dashboard. Save connections, generate SSH tunnel commands, and open dashboards instantly.">
+<meta property="og:url" content="https://myopenclawhub.com/">
+<meta property="og:image" content="https://myopenclawhub.com/docs/images/openclaw_android.jpg">
+<meta property="og:site_name" content="OpenClaw on Android">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="My OpenClaw Hub — Manage OpenClaw Servers from Your Browser">
+<meta name="twitter:description" content="Manage multiple OpenClaw hosts from one dashboard. Save connections, generate SSH tunnel commands, and open dashboards instantly.">
+<meta name="twitter:image" content="https://myopenclawhub.com/docs/images/openclaw_android.jpg">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☸️</text></svg>">
+<style>
+  :root {
+    --bg: #0b1020;
+    --card: #121a33;
+    --text: #e8ecff;
+    --muted: #a8b1d6;
+    --accent: #6aa3ff;
+    --border: rgba(255, 255, 255, 0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    letter-spacing: 0.2px;
+  }
+
+  /* Main */
+  .main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 28px 16px;
+  }
+  .outer {
+    width: 100%;
+    max-width: 520px;
+  }
+  .container {
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  }
+  .banner {
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .banner-track {
+    display: flex;
+    gap: 6px;
+    width: max-content;
+    animation: scroll-left 60s linear infinite;
+  }
+  .banner-track img {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: 0.2px;
+  }
+  .title-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .lang-select {
+    background: rgba(0,0,0,0.20);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 4px 6px;
+    width: 72px;
+    outline: none;
+    cursor: pointer;
+  }
+  .lang-select:focus {
+    border-color: rgba(106, 163, 255, 0.55);
+  }
+  .github-link {
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-flex;
+    transition: color 0.2s;
+  }
+  .github-link:hover {
+    color: var(--text);
+  }
+  .card-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text);
+    margin-top: 28px;
+    margin-bottom: 10px;
+    letter-spacing: 0.2px;
+  }
+  .card-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .card-title-row .card-title {
+    margin-bottom: 10px;
+  }
+
+  /* Device list */
+  .device-section {
+    margin-bottom: 20px;
+  }
+  .btn-new {
+    background: rgba(106, 163, 255, 0.22);
+    border: 1px solid rgba(106, 163, 255, 0.35);
+    color: var(--text);
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-new:hover { background: rgba(106, 163, 255, 0.32); }
+  .device-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  .device-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .device-card:hover {
+    border-color: rgba(106, 163, 255, 0.35);
+    background: rgba(106, 163, 255, 0.08);
+  }
+  .device-card.active {
+    border-color: rgba(106, 163, 255, 0.55);
+    background: rgba(106, 163, 255, 0.12);
+  }
+  .device-card-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .device-card-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .device-card-ip {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    margin-top: 2px;
+  }
+  .btn-delete {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.2);
+    font-size: 1.1em;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: color 0.2s, background 0.2s;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+  .btn-delete:hover {
+    color: rgba(255, 106, 106, 0.92);
+    background: rgba(255, 106, 106, 0.1);
+  }
+  .empty-msg {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 16px 0;
+  }
+
+  /* Form */
+  .form-section {
+  }
+  .form-group {
+    margin-bottom: 22px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  input {
+    width: 100%;
+    padding: 10px 12px;
+    background: rgba(0,0,0,0.20);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    outline: none;
+  }
+  input#nickname {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  }
+  input:disabled {
+    background: rgba(0,0,0,0.12);
+    color: rgba(255,255,255,0.25);
+    border-color: rgba(255,255,255,0.05);
+    cursor: not-allowed;
+  }
+  input:focus {
+    border-color: rgba(106, 163, 255, 0.55);
+    box-shadow: 0 0 0 3px rgba(106, 163, 255, 0.12);
+  }
+  .row {
+    display: flex;
+    gap: 16px;
+  }
+  .row .form-group { flex: 1; }
+  .divider {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    margin: 0 0 12px;
+  }
+  .command-box {
+    position: relative;
+    background: rgba(0,0,0,0.20);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 12px 40px 12px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    word-break: break-all;
+    line-height: 1.5;
+    color: var(--text);
+    min-height: 44px;
+  }
+  .btn-copy {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(106, 163, 255, 0.22);
+    border: 1px solid rgba(106, 163, 255, 0.35);
+    color: var(--text);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-copy:hover { background: rgba(106, 163, 255, 0.32); }
+  .btn-copy.disabled { opacity: 0.35; pointer-events: none; }
+  .btn-copy.copied { background: rgba(137, 240, 194, 0.22); border-color: rgba(137, 240, 194, 0.35); }
+  .btn-open {
+    display: block;
+    text-align: center;
+    background: rgba(106, 163, 255, 0.22);
+    border: 1px solid rgba(106, 163, 255, 0.35);
+    color: var(--text);
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 28px;
+    transition: background 0.2s, opacity 0.2s;
+  }
+  .btn-open:hover {
+    background: rgba(106, 163, 255, 0.32);
+  }
+  .btn-open.disabled {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  /* Tooltip */
+  .label-with-tooltip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .tooltip-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  .tooltip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: rgba(106, 163, 255, 0.22);
+    color: var(--accent);
+    font-size: 0.7em;
+    font-weight: 700;
+    cursor: help;
+  }
+  .tooltip-bubble {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.6;
+    white-space: normal;
+    width: 260px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    z-index: 10;
+  }
+  .tooltip-bubble code {
+    background: rgba(0,0,0,0.30);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.9em;
+    color: rgba(137, 240, 194, 0.92);
+  }
+  .tooltip-bubble.tooltip-wide {
+    width: 560px;
+  }
+  .tooltip-bubble .tooltip-img {
+    display: block;
+    width: calc(100% + 28px);
+    margin: 8px -14px -12px;
+    border-radius: 0 0 12px 12px;
+    border: none;
+  }
+  .tooltip-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 2px;
+    border: 6px solid transparent;
+    border-top-color: var(--border);
+  }
+  .tooltip-wrap:hover .tooltip-bubble { display: block; }
+
+  /* Storage info */
+  .storage-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+  }
+  .storage-info p {
+    margin: 0;
+    line-height: 1.4;
+  }
+  .storage-actions {
+    flex-shrink: 0;
+    margin-left: 12px;
+  }
+  .storage-actions a {
+    color: rgba(255,255,255,0.25);
+    text-decoration: none;
+  }
+  .storage-actions a:hover {
+    color: var(--accent);
+  }
+  .storage-sep {
+    margin: 0 4px;
+  }
+
+  .footer {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .footer img {
+    opacity: 0.4;
+    transition: opacity 0.2s;
+  }
+  .footer img:hover {
+    opacity: 0.7;
+  }
+
+  .hidden { display: none; }
+
+  @media (max-width: 768px) {
+    .main { padding: 20px 16px; }
+  }
+</style>
 </head>
 <body>
-<p>Redirecting to <a href="tools/connect.html">My OpenClaw Hub</a>...</p>
+
+<main class="main">
+  <div class="outer">
+    <div class="title-row">
+      <h1>My OpenClaw Hub</h1>
+      <div class="title-right">
+        <select class="lang-select" id="langSelect" onchange="setLang(this.value)">
+          <option value="en">EN</option>
+          <option value="ko">한국어</option>
+          <option value="zh">中文</option>
+          <option value="ja">日本語</option>
+          <option value="es">ES</option>
+          <option value="fr">FR</option>
+          <option value="de">DE</option>
+          <option value="pt">PT</option>
+          <option value="ru">RU</option>
+          <option value="ar">عربي</option>
+        </select>
+        <a href="https://github.com/AidanPark/openclaw-android" class="github-link" target="_blank" title="GitHub"><svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+      </div>
+    </div>
+    <div class="banner">
+      <div class="banner-track">
+        <img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt=""><img src="docs/images/openclaw.svg" alt="">
+      </div>
+    </div>
+    <div class="card-title-row">
+      <div class="card-title" data-i18n="savedConnections">My OpenClaw Connections</div>
+      <button class="btn-new" onclick="showForm(null)" data-i18n="newConnection">+ New Connection</button>
+    </div>
+    <!-- Device List -->
+    <div class="device-section" id="deviceSection">
+      <div class="device-list" id="deviceList"></div>
+    </div>
+    <div class="storage-info">
+      <p data-i18n="storageInfo">Your settings are saved locally in your browser and never sent to any server.</p>
+      <div class="storage-actions">
+        <a href="#" onclick="exportDevices(); return false;" data-i18n="export">Export</a>
+        <span class="storage-sep">/</span>
+        <a href="#" onclick="document.getElementById('importFile').click(); return false;" data-i18n="import">Import</a>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importDevices(this)">
+      </div>
+    </div>
+
+    <div class="card-title" data-i18n="connectionInfo">Connection Info</div>
+  <div class="container">
+    <!-- Form (hidden by default, shown on new/edit) -->
+    <div class="form-section hidden" id="formSection">
+      <div class="form-group">
+        <label class="label-with-tooltip"><span data-i18n="nickname">Nickname</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-bubble" data-i18n="tipNickname">Give each device a nickname to manage multiple OpenClaw hosts easily.</span></span></label>
+        <input type="text" id="nickname" data-i18n-placeholder="phNickname" placeholder="e.g. Jarvis, Raspberry Pi, Galaxy S24">
+      </div>
+      <div class="form-group">
+        <label class="label-with-tooltip"><span data-i18n="phoneIp">OpenClaw Host IP</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-bubble tooltip-wide" data-i18n-html="tipPhoneIp">Run <code>ifconfig</code> in Termux and find the <code>inet</code> address under <code>wlan0</code> (e.g. <code>192.168.0.100</code>). Your PC must be on the same network.<img class="tooltip-img" src="docs/images/termux-ifconfig.png" alt="ifconfig in Termux"></span></span></label>
+        <input type="text" id="phoneIp" placeholder="192.168.0.100">
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <label class="label-with-tooltip"><span data-i18n="sshPort">SSH Port</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-bubble" data-i18n-html="tipSshPort">Termux sshd uses port <code>8022</code> by default. You rarely need to change this.</span></span></label>
+          <input type="text" id="sshPort" value="8022" disabled>
+        </div>
+        <div class="form-group">
+          <label class="label-with-tooltip"><span data-i18n="localPort">Local Port</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-bubble" data-i18n-html="tipLocalPort">The port on your PC that maps to the dashboard. Change this if you run multiple tunnels at once (e.g. <code>18790</code>, <code>18791</code>).</span></span></label>
+          <input type="text" id="localPort" placeholder="18789" value="18789">
+        </div>
+        <div class="form-group">
+          <label class="label-with-tooltip"><span data-i18n="dashPort">Dashboard Port</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-bubble" data-i18n-html="tipDashPort">OpenClaw dashboard listens on port <code>18789</code> by default. You rarely need to change this.</span></span></label>
+          <input type="text" id="dashPort" value="18789" disabled>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label-with-tooltip"><span data-i18n="token">Token</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-bubble tooltip-wide" data-i18n-html="tipToken">Shown when the gateway starts. You can also run <code>openclaw dashboard</code> to see it. Copy the value after <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard"></span></span></label>
+        <input type="text" id="token" placeholder="40db03634fb0104867...">
+      </div>
+    </div>
+  </div>
+
+  <div id="resultSection" class="hidden">
+    <div class="card-title" data-i18n="sshConnect">SSH Connect</div>
+  <div class="container">
+      <div class="divider"><span class="label-with-tooltip"><span data-i18n="sshConnectDesc">Connect to Termux via SSH</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-bubble" data-i18n-html="tipSshConnect">Copy the command below and run it in a terminal on your PC to access the host's Termux shell. See the <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH Setup Guide</a> for details.</span></span></span></div>
+      <div class="command-box">
+        <span id="sshConnectCmd"></span>
+        <button class="btn-copy" onclick="copySshConnect(this)" data-i18n="copy">Copy</button>
+      </div>
+  </div>
+
+    <div class="card-title" data-i18n="dashConnect">Dashboard Connect</div>
+  <div class="container">
+      <div id="result">
+        <div class="divider"><span class="label-with-tooltip"><span data-i18n="sshTunnelDesc">Run SSH Tunnel on your PC</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-bubble" data-i18n="tipSshTunnel">Copy the command below and run it in a terminal on your PC. Keep it running while you use the dashboard.</span></span></span></div>
+        <div class="command-box">
+          <span id="sshCmd"></span>
+          <button class="btn-copy" onclick="copyCmd(this)" data-i18n="copy">Copy</button>
+        </div>
+
+        <a id="dashLink" class="btn-open" href="#" target="_blank" data-i18n="openDashboard">Open Dashboard</a>
+      </div>
+  </div>
+  </div>
+    <div class="footer">
+      <a href="https://hits.sh/aidanpark.github.io/openclaw-android/tools/connect.html/" target="_blank"><img src="https://hits.sh/aidanpark.github.io/openclaw-android/tools/connect.html.svg?label=views&color=555555&labelColor=333333" alt="views"></a>
+    </div>
+  </div>
+</main>
+
+<script>
+  // ─── i18n ───────────────────────────────────────
+  const i18n = {
+    en: {
+      savedConnections: 'My OpenClaw Connections',
+      newConnection: '+ New Connection',
+      emptyMsg: 'No connections saved yet. Click "+ New Connection" to add one.',
+      storageInfo: 'Your settings are saved locally in your browser and never sent to any server.',
+      export: 'Export',
+      import: 'Import',
+      connectionInfo: 'Connection Info',
+      nickname: 'Nickname',
+      phoneIp: 'OpenClaw Host IP',
+      sshPort: 'SSH Port',
+      localPort: 'Local Port',
+      dashPort: 'Dashboard Port',
+      token: 'Token',
+      phNickname: 'e.g. Jarvis, Raspberry Pi, Galaxy S24',
+      tipNickname: 'Give each device a nickname to manage multiple OpenClaw hosts easily.',
+      tipPhoneIp: 'Run <code>ifconfig</code> in Termux and find the <code>inet</code> address under <code>wlan0</code> (e.g. <code>192.168.0.100</code>). Your PC must be on the same network.<img class="tooltip-img" src="docs/images/termux-ifconfig.png" alt="ifconfig in Termux">',
+      tipSshPort: 'Termux sshd uses port <code>8022</code> by default. You rarely need to change this.',
+      tipLocalPort: 'The port on your PC that maps to the dashboard. Change this if you run multiple tunnels at once (e.g. <code>18790</code>, <code>18791</code>).',
+      tipDashPort: 'OpenClaw dashboard listens on port <code>18789</code> by default. You rarely need to change this.',
+      tipToken: 'Shown when the gateway starts. You can also run <code>openclaw dashboard</code> to see it. Copy the value after <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
+      sshConnect: 'SSH Connect',
+      sshConnectDesc: 'Connect to Termux via SSH',
+      tipSshConnect: 'Copy the command below and run it in a terminal on your PC to access the host\'s Termux shell. See the <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH Setup Guide</a> for details.',
+      dashConnect: 'Dashboard Connect',
+      sshTunnelDesc: 'Run SSH Tunnel on your PC',
+      tipSshTunnel: 'Copy the command below and run it in a terminal on your PC. Keep it running while you use the dashboard.',
+      copy: 'Copy',
+      copied: 'Copied!',
+      openDashboard: 'Open Dashboard',
+      deleteConfirm: 'Delete "{name}"?',
+      invalidFile: 'Invalid file format.',
+    },
+    ko: {
+      savedConnections: '내 OpenClaw 연결',
+      newConnection: '+ 새 연결',
+      emptyMsg: '저장된 연결이 없습니다. "+ 새 연결"을 클릭하여 추가하세요.',
+      storageInfo: '설정은 브라우저에 로컬로 저장되며 서버로 전송되지 않습니다.',
+      export: '내보내기',
+      import: '가져오기',
+      connectionInfo: '연결 정보',
+      nickname: '닉네임',
+      phoneIp: 'OpenClaw 호스트 IP',
+      sshPort: 'SSH 포트',
+      localPort: '로컬 포트',
+      dashPort: '대시보드 포트',
+      token: '토큰',
+      phNickname: '예: Jarvis, Raspberry Pi, Galaxy S24',
+      tipNickname: '각 기기에 닉네임을 설정하여 여러 OpenClaw 호스트를 쉽게 관리할 수 있습니다.',
+      tipPhoneIp: 'Termux에서 <code>ifconfig</code>를 실행하고 <code>wlan0</code> 아래의 <code>inet</code> 주소를 확인하세요 (예: <code>192.168.0.100</code>). PC와 동일한 네트워크에 연결되어 있어야 합니다.<img class="tooltip-img" src="docs/images/termux-ifconfig.png" alt="ifconfig in Termux">',
+      tipSshPort: 'Termux sshd는 기본적으로 포트 <code>8022</code>를 사용합니다. 변경할 필요가 거의 없습니다.',
+      tipLocalPort: 'PC에서 대시보드에 연결할 포트입니다. 여러 터널을 동시에 사용할 경우 변경하세요 (예: <code>18790</code>, <code>18791</code>).',
+      tipDashPort: 'OpenClaw 대시보드는 기본적으로 포트 <code>18789</code>에서 실행됩니다. 변경할 필요가 거의 없습니다.',
+      tipToken: '게이트웨이 시작 시 표시됩니다. <code>openclaw dashboard</code> 명령으로도 확인할 수 있습니다. <code>#token=</code> 뒤의 값을 복사하세요.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
+      sshConnect: 'SSH 연결',
+      sshConnectDesc: 'SSH로 Termux에 연결',
+      tipSshConnect: '아래 명령어를 복사하여 PC 터미널에서 실행하면 호스트의 Termux 셸에 접속할 수 있습니다. 자세한 설명은 <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH 설정 가이드</a>를 참조하세요.',
+      dashConnect: '대시보드 연결',
+      sshTunnelDesc: 'PC에서 SSH 터널 실행',
+      tipSshTunnel: '아래 명령어를 복사하여 PC 터미널에서 실행하세요. 대시보드 사용 중에는 계속 실행 상태를 유지하세요.',
+      copy: '복사',
+      copied: '복사됨!',
+      openDashboard: '대시보드 열기',
+      deleteConfirm: '"{name}"을(를) 삭제할까요?',
+      invalidFile: '잘못된 파일 형식입니다.',
+    },
+    zh: {
+      savedConnections: '我的 OpenClaw 连接',
+      newConnection: '+ 新建连接',
+      emptyMsg: '尚未保存任何连接。点击"+ 新建连接"添加一个。',
+      storageInfo: '您的设置仅保存在浏览器本地，不会发送到任何服务器。',
+      export: '导出',
+      import: '导入',
+      connectionInfo: '连接信息',
+      nickname: '昵称',
+      phoneIp: 'OpenClaw 主机 IP',
+      sshPort: 'SSH 端口',
+      localPort: '本地端口',
+      dashPort: '仪表板端口',
+      token: '令牌',
+      phNickname: '例如：Jarvis、Raspberry Pi、Galaxy S24',
+      tipNickname: '为每个设备设置昵称，方便管理多个 OpenClaw 主机。',
+      tipPhoneIp: '在 Termux 中运行 <code>ifconfig</code>，找到 <code>wlan0</code> 下的 <code>inet</code> 地址（例如 <code>192.168.0.100</code>）。您的电脑必须连接同一网络。<img class="tooltip-img" src="docs/images/termux-ifconfig.png" alt="ifconfig in Termux">',
+      tipSshPort: 'Termux sshd 默认使用端口 <code>8022</code>，通常无需更改。',
+      tipLocalPort: '电脑上映射到仪表板的端口。同时运行多个隧道时需要更改（例如 <code>18790</code>、<code>18791</code>）。',
+      tipDashPort: 'OpenClaw 仪表板默认监听端口 <code>18789</code>，通常无需更改。',
+      tipToken: '网关启动时显示。也可运行 <code>openclaw dashboard</code> 查看。复制 <code>#token=</code> 后的值。<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
+      sshConnect: 'SSH 连接',
+      sshConnectDesc: '通过 SSH 连接 Termux',
+      tipSshConnect: '复制以下命令并在电脑终端中运行，即可访问主机的 Termux 终端。详情请参阅 <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH 设置指南</a>。',
+      dashConnect: '仪表板连接',
+      sshTunnelDesc: '在电脑上运行 SSH 隧道',
+      tipSshTunnel: '复制以下命令并在电脑终端中运行。使用仪表板时请保持运行。',
+      copy: '复制',
+      copied: '已复制！',
+      openDashboard: '打开仪表板',
+      deleteConfirm: '删除"{name}"？',
+      invalidFile: '文件格式无效。',
+    },
+    ja: {
+      savedConnections: 'マイ OpenClaw 接続',
+      newConnection: '+ 新規接続',
+      emptyMsg: '保存された接続がありません。「+ 新規接続」をクリックして追加してください。',
+      storageInfo: '設定はブラウザにローカル保存され、サーバーに送信されません。',
+      export: 'エクスポート',
+      import: 'インポート',
+      connectionInfo: '接続情報',
+      nickname: 'ニックネーム',
+      phoneIp: 'OpenClaw ホスト IP',
+      sshPort: 'SSH ポート',
+      localPort: 'ローカルポート',
+      dashPort: 'ダッシュボードポート',
+      token: 'トークン',
+      phNickname: '例: Jarvis, Raspberry Pi, Galaxy S24',
+      tipNickname: '各デバイスにニックネームを付けて、複数の OpenClaw ホストを簡単に管理できます。',
+      tipPhoneIp: 'Termux で <code>ifconfig</code> を実行し、<code>wlan0</code> の <code>inet</code> アドレスを確認してください（例: <code>192.168.0.100</code>）。PC は同じネットワークに接続している必要があります。<img class="tooltip-img" src="docs/images/termux-ifconfig.png" alt="ifconfig in Termux">',
+      tipSshPort: 'Termux sshd はデフォルトでポート <code>8022</code> を使用します。変更する必要はほとんどありません。',
+      tipLocalPort: 'PC 上でダッシュボードにマッピングするポートです。複数のトンネルを同時に使用する場合は変更してください（例: <code>18790</code>、<code>18791</code>）。',
+      tipDashPort: 'OpenClaw ダッシュボードはデフォルトでポート <code>18789</code> で待機します。変更する必要はほとんどありません。',
+      tipToken: 'ゲートウェイ起動時に表示されます。<code>openclaw dashboard</code> コマンドでも確認できます。<code>#token=</code> の後の値をコピーしてください。<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
+      sshConnect: 'SSH 接続',
+      sshConnectDesc: 'SSH で Termux に接続',
+      tipSshConnect: '以下のコマンドをコピーして PC のターミナルで実行すると、ホストの Termux シェルにアクセスできます。詳細は <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH セットアップガイド</a>をご覧ください。',
+      dashConnect: 'ダッシュボード接続',
+      sshTunnelDesc: 'PC で SSH トンネルを実行',
+      tipSshTunnel: '以下のコマンドをコピーして PC のターミナルで実行してください。ダッシュボード使用中は実行し続けてください。',
+      copy: 'コピー',
+      copied: 'コピー済み！',
+      openDashboard: 'ダッシュボードを開く',
+      deleteConfirm: '「{name}」を削除しますか？',
+      invalidFile: 'ファイル形式が無効です。',
+    },
+    es: {
+      savedConnections: 'Mis conexiones OpenClaw',
+      newConnection: '+ Nueva conexión',
+      emptyMsg: 'No hay conexiones guardadas. Haz clic en "+ Nueva conexión" para añadir una.',
+      storageInfo: 'Tu configuración se guarda localmente en el navegador y nunca se envía a ningún servidor.',
+      export: 'Exportar',
+      import: 'Importar',
+      connectionInfo: 'Información de conexión',
+      nickname: 'Apodo',
+      phoneIp: 'IP del host OpenClaw',
+      sshPort: 'Puerto SSH',
+      localPort: 'Puerto local',
+      dashPort: 'Puerto del panel',
+      token: 'Token',
+      phNickname: 'ej. Jarvis, Raspberry Pi, Galaxy S24',
+      tipNickname: 'Asigna un apodo a cada dispositivo para gestionar varios hosts OpenClaw fácilmente.',
+      tipPhoneIp: 'Ejecuta <code>ifconfig</code> en Termux y busca la dirección <code>inet</code> bajo <code>wlan0</code> (ej. <code>192.168.0.100</code>). Tu PC debe estar en la misma red.<img class="tooltip-img" src="docs/images/termux-ifconfig.png" alt="ifconfig in Termux">',
+      tipSshPort: 'Termux sshd usa el puerto <code>8022</code> por defecto. Rara vez necesitas cambiarlo.',
+      tipLocalPort: 'El puerto en tu PC que se asigna al panel. Cámbialo si ejecutas varios túneles a la vez (ej. <code>18790</code>, <code>18791</code>).',
+      tipDashPort: 'El panel de OpenClaw escucha en el puerto <code>18789</code> por defecto. Rara vez necesitas cambiarlo.',
+      tipToken: 'Se muestra al iniciar el gateway. También puedes ejecutar <code>openclaw dashboard</code> para verlo. Copia el valor después de <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
+      sshConnect: 'Conexión SSH',
+      sshConnectDesc: 'Conectar a Termux vía SSH',
+      tipSshConnect: 'Copia el comando de abajo y ejecútalo en una terminal de tu PC para acceder al shell Termux del host. Consulta la <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Guía de configuración SSH</a> para más detalles.',
+      dashConnect: 'Conexión al panel',
+      sshTunnelDesc: 'Ejecutar túnel SSH en tu PC',
+      tipSshTunnel: 'Copia el comando de abajo y ejecútalo en una terminal de tu PC. Mantenlo en ejecución mientras usas el panel.',
+      copy: 'Copiar',
+      copied: '¡Copiado!',
+      openDashboard: 'Abrir panel',
+      deleteConfirm: '¿Eliminar "{name}"?',
+      invalidFile: 'Formato de archivo inválido.',
+    },
+    fr: {
+      savedConnections: 'Mes connexions OpenClaw',
+      newConnection: '+ Nouvelle connexion',
+      emptyMsg: 'Aucune connexion enregistrée. Cliquez sur "+ Nouvelle connexion" pour en ajouter une.',
+      storageInfo: 'Vos paramètres sont enregistrés localement dans votre navigateur et ne sont jamais envoyés à un serveur.',
+      export: 'Exporter',
+      import: 'Importer',
+      connectionInfo: 'Infos de connexion',
+      nickname: 'Surnom',
+      phoneIp: 'IP de l\'hôte OpenClaw',
+      sshPort: 'Port SSH',
+      localPort: 'Port local',
+      dashPort: 'Port du tableau de bord',
+      token: 'Jeton',
+      phNickname: 'ex. Jarvis, Raspberry Pi, Galaxy S24',
+      tipNickname: 'Donnez un surnom à chaque appareil pour gérer facilement plusieurs hôtes OpenClaw.',
+      tipPhoneIp: 'Exécutez <code>ifconfig</code> dans Termux et trouvez l\'adresse <code>inet</code> sous <code>wlan0</code> (ex. <code>192.168.0.100</code>). Votre PC doit être sur le même réseau.<img class="tooltip-img" src="docs/images/termux-ifconfig.png" alt="ifconfig in Termux">',
+      tipSshPort: 'Le sshd de Termux utilise le port <code>8022</code> par défaut. Vous n\'avez presque jamais besoin de le changer.',
+      tipLocalPort: 'Le port sur votre PC qui mappe vers le tableau de bord. Changez-le si vous exécutez plusieurs tunnels simultanément (ex. <code>18790</code>, <code>18791</code>).',
+      tipDashPort: 'Le tableau de bord OpenClaw écoute sur le port <code>18789</code> par défaut. Vous n\'avez presque jamais besoin de le changer.',
+      tipToken: 'Affiché au démarrage de la passerelle. Vous pouvez aussi exécuter <code>openclaw dashboard</code> pour le voir. Copiez la valeur après <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
+      sshConnect: 'Connexion SSH',
+      sshConnectDesc: 'Se connecter à Termux via SSH',
+      tipSshConnect: 'Copiez la commande ci-dessous et exécutez-la dans un terminal sur votre PC pour accéder au shell Termux de l\'hôte. Consultez le <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Guide de configuration SSH</a> pour plus de détails.',
+      dashConnect: 'Connexion au tableau de bord',
+      sshTunnelDesc: 'Exécuter le tunnel SSH sur votre PC',
+      tipSshTunnel: 'Copiez la commande ci-dessous et exécutez-la dans un terminal sur votre PC. Gardez-la en cours d\'exécution pendant l\'utilisation du tableau de bord.',
+      copy: 'Copier',
+      copied: 'Copié !',
+      openDashboard: 'Ouvrir le tableau de bord',
+      deleteConfirm: 'Supprimer « {name} » ?',
+      invalidFile: 'Format de fichier invalide.',
+    },
+    de: {
+      savedConnections: 'Meine OpenClaw-Verbindungen',
+      newConnection: '+ Neue Verbindung',
+      emptyMsg: 'Noch keine Verbindungen gespeichert. Klicke auf „+ Neue Verbindung", um eine hinzuzufügen.',
+      storageInfo: 'Ihre Einstellungen werden lokal im Browser gespeichert und nie an einen Server gesendet.',
+      export: 'Exportieren',
+      import: 'Importieren',
+      connectionInfo: 'Verbindungsinfo',
+      nickname: 'Spitzname',
+      phoneIp: 'OpenClaw-Host-IP',
+      sshPort: 'SSH-Port',
+      localPort: 'Lokaler Port',
+      dashPort: 'Dashboard-Port',
+      token: 'Token',
+      phNickname: 'z.B. Jarvis, Raspberry Pi, Galaxy S24',
+      tipNickname: 'Geben Sie jedem Gerät einen Spitznamen, um mehrere OpenClaw-Hosts einfach zu verwalten.',
+      tipPhoneIp: 'Führen Sie <code>ifconfig</code> in Termux aus und suchen Sie die <code>inet</code>-Adresse unter <code>wlan0</code> (z.B. <code>192.168.0.100</code>). Ihr PC muss im selben Netzwerk sein.<img class="tooltip-img" src="docs/images/termux-ifconfig.png" alt="ifconfig in Termux">',
+      tipSshPort: 'Termux sshd verwendet standardmäßig Port <code>8022</code>. Eine Änderung ist selten nötig.',
+      tipLocalPort: 'Der Port auf Ihrem PC, der zum Dashboard weitergeleitet wird. Ändern Sie ihn, wenn Sie mehrere Tunnel gleichzeitig betreiben (z.B. <code>18790</code>, <code>18791</code>).',
+      tipDashPort: 'Das OpenClaw-Dashboard lauscht standardmäßig auf Port <code>18789</code>. Eine Änderung ist selten nötig.',
+      tipToken: 'Wird beim Starten des Gateways angezeigt. Sie können auch <code>openclaw dashboard</code> ausführen. Kopieren Sie den Wert nach <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
+      sshConnect: 'SSH-Verbindung',
+      sshConnectDesc: 'Über SSH mit Termux verbinden',
+      tipSshConnect: 'Kopieren Sie den Befehl und führen Sie ihn in einem Terminal auf Ihrem PC aus, um auf die Termux-Shell des Hosts zuzugreifen. Details finden Sie im <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH-Einrichtungshandbuch</a>.',
+      dashConnect: 'Dashboard-Verbindung',
+      sshTunnelDesc: 'SSH-Tunnel auf Ihrem PC ausführen',
+      tipSshTunnel: 'Kopieren Sie den Befehl und führen Sie ihn in einem Terminal auf Ihrem PC aus. Lassen Sie ihn laufen, während Sie das Dashboard nutzen.',
+      copy: 'Kopieren',
+      copied: 'Kopiert!',
+      openDashboard: 'Dashboard öffnen',
+      deleteConfirm: '„{name}" löschen?',
+      invalidFile: 'Ungültiges Dateiformat.',
+    },
+    pt: {
+      savedConnections: 'Minhas conexões OpenClaw',
+      newConnection: '+ Nova conexão',
+      emptyMsg: 'Nenhuma conexão salva ainda. Clique em "+ Nova conexão" para adicionar uma.',
+      storageInfo: 'Suas configurações são salvas localmente no navegador e nunca enviadas a nenhum servidor.',
+      export: 'Exportar',
+      import: 'Importar',
+      connectionInfo: 'Informações da conexão',
+      nickname: 'Apelido',
+      phoneIp: 'IP do host OpenClaw',
+      sshPort: 'Porta SSH',
+      localPort: 'Porta local',
+      dashPort: 'Porta do painel',
+      token: 'Token',
+      phNickname: 'ex. Jarvis, Raspberry Pi, Galaxy S24',
+      tipNickname: 'Dê um apelido a cada dispositivo para gerenciar vários hosts OpenClaw facilmente.',
+      tipPhoneIp: 'Execute <code>ifconfig</code> no Termux e encontre o endereço <code>inet</code> em <code>wlan0</code> (ex. <code>192.168.0.100</code>). Seu PC deve estar na mesma rede.<img class="tooltip-img" src="docs/images/termux-ifconfig.png" alt="ifconfig in Termux">',
+      tipSshPort: 'O sshd do Termux usa a porta <code>8022</code> por padrão. Raramente é necessário alterar.',
+      tipLocalPort: 'A porta no seu PC que mapeia para o painel. Altere se executar vários túneis simultaneamente (ex. <code>18790</code>, <code>18791</code>).',
+      tipDashPort: 'O painel do OpenClaw escuta na porta <code>18789</code> por padrão. Raramente é necessário alterar.',
+      tipToken: 'Mostrado ao iniciar o gateway. Você também pode executar <code>openclaw dashboard</code> para ver. Copie o valor após <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
+      sshConnect: 'Conexão SSH',
+      sshConnectDesc: 'Conectar ao Termux via SSH',
+      tipSshConnect: 'Copie o comando abaixo e execute-o em um terminal no seu PC para acessar o shell Termux do host. Veja o <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Guia de configuração SSH</a> para detalhes.',
+      dashConnect: 'Conexão ao painel',
+      sshTunnelDesc: 'Executar túnel SSH no seu PC',
+      tipSshTunnel: 'Copie o comando abaixo e execute-o em um terminal no seu PC. Mantenha-o rodando enquanto usar o painel.',
+      copy: 'Copiar',
+      copied: 'Copiado!',
+      openDashboard: 'Abrir painel',
+      deleteConfirm: 'Excluir "{name}"?',
+      invalidFile: 'Formato de arquivo inválido.',
+    },
+    ru: {
+      savedConnections: 'Мои подключения OpenClaw',
+      newConnection: '+ Новое подключение',
+      emptyMsg: 'Нет сохранённых подключений. Нажмите «+ Новое подключение», чтобы добавить.',
+      storageInfo: 'Ваши настройки сохраняются локально в браузере и никогда не отправляются на сервер.',
+      export: 'Экспорт',
+      import: 'Импорт',
+      connectionInfo: 'Информация о подключении',
+      nickname: 'Имя',
+      phoneIp: 'IP хоста OpenClaw',
+      sshPort: 'SSH-порт',
+      localPort: 'Локальный порт',
+      dashPort: 'Порт панели',
+      token: 'Токен',
+      phNickname: 'напр. Jarvis, Raspberry Pi, Galaxy S24',
+      tipNickname: 'Дайте каждому устройству имя для удобного управления несколькими хостами OpenClaw.',
+      tipPhoneIp: 'Выполните <code>ifconfig</code> в Termux и найдите адрес <code>inet</code> под <code>wlan0</code> (напр. <code>192.168.0.100</code>). Ваш ПК должен быть в той же сети.<img class="tooltip-img" src="docs/images/termux-ifconfig.png" alt="ifconfig in Termux">',
+      tipSshPort: 'Termux sshd использует порт <code>8022</code> по умолчанию. Менять его почти никогда не нужно.',
+      tipLocalPort: 'Порт на вашем ПК, перенаправляемый на панель. Измените, если запускаете несколько туннелей одновременно (напр. <code>18790</code>, <code>18791</code>).',
+      tipDashPort: 'Панель OpenClaw по умолчанию слушает порт <code>18789</code>. Менять его почти никогда не нужно.',
+      tipToken: 'Показывается при запуске шлюза. Также можно выполнить <code>openclaw dashboard</code>. Скопируйте значение после <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
+      sshConnect: 'SSH-подключение',
+      sshConnectDesc: 'Подключиться к Termux по SSH',
+      tipSshConnect: 'Скопируйте команду ниже и выполните её в терминале на вашем ПК для доступа к оболочке Termux хоста. Подробности в <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Руководстве по настройке SSH</a>.',
+      dashConnect: 'Подключение к панели',
+      sshTunnelDesc: 'Запустить SSH-туннель на вашем ПК',
+      tipSshTunnel: 'Скопируйте команду ниже и выполните её в терминале на вашем ПК. Не закрывайте, пока используете панель.',
+      copy: 'Копировать',
+      copied: 'Скопировано!',
+      openDashboard: 'Открыть панель',
+      deleteConfirm: 'Удалить «{name}»?',
+      invalidFile: 'Неверный формат файла.',
+    },
+    ar: {
+      savedConnections: 'اتصالاتي OpenClaw',
+      newConnection: '+ اتصال جديد',
+      emptyMsg: 'لا توجد اتصالات محفوظة بعد. انقر على "+ اتصال جديد" لإضافة واحد.',
+      storageInfo: 'يتم حفظ إعداداتك محليًا في متصفحك ولا يتم إرسالها إلى أي خادم.',
+      export: 'تصدير',
+      import: 'استيراد',
+      connectionInfo: 'معلومات الاتصال',
+      nickname: 'الاسم المستعار',
+      phoneIp: 'IP مضيف OpenClaw',
+      sshPort: 'منفذ SSH',
+      localPort: 'المنفذ المحلي',
+      dashPort: 'منفذ لوحة التحكم',
+      token: 'الرمز',
+      phNickname: 'مثال: Jarvis، Raspberry Pi، Galaxy S24',
+      tipNickname: 'أعطِ كل جهاز اسمًا مستعارًا لإدارة عدة مضيفات OpenClaw بسهولة.',
+      tipPhoneIp: 'شغّل <code>ifconfig</code> في Termux وابحث عن عنوان <code>inet</code> تحت <code>wlan0</code> (مثال: <code>192.168.0.100</code>). يجب أن يكون حاسوبك على نفس الشبكة.<img class="tooltip-img" src="docs/images/termux-ifconfig.png" alt="ifconfig in Termux">',
+      tipSshPort: 'يستخدم Termux sshd المنفذ <code>8022</code> افتراضيًا. نادرًا ما تحتاج إلى تغييره.',
+      tipLocalPort: 'المنفذ على حاسوبك الذي يُعيّن للوحة التحكم. غيّره إذا كنت تشغّل عدة أنفاق في وقت واحد (مثال: <code>18790</code>، <code>18791</code>).',
+      tipDashPort: 'تستمع لوحة تحكم OpenClaw على المنفذ <code>18789</code> افتراضيًا. نادرًا ما تحتاج إلى تغييره.',
+      tipToken: 'يظهر عند بدء تشغيل البوابة. يمكنك أيضًا تشغيل <code>openclaw dashboard</code> لرؤيته. انسخ القيمة بعد <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
+      sshConnect: 'اتصال SSH',
+      sshConnectDesc: 'الاتصال بـ Termux عبر SSH',
+      tipSshConnect: 'انسخ الأمر أدناه وشغّله في طرفية على حاسوبك للوصول إلى واجهة Termux للمضيف. راجع <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">دليل إعداد SSH</a> للتفاصيل.',
+      dashConnect: 'اتصال لوحة التحكم',
+      sshTunnelDesc: 'تشغيل نفق SSH على حاسوبك',
+      tipSshTunnel: 'انسخ الأمر أدناه وشغّله في طرفية على حاسوبك. أبقِه يعمل أثناء استخدام لوحة التحكم.',
+      copy: 'نسخ',
+      copied: 'تم النسخ!',
+      openDashboard: 'فتح لوحة التحكم',
+      deleteConfirm: 'حذف "{name}"؟',
+      invalidFile: 'تنسيق ملف غير صالح.',
+    },
+  };
+
+  let currentLang = 'en';
+
+  function detectLang() {
+    const saved = localStorage.getItem('openclaw-lang');
+    if (saved && i18n[saved]) return saved;
+    const nav = (navigator.language || '').toLowerCase();
+    const code = nav.split('-')[0];
+    if (i18n[code]) return code;
+    return 'en';
+  }
+
+  function t(key) {
+    return (i18n[currentLang] && i18n[currentLang][key]) || i18n.en[key] || key;
+  }
+
+  function setLang(lang) {
+    if (!i18n[lang]) lang = 'en';
+    currentLang = lang;
+    localStorage.setItem('openclaw-lang', lang);
+    document.getElementById('langSelect').value = lang;
+    document.documentElement.lang = lang;
+
+    // Apply text translations
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (key && i18n[currentLang][key] !== undefined) {
+        el.textContent = i18n[currentLang][key];
+      }
+    });
+
+    // Apply HTML translations (tooltips with code/img)
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (key && i18n[currentLang][key] !== undefined) {
+        el.innerHTML = i18n[currentLang][key];
+      }
+    });
+
+    // Apply placeholder translations
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (key && i18n[currentLang][key] !== undefined) {
+        el.placeholder = i18n[currentLang][key];
+      }
+    });
+
+    // Re-render dynamic content
+    renderList();
+    if (editingId) {
+      const d = devices.find(x => x.id === editingId);
+      if (d && d.phoneIp && d.token) renderResult(d);
+    }
+  }
+
+  // ─── App ────────────────────────────────────────
+  const STORAGE_KEY = 'openclaw-devices';
+  const formFields = ['nickname', 'phoneIp', 'sshPort', 'localPort', 'dashPort', 'token'];
+  let devices = [];
+  let activeId = null;
+  let editingId = null;
+
+  function loadDevices() {
+    try {
+      devices = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch(e) {
+      devices = [];
+    }
+    // Migrate from old single-device format
+    const old = localStorage.getItem('openclaw-connect');
+    if (old && devices.length === 0) {
+      try {
+        const d = JSON.parse(old);
+        d.id = genId();
+        d.nickname = d.phoneIp || 'My Phone';
+        devices.push(d);
+        saveAll();
+        localStorage.removeItem('openclaw-connect');
+      } catch(e) {}
+    }
+  }
+
+  function saveAll() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(devices));
+  }
+
+  function genId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+
+  function renderList() {
+    const list = document.getElementById('deviceList');
+    if (devices.length === 0) {
+      list.innerHTML = '<div class="empty-msg">' + esc(t('emptyMsg')) + '</div>';
+      return;
+    }
+    list.innerHTML = devices.map(d => `
+      <div class="device-card ${d.id === activeId ? 'active' : ''}" onclick="selectDevice('${d.id}')">
+        <div class="device-card-info">
+          <div class="device-card-name">${esc(d.nickname)}</div>
+          <div class="device-card-ip">${esc(d.phoneIp)}:${esc(d.dashPort || '18789')}</div>
+        </div>
+        <button class="btn-delete" onclick="event.stopPropagation(); deleteDevice('${d.id}')" title="Delete">&times;</button>
+      </div>
+    `).join('');
+  }
+
+  function esc(s) {
+    const el = document.createElement('span');
+    el.textContent = s || '';
+    return el.innerHTML;
+  }
+
+  function selectDevice(id) {
+    const d = devices.find(x => x.id === id);
+    if (!d) return;
+    activeId = id;
+    editingId = id;
+    showForm(id);
+  }
+
+  function renderResult(d) {
+    const complete = d.nickname && d.phoneIp && d.token;
+    const sshConnectCmd = `ssh -p ${d.sshPort || '8022'} ${d.phoneIp}`;
+    const sshCmd = `ssh -N -L ${d.localPort || '18789'}:127.0.0.1:${d.dashPort || '18789'} -p ${d.sshPort || '8022'} ${d.phoneIp}`;
+    const dashUrl = `http://127.0.0.1:${d.localPort || '18789'}/#token=${d.token}`;
+
+    document.getElementById('sshConnectCmd').textContent = sshConnectCmd;
+    document.getElementById('sshCmd').textContent = sshCmd;
+    const link = document.getElementById('dashLink');
+    link.href = complete ? dashUrl : '#';
+    link.textContent = t('openDashboard');
+    link.classList.toggle('disabled', !complete);
+    document.querySelectorAll('#resultSection .btn-copy').forEach(btn => {
+      btn.classList.toggle('disabled', !complete);
+    });
+    document.getElementById('resultSection').classList.remove('hidden');
+  }
+
+  function showForm(id) {
+    editingId = id;
+    const form = document.getElementById('formSection');
+    form.classList.remove('hidden');
+
+    if (id) {
+      const d = devices.find(x => x.id === id);
+      if (!d) return;
+      formFields.forEach(f => document.getElementById(f).value = d[f] || '');
+      renderResult(d);
+    } else {
+      // Create new device immediately
+      const newId = genId();
+      const usedPorts = new Set(devices.map(d => parseInt(d.localPort) || 18789));
+      let nextPort = 18789;
+      while (usedPorts.has(nextPort)) nextPort++;
+      const data = { id: newId, nickname: '', phoneIp: '', sshPort: '8022', localPort: String(nextPort), dashPort: '18789', token: '' };
+      devices.push(data);
+      saveAll();
+      editingId = newId;
+      activeId = newId;
+      formFields.forEach(f => document.getElementById(f).value = data[f] || '');
+      document.getElementById('resultSection').classList.add('hidden');
+      document.getElementById('nickname').focus();
+    }
+    renderList();
+  }
+
+  function autoSave() {
+    if (!editingId) return;
+    const idx = devices.findIndex(x => x.id === editingId);
+    if (idx < 0) return;
+    const data = { id: editingId };
+    formFields.forEach(f => data[f] = document.getElementById(f).value.trim());
+    devices[idx] = data;
+    saveAll();
+    renderList();
+    if (data.phoneIp && data.token) {
+      renderResult(data);
+    } else {
+      document.getElementById('resultSection').classList.add('hidden');
+    }
+  }
+
+  function deleteDevice(id) {
+    const d = devices.find(x => x.id === id);
+    if (!d) return;
+    if (!confirm(t('deleteConfirm').replace('{name}', d.nickname))) return;
+    devices = devices.filter(x => x.id !== id);
+    saveAll();
+    if (activeId === id) {
+      activeId = null;
+      document.getElementById('resultSection').classList.add('hidden');
+    }
+    renderList();
+    if (devices.length > 0 && !activeId) {
+      selectDevice(devices[0].id);
+    }
+  }
+
+  function copySshConnect(btn) {
+    const text = document.getElementById('sshConnectCmd').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = t('copied');
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = t('copy'); btn.classList.remove('copied'); }, 1500);
+    });
+  }
+
+  function copyCmd(btn) {
+    const text = document.getElementById('sshCmd').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = t('copied');
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = t('copy'); btn.classList.remove('copied'); }, 1500);
+    });
+  }
+
+  function exportDevices() {
+    const json = JSON.stringify(devices, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'openclaw-on-android-devices.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function importDevices(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (!Array.isArray(imported)) throw new Error();
+        devices = imported;
+        saveAll();
+        activeId = null;
+        editingId = null;
+        document.getElementById('formSection').classList.add('hidden');
+        document.getElementById('resultSection').classList.add('hidden');
+        renderList();
+        if (devices.length > 0) selectDevice(devices[0].id);
+      } catch(err) {
+        alert(t('invalidFile'));
+      }
+    };
+    reader.readAsText(file);
+    input.value = '';
+  }
+
+  // Auto-save on input change
+  formFields.forEach(f => {
+    const el = document.getElementById(f);
+    if (!el.disabled) el.addEventListener('input', autoSave);
+  });
+
+  // Init
+  loadDevices();
+  currentLang = detectLang();
+  document.getElementById('langSelect').value = currentLang;
+  setLang(currentLang);
+  renderList();
+  if (devices.length > 0) {
+    activeId = devices[0].id;
+    selectDevice(activeId);
+  }
+</script>
+
 </body>
 </html>
