@@ -116,6 +116,30 @@ source ~/.bashrc
 
 또는 Termux 앱을 완전히 종료했다가 다시 여세요.
 
+## "Cannot find module bionic-compat.js" 에러
+
+```
+Error: Cannot find module '/data/data/com.termux/files/home/.openclaw-lite/patches/bionic-compat.js'
+```
+
+### 원인
+
+`~/.bashrc`의 `NODE_OPTIONS` 환경변수가 이전 설치 경로(`.openclaw-lite`)를 참조하고 있습니다. 프로젝트명이 "OpenClaw Lite"였던 이전 버전에서 업데이트한 경우 발생합니다.
+
+### 해결 방법
+
+업데이터를 실행하면 환경변수 블록이 갱신됩니다:
+
+```bash
+curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash && source ~/.bashrc
+```
+
+또는 수동으로 수정:
+
+```bash
+sed -i 's/\.openclaw-lite/\.openclaw-android/g' ~/.bashrc && source ~/.bashrc
+```
+
 ## "not supported on android" 에러
 
 ```

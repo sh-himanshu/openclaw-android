@@ -23,6 +23,7 @@ PACKAGES=(
     clang
     tmux
     ttyd
+    libvips
 )
 
 echo "Installing packages: ${PACKAGES[*]}"

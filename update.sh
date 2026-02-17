@@ -78,6 +78,18 @@ else
     fi
 fi
 
+# Install libvips if not already installed (needed for sharp/image processing)
+if pkg list-installed libvips &>/dev/null 2>&1; then
+    echo -e "${GREEN}[OK]${NC}   libvips already installed"
+else
+    echo "Installing libvips..."
+    if pkg install -y libvips; then
+        echo -e "${GREEN}[OK]${NC}   libvips installed"
+    else
+        echo -e "${YELLOW}[WARN]${NC} Failed to install libvips (non-critical)"
+    fi
+fi
+
 # ─────────────────────────────────────────────
 step 3 "Downloading Latest Scripts"
 
