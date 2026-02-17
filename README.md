@@ -225,6 +225,7 @@ openclaw-android/
 │   ├── patch-paths.sh          # Fix hardcoded paths in OpenClaw
 │   └── apply-patches.sh        # Patch orchestrator
 ├── scripts/
+│   ├── build-sharp.sh          # Build sharp native module (image processing)
 │   ├── check-env.sh            # Pre-flight environment check
 │   ├── install-deps.sh         # Install Termux packages
 │   ├── setup-env.sh            # Configure environment variables
@@ -270,7 +271,6 @@ Installs Termux packages required for building and running OpenClaw.
 | `clang` | C/C++ compiler | Default C/C++ compiler in Termux. Used by `node-gyp` to compile C/C++ source of native modules. Termux uses Clang as standard instead of GCC |
 | `tmux` | Terminal multiplexer | Allows running the OpenClaw server in a background session. In Termux, apps going to background may suspend processes, so running inside a tmux session keeps it stable |
 | `ttyd` | Web terminal | Shares a terminal over the web. Used by [My OpenClaw Hub](https://myopenclawhub.com) to provide browser-based terminal access to the host |
-| `libvips` | Image processing library | Required by the `sharp` npm package for image processing. Enables OpenClaw agents to view and analyze images (e.g., images sent via Discord) |
 
 - After installation, verifies Node.js >= 22 and npm presence. Exits on failure
 
@@ -309,6 +309,12 @@ Installs OpenClaw globally and applies Termux compatibility patches.
      - `"/bin/bash"` → `"$PREFIX/bin/bash"`
      - `"/usr/bin/env"` → `"$PREFIX/bin/env"`
    - Logs patch results to `~/.openclaw-android/patch.log`
+4. `scripts/build-sharp.sh` builds the sharp native module for image processing (non-critical):
+   - Installs `libvips` and `binutils` packages
+   - Installs `node-gyp` globally
+   - Sets `GYP_DEFINES` and `CPATH` for Android/Termux cross-compilation
+   - Runs `npm rebuild sharp` inside the OpenClaw directory
+   - If the build fails, prints a warning and continues — image processing won't work but the gateway runs normally
 
 ### [6/7] Installation Verification — `tests/verify-install.sh`
 

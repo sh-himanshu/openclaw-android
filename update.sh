@@ -20,7 +20,7 @@ echo ""
 
 step() {
     echo ""
-    echo -e "${BOLD}[$1/4] $2${NC}"
+    echo -e "${BOLD}[$1/5] $2${NC}"
     echo "----------------------------------------"
 }
 
@@ -78,18 +78,6 @@ else
     fi
 fi
 
-# Install libvips if not already installed (needed for sharp/image processing)
-if pkg list-installed libvips &>/dev/null 2>&1; then
-    echo -e "${GREEN}[OK]${NC}   libvips already installed"
-else
-    echo "Installing libvips..."
-    if pkg install -y libvips; then
-        echo -e "${GREEN}[OK]${NC}   libvips installed"
-    else
-        echo -e "${YELLOW}[WARN]${NC} Failed to install libvips (non-critical)"
-    fi
-fi
-
 # ─────────────────────────────────────────────
 step 3 "Downloading Latest Scripts"
 
@@ -111,12 +99,32 @@ else
     echo -e "${YELLOW}[WARN]${NC} Failed to save update.sh (non-critical)"
 fi
 
+# Download build-sharp.sh
+SHARP_TMPFILE=$(mktemp "$PREFIX/tmp/build-sharp.XXXXXX.sh")
+if curl -sfL "$REPO_BASE/scripts/build-sharp.sh" -o "$SHARP_TMPFILE"; then
+    echo -e "${GREEN}[OK]${NC}   build-sharp.sh downloaded"
+else
+    echo -e "${YELLOW}[WARN]${NC} Failed to download build-sharp.sh (non-critical)"
+    rm -f "$SHARP_TMPFILE"
+    SHARP_TMPFILE=""
+fi
+
 # ─────────────────────────────────────────────
 step 4 "Updating Environment Variables"
 
 # Run setup-env.sh to refresh .bashrc block
 bash "$TMPFILE"
 rm -f "$TMPFILE"
+
+# ─────────────────────────────────────────────
+step 5 "Building sharp (image processing)"
+
+if [ -n "$SHARP_TMPFILE" ]; then
+    bash "$SHARP_TMPFILE"
+    rm -f "$SHARP_TMPFILE"
+else
+    echo -e "${YELLOW}[SKIP]${NC} build-sharp.sh was not downloaded"
+fi
 
 echo ""
 echo -e "${BOLD}========================================${NC}"

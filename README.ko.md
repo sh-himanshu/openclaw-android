@@ -225,6 +225,7 @@ openclaw-android/
 │   ├── patch-paths.sh          # OpenClaw 내 하드코딩 경로 수정
 │   └── apply-patches.sh        # 패치 오케스트레이터
 ├── scripts/
+│   ├── build-sharp.sh          # sharp 네이티브 모듈 빌드 (이미지 처리)
 │   ├── check-env.sh            # 사전 환경 점검
 │   ├── install-deps.sh         # Termux 패키지 설치
 │   ├── setup-env.sh            # 환경변수 설정
@@ -270,7 +271,6 @@ OpenClaw 빌드 및 실행에 필요한 Termux 패키지를 설치합니다.
 | `clang` | C/C++ 컴파일러 | Termux의 기본 C/C++ 컴파일러. `node-gyp`가 네이티브 모듈의 C/C++ 소스를 컴파일할 때 사용. Termux에서는 GCC 대신 Clang이 표준 |
 | `tmux` | 터미널 멀티플렉서 | OpenClaw 서버를 백그라운드 세션에서 실행할 수 있게 해줌. Termux에서는 앱이 백그라운드로 가면 프로세스가 중단될 수 있으므로, tmux 세션 안에서 실행하면 안정적으로 유지 가능 |
 | `ttyd` | 웹 터미널 | 터미널을 웹으로 공유하는 도구. [My OpenClaw Hub](https://myopenclawhub.com)에서 브라우저 기반 터미널 접속을 제공하는 데 사용 |
-| `libvips` | 이미지 처리 라이브러리 | `sharp` npm 패키지가 이미지 처리에 사용. OpenClaw 에이전트가 이미지를 보고 분석할 수 있게 해줌 (예: 디스코드로 전송된 이미지) |
 
 - 설치 후 Node.js >= 22 버전 및 npm 존재 여부를 검증. 실패 시 종료
 
@@ -309,6 +309,12 @@ OpenClaw을 글로벌로 설치하고 Termux 호환 패치를 적용합니다.
      - `"/bin/bash"` → `"$PREFIX/bin/bash"`
      - `"/usr/bin/env"` → `"$PREFIX/bin/env"`
    - 패치 결과를 `~/.openclaw-android/patch.log`에 기록
+4. `scripts/build-sharp.sh`가 이미지 처리용 sharp 네이티브 모듈을 빌드 (비필수):
+   - `libvips`와 `binutils` 패키지 설치
+   - `node-gyp` 글로벌 설치
+   - Android/Termux 크로스 컴파일을 위한 `GYP_DEFINES`와 `CPATH` 설정
+   - OpenClaw 디렉토리에서 `npm rebuild sharp` 실행
+   - 빌드 실패 시 경고만 출력하고 계속 진행 — 이미지 처리는 안 되지만 게이트웨이는 정상 동작
 
 ### [6/7] 설치 검증 — `tests/verify-install.sh`
 

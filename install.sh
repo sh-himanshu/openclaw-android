@@ -74,6 +74,10 @@ echo -e "${GREEN}[OK]${NC}   OpenClaw installed"
 echo ""
 bash "$SCRIPT_DIR/patches/apply-patches.sh"
 
+# Build sharp for image processing (non-critical)
+echo ""
+bash "$SCRIPT_DIR/scripts/build-sharp.sh"
+
 # ─────────────────────────────────────────────
 step 6 "Verifying Installation"
 bash "$SCRIPT_DIR/tests/verify-install.sh"
