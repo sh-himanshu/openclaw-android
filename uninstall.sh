@@ -2,7 +2,6 @@
 # uninstall.sh - Remove OpenClaw on Android from Termux
 set -euo pipefail
 
-RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BOLD='\033[1m'

@@ -54,7 +54,8 @@ fi
 if command -v node &>/dev/null; then
     NODE_VER=$(node -v 2>/dev/null || echo "unknown")
     echo -e "${GREEN}[OK]${NC}   Node.js found: $NODE_VER"
-    NODE_MAJOR=$(echo "$NODE_VER" | sed 's/v\([0-9]*\).*/\1/')
+    NODE_MAJOR="${NODE_VER%%.*}"
+    NODE_MAJOR="${NODE_MAJOR#v}"
     if [ "$NODE_MAJOR" -lt 22 ] 2>/dev/null; then
         echo -e "${YELLOW}[WARN]${NC} Node.js >= 22 required. Will be upgraded during install."
     fi

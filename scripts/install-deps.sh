@@ -4,7 +4,6 @@ set -euo pipefail
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 NC='\033[0m'
 
 echo "=== Installing Dependencies ==="
@@ -23,6 +22,7 @@ PACKAGES=(
     cmake
     clang
     tmux
+    ttyd
 )
 
 echo "Installing packages: ${PACKAGES[*]}"
@@ -37,7 +37,8 @@ if ! command -v node &>/dev/null; then
 fi
 
 NODE_VER=$(node -v)
-NODE_MAJOR=$(echo "$NODE_VER" | sed 's/v\([0-9]*\).*/\1/')
+NODE_MAJOR="${NODE_VER%%.*}"
+NODE_MAJOR="${NODE_MAJOR#v}"
 
 echo -e "${GREEN}[OK]${NC}   Node.js $NODE_VER installed"
 

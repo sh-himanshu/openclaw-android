@@ -269,6 +269,7 @@ OpenClaw 빌드 및 실행에 필요한 Termux 패키지를 설치합니다.
 | `cmake` | 크로스 플랫폼 빌드 시스템 | 일부 네이티브 모듈이 Makefile 대신 CMake 기반 빌드를 사용. 특히 암호화 관련 라이브러리(`argon2` 등)가 CMakeLists.txt를 포함하는 경우가 많음 |
 | `clang` | C/C++ 컴파일러 | Termux의 기본 C/C++ 컴파일러. `node-gyp`가 네이티브 모듈의 C/C++ 소스를 컴파일할 때 사용. Termux에서는 GCC 대신 Clang이 표준 |
 | `tmux` | 터미널 멀티플렉서 | OpenClaw 서버를 백그라운드 세션에서 실행할 수 있게 해줌. Termux에서는 앱이 백그라운드로 가면 프로세스가 중단될 수 있으므로, tmux 세션 안에서 실행하면 안정적으로 유지 가능 |
+| `ttyd` | 웹 터미널 | 터미널을 웹으로 공유하는 도구. [My OpenClaw Hub](https://myopenclawhub.com)에서 브라우저 기반 터미널 접속을 제공하는 데 사용 |
 
 - 설치 후 Node.js >= 22 버전 및 npm 존재 여부를 검증. 실패 시 종료
 

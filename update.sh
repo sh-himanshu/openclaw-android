@@ -20,7 +20,7 @@ echo ""
 
 step() {
     echo ""
-    echo -e "${BOLD}[$1/3] $2${NC}"
+    echo -e "${BOLD}[$1/4] $2${NC}"
     echo "----------------------------------------"
 }
 
@@ -64,7 +64,22 @@ if ! command -v curl &>/dev/null; then
 fi
 
 # ─────────────────────────────────────────────
-step 2 "Downloading Latest Scripts"
+step 2 "Installing New Packages"
+
+# Install ttyd if not already installed
+if command -v ttyd &>/dev/null; then
+    echo -e "${GREEN}[OK]${NC}   ttyd already installed ($(ttyd --version 2>/dev/null || echo ""))"
+else
+    echo "Installing ttyd..."
+    if pkg install -y ttyd; then
+        echo -e "${GREEN}[OK]${NC}   ttyd installed"
+    else
+        echo -e "${YELLOW}[WARN]${NC} Failed to install ttyd (non-critical)"
+    fi
+fi
+
+# ─────────────────────────────────────────────
+step 3 "Downloading Latest Scripts"
 
 # Download setup-env.sh (needed for .bashrc update)
 TMPFILE=$(mktemp "$PREFIX/tmp/setup-env.XXXXXX.sh")
@@ -85,7 +100,7 @@ else
 fi
 
 # ─────────────────────────────────────────────
-step 3 "Updating Environment Variables"
+step 4 "Updating Environment Variables"
 
 # Run setup-env.sh to refresh .bashrc block
 bash "$TMPFILE"

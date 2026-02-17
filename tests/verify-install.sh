@@ -32,7 +32,8 @@ echo ""
 # 1. Node.js version
 if command -v node &>/dev/null; then
     NODE_VER=$(node -v)
-    NODE_MAJOR=$(echo "$NODE_VER" | sed 's/v\([0-9]*\).*/\1/')
+    NODE_MAJOR="${NODE_VER%%.*}"
+    NODE_MAJOR="${NODE_MAJOR#v}"
     if [ "$NODE_MAJOR" -ge 22 ] 2>/dev/null; then
         check_pass "Node.js $NODE_VER (>= 22)"
     else
