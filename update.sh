@@ -99,6 +99,13 @@ else
     echo -e "${YELLOW}[WARN]${NC} Failed to download bionic-compat.js (non-critical)"
 fi
 
+# Download termux-compat.h (native build compatibility)
+if curl -sfL "$REPO_BASE/patches/termux-compat.h" > "$OPENCLAW_DIR/patches/termux-compat.h"; then
+    echo -e "${GREEN}[OK]${NC}   termux-compat.h updated"
+else
+    echo -e "${YELLOW}[WARN]${NC} Failed to download termux-compat.h (non-critical)"
+fi
+
 # Install spawn.h stub if missing (needed for koffi/native module builds)
 if [ ! -f "$PREFIX/include/spawn.h" ]; then
     if curl -sfL "$REPO_BASE/patches/spawn.h" -o "$PREFIX/include/spawn.h"; then

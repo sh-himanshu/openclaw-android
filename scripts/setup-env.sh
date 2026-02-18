@@ -15,12 +15,17 @@ MARKER_END="# <<< OpenClaw on Android <<<"
 
 COMPAT_PATH="$HOME/.openclaw-android/patches/bionic-compat.js"
 
+COMPAT_HEADER="$HOME/.openclaw-android/patches/termux-compat.h"
+
 ENV_BLOCK="${MARKER_START}
 export TMPDIR=\"\$PREFIX/tmp\"
 export TMP=\"\$TMPDIR\"
 export TEMP=\"\$TMPDIR\"
 export NODE_OPTIONS=\"-r $COMPAT_PATH\"
 export CONTAINER=1
+export CXXFLAGS=\"-include $COMPAT_HEADER\"
+export GYP_DEFINES=\"OS=linux android_ndk_path=\$PREFIX\"
+export CPATH=\"\$PREFIX/include/glib-2.0:\$PREFIX/lib/glib-2.0/include\"
 ${MARKER_END}"
 
 # Create .bashrc if it doesn't exist
@@ -46,6 +51,9 @@ echo "  TMP=\$TMPDIR"
 echo "  TEMP=\$TMPDIR"
 echo "  NODE_OPTIONS=\"-r $COMPAT_PATH\""
 echo "  CONTAINER=1  (suppresses systemd checks)"
+echo "  CXXFLAGS=\"-include ...termux-compat.h\"  (native build fixes)"
+echo "  GYP_DEFINES=\"OS=linux ...\"  (node-gyp Android override)"
+echo "  CPATH=\"...glib-2.0...\"  (sharp header paths)"
 
 # Source for current session
 export TMPDIR="$PREFIX/tmp"
@@ -53,6 +61,9 @@ export TMP="$TMPDIR"
 export TEMP="$TMPDIR"
 export NODE_OPTIONS="-r $COMPAT_PATH"
 export CONTAINER=1
+export CXXFLAGS="-include $COMPAT_HEADER"
+export GYP_DEFINES="OS=linux android_ndk_path=$PREFIX"
+export CPATH="$PREFIX/include/glib-2.0:$PREFIX/lib/glib-2.0/include"
 
 echo ""
 echo -e "${GREEN}Environment setup complete.${NC}"

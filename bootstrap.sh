@@ -32,6 +32,7 @@ FILES=(
     "patches/patch-paths.sh"
     "patches/apply-patches.sh"
     "patches/spawn.h"
+    "patches/termux-compat.h"
     "scripts/check-env.sh"
     "scripts/install-deps.sh"
     "scripts/setup-paths.sh"
