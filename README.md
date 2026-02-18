@@ -291,6 +291,7 @@ Installs Termux packages required for building and running OpenClaw.
 | `clang` | C/C++ compiler | Default C/C++ compiler in Termux. Used by `node-gyp` to compile C/C++ source of native modules. Termux uses Clang as standard instead of GCC |
 | `tmux` | Terminal multiplexer | Allows running the OpenClaw server in a background session. In Termux, apps going to background may suspend processes, so running inside a tmux session keeps it stable |
 | `ttyd` | Web terminal | Shares a terminal over the web. Used by [My OpenClaw Hub](https://myopenclawhub.com) to provide browser-based terminal access to the host |
+| `pyyaml` (pip) | YAML parser for Python | Required for `.skill` packaging in OpenClaw. Installed via `pip install pyyaml` after the Termux packages |
 
 - After installation, verifies Node.js >= 22 and npm presence. Exits on failure
 
