@@ -3,7 +3,6 @@
 set -euo pipefail
 
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 NC='\033[0m'
 
 echo "=== Setting Up Paths ==="
@@ -20,20 +19,6 @@ echo -e "${GREEN}[OK]${NC}   Created $HOME/.openclaw-android/patches"
 # Create openclaw data directory
 mkdir -p "$HOME/.openclaw"
 echo -e "${GREEN}[OK]${NC}   Created $HOME/.openclaw"
-
-# Create symlinks for standard Linux paths if they don't exist
-# These help packages that hardcode /bin/sh, /usr/bin/env, etc.
-setup_symlink() {
-    local target="$1"
-    local link="$2"
-    if [ -e "$link" ] || [ -L "$link" ]; then
-        echo -e "${YELLOW}[SKIP]${NC} $link already exists"
-    else
-        # In Termux, we can only create symlinks in writable areas
-        # We rely on $PREFIX/bin being in PATH instead
-        echo -e "${YELLOW}[INFO]${NC} $link -> $target (handled via PATH)"
-    fi
-}
 
 echo ""
 echo "Standard path mappings (via \$PREFIX):"

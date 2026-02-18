@@ -10,6 +10,9 @@ NC='\033[0m'
 echo "=== Patching Hardcoded Paths ==="
 echo ""
 
+# Ensure required environment variables are set (for standalone use)
+export TMPDIR="${TMPDIR:-$PREFIX/tmp}"
+
 # Find OpenClaw installation directory
 NPM_ROOT=$(npm root -g 2>/dev/null)
 OPENCLAW_DIR="$NPM_ROOT/openclaw"

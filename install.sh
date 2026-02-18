@@ -45,6 +45,9 @@ export TMP="$TMPDIR"
 export TEMP="$TMPDIR"
 export NODE_OPTIONS="-r $HOME/.openclaw-android/patches/bionic-compat.js"
 export CONTAINER=1
+export CXXFLAGS="-include $HOME/.openclaw-android/patches/termux-compat.h"
+export GYP_DEFINES="OS=linux android_ndk_path=$PREFIX"
+export CPATH="$PREFIX/include/glib-2.0:$PREFIX/lib/glib-2.0/include"
 
 # ─────────────────────────────────────────────
 step 5 "Installing OpenClaw"

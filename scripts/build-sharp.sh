@@ -10,6 +10,13 @@ NC='\033[0m'
 echo "=== Building sharp (image processing) ==="
 echo ""
 
+# Ensure required environment variables are set (for standalone use)
+export TMPDIR="${TMPDIR:-$PREFIX/tmp}"
+export TMP="$TMPDIR"
+export TEMP="$TMPDIR"
+export CONTAINER="${CONTAINER:-1}"
+export NODE_OPTIONS="${NODE_OPTIONS:--r $HOME/.openclaw-android/patches/bionic-compat.js}"
+
 # Install required packages
 echo "Installing build dependencies..."
 if ! pkg install -y libvips binutils; then
@@ -29,6 +36,7 @@ fi
 echo -e "${GREEN}[OK]${NC}   node-gyp installed"
 
 # Set build environment variables
+export CXXFLAGS="-include $HOME/.openclaw-android/patches/termux-compat.h"
 export GYP_DEFINES="OS=linux android_ndk_path=$PREFIX"
 export CPATH="$PREFIX/include/glib-2.0:$PREFIX/lib/glib-2.0/include"
 

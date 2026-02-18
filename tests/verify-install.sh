@@ -89,6 +89,19 @@ else
     check_fail "bionic-compat.js not found at $COMPAT_FILE"
 fi
 
+COMPAT_HEADER="$HOME/.openclaw-android/patches/termux-compat.h"
+if [ -f "$COMPAT_HEADER" ]; then
+    check_pass "termux-compat.h exists"
+else
+    check_fail "termux-compat.h not found at $COMPAT_HEADER"
+fi
+
+if [ -n "${CXXFLAGS:-}" ]; then
+    check_pass "CXXFLAGS is set"
+else
+    check_warn "CXXFLAGS not set (native module builds may fail)"
+fi
+
 # 6. Directories
 for DIR in "$HOME/.openclaw-android" "$HOME/.openclaw" "$PREFIX/tmp"; do
     if [ -d "$DIR" ]; then
@@ -108,7 +121,7 @@ fi
 # Summary
 echo ""
 echo "==============================="
-echo "  Results: ${GREEN}$PASS passed${NC}, ${RED}$FAIL failed${NC}, ${YELLOW}$WARN warnings${NC}"
+echo -e "  Results: ${GREEN}$PASS passed${NC}, ${RED}$FAIL failed${NC}, ${YELLOW}$WARN warnings${NC}"
 echo "==============================="
 echo ""
 
