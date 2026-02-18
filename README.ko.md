@@ -221,7 +221,9 @@ openclaw-android/
 ├── update.sh                   # 기존 설치 환경 경량 업데이터
 ├── uninstall.sh                # 깔끔한 제거
 ├── patches/
-│   ├── bionic-compat.js        # 플랫폼 오버라이드 + os.networkInterfaces() 안전 래퍼
+│   ├── bionic-compat.js        # 플랫폼 오버라이드 + os.networkInterfaces() + os.cpus() 패치
+│   ├── termux-compat.h         # C/C++ 호환 심 (renameat2 syscall 래퍼)
+│   ├── spawn.h                 # Termux용 POSIX spawn 스텁 헤더
 │   ├── patch-paths.sh          # OpenClaw 내 하드코딩 경로 수정
 │   └── apply-patches.sh        # 패치 오케스트레이터
 ├── scripts/
@@ -294,12 +296,18 @@ Termux에서 필요한 디렉토리 구조를 생성합니다.
   - `TMP`, `TEMP` — `TMPDIR`과 동일 (일부 도구 호환용)
   - `NODE_OPTIONS="-r .../bionic-compat.js"` — 모든 Node 프로세스에 Bionic 호환 패치 자동 로드
   - `CONTAINER=1` — systemd 존재 여부 확인을 우회
+  - `CXXFLAGS="-include .../termux-compat.h"` — 네이티브 모듈 빌드 시 C/C++ 호환 심 자동 포함
+  - `GYP_DEFINES="OS=linux ..."` — node-gyp의 OS 감지를 Android에 맞게 오버라이드
+  - `CPATH="...glib-2.0..."` — sharp 빌드에 필요한 glib 헤더 경로 제공
 
 ### [5/7] OpenClaw 설치 및 패치 — `npm install` + `patches/apply-patches.sh`
 
 OpenClaw을 글로벌로 설치하고 Termux 호환 패치를 적용합니다.
 
-1. `bionic-compat.js`를 `~/.openclaw-android/patches/`에 복사 (npm install 과정에서도 필요)
+1. 호환 패치 파일을 `~/.openclaw-android/patches/`에 복사:
+   - `bionic-compat.js` — Node.js 런타임 패치 (npm install 과정에서도 필요)
+   - `termux-compat.h` — C/C++ 빌드 호환 심 (renameat2 syscall 래퍼)
+   - `spawn.h` → `$PREFIX/include/spawn.h` — POSIX spawn 스텁 헤더 (없는 경우 설치)
 2. `npm install -g openclaw@latest` 실행
 3. `patches/apply-patches.sh`가 패치를 일괄 적용:
    - `bionic-compat.js` 최종 복사 확인

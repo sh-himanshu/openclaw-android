@@ -221,7 +221,9 @@ openclaw-android/
 ├── update.sh                   # Lightweight updater for existing installations
 ├── uninstall.sh                # Clean removal
 ├── patches/
-│   ├── bionic-compat.js        # Platform override + os.networkInterfaces() safe wrapper
+│   ├── bionic-compat.js        # Platform override + os.networkInterfaces() + os.cpus() patches
+│   ├── termux-compat.h         # C/C++ compatibility shim (renameat2 syscall wrapper)
+│   ├── spawn.h                 # POSIX spawn stub header for Termux
 │   ├── patch-paths.sh          # Fix hardcoded paths in OpenClaw
 │   └── apply-patches.sh        # Patch orchestrator
 ├── scripts/
@@ -294,12 +296,18 @@ Adds an environment variable block to `~/.bashrc`.
   - `TMP`, `TEMP` — Same as `TMPDIR` (for compatibility with some tools)
   - `NODE_OPTIONS="-r .../bionic-compat.js"` — Auto-load Bionic compatibility patch for all Node processes
   - `CONTAINER=1` — Bypass systemd existence checks
+  - `CXXFLAGS="-include .../termux-compat.h"` — Force-include C/C++ compatibility shim for native module builds
+  - `GYP_DEFINES="OS=linux ..."` — Override node-gyp OS detection for Android
+  - `CPATH="...glib-2.0..."` — Provide glib header paths for sharp builds
 
 ### [5/7] OpenClaw Installation & Patching — `npm install` + `patches/apply-patches.sh`
 
 Installs OpenClaw globally and applies Termux compatibility patches.
 
-1. Copies `bionic-compat.js` to `~/.openclaw-android/patches/` (needed during npm install as well)
+1. Copies compatibility patches to `~/.openclaw-android/patches/`:
+   - `bionic-compat.js` — Node.js runtime patches (needed during npm install)
+   - `termux-compat.h` — C/C++ build compatibility (renameat2 syscall wrapper)
+   - `spawn.h` → `$PREFIX/include/spawn.h` — POSIX spawn stub header (if missing)
 2. Runs `npm install -g openclaw@latest`
 3. `patches/apply-patches.sh` applies all patches:
    - Verifies `bionic-compat.js` final copy
