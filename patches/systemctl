@@ -4,9 +4,13 @@
 
 for arg in "$@"; do
     if [ "$arg" = "restart" ]; then
-        openclaw gateway config.patch \
+        # Try config.patch reload first (gateway running → SIGUSR1)
+        if ! openclaw gateway config.patch \
             "{\"meta\":{\"restartNonce\":\"$(date +%s%N)\"}}" \
-            2>/dev/null || true
+            2>/dev/null; then
+            # Gateway not running — start it
+            openclaw gateway start 2>/dev/null || true
+        fi
         exit 0
     fi
 done
