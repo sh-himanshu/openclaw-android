@@ -140,6 +140,30 @@ curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/updat
 sed -i 's/\.openclaw-lite/\.openclaw-android/g' ~/.bashrc && source ~/.bashrc
 ```
 
+## 업데이트 중 "systemctl --user unavailable: spawn systemctl ENOENT" 에러
+
+```
+Gateway service check failed: Error: systemctl --user unavailable: spawn systemctl ENOENT
+```
+
+### 원인
+
+`openclaw update` 실행 후, OpenClaw이 `systemctl`로 게이트웨이 서비스를 재시작하려고 합니다. Termux에는 systemd가 없으므로 `systemctl` 바이너리를 찾을 수 없어 `ENOENT` 에러가 발생합니다.
+
+### 영향
+
+**이 에러는 무해합니다.** 업데이트 자체는 이미 성공적으로 완료되었으며, 자동 서비스 재시작만 실패한 것입니다. OpenClaw은 최신 상태로 업데이트되어 있습니다.
+
+### 해결 방법
+
+수동으로 게이트웨이를 시작하면 됩니다:
+
+```bash
+openclaw gateway
+```
+
+업데이트 전에 게이트웨이가 실행 중이었다면 기존 프로세스를 먼저 종료해야 할 수 있습니다. 위의 [게이트웨이가 시작되지 않음](#게이트웨이가-시작되지-않음-gateway-already-running-또는-port-is-already-in-use) 섹션을 참고하세요.
+
 ## "not supported on android" 에러
 
 ```

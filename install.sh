@@ -4,6 +4,7 @@
 set -euo pipefail
 
 GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
 BOLD='\033[1m'
 NC='\033[0m'
 
@@ -100,7 +101,10 @@ bash "$SCRIPT_DIR/tests/verify-install.sh"
 step 7 "Updating OpenClaw"
 echo "Running: openclaw update"
 echo ""
-openclaw update
+openclaw update || true
+echo ""
+echo -e "${YELLOW}Note:${NC} If you see a 'systemctl' error above, it's safe to ignore."
+echo "       Termux doesn't have systemd — just start the gateway manually."
 
 echo ""
 echo -e "${BOLD}========================================${NC}"

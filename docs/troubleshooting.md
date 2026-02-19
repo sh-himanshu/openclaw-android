@@ -140,6 +140,30 @@ Or manually fix it:
 sed -i 's/\.openclaw-lite/\.openclaw-android/g' ~/.bashrc && source ~/.bashrc
 ```
 
+## "systemctl --user unavailable: spawn systemctl ENOENT" during update
+
+```
+Gateway service check failed: Error: systemctl --user unavailable: spawn systemctl ENOENT
+```
+
+### Cause
+
+After running `openclaw update`, OpenClaw tries to restart the gateway service using `systemctl`. Since Termux doesn't have systemd, the `systemctl` binary doesn't exist and the command fails with `ENOENT`.
+
+### Impact
+
+**This error is harmless.** The update itself has already completed successfully — only the automatic service restart failed. Your OpenClaw installation is up to date.
+
+### Solution
+
+Simply start the gateway manually:
+
+```bash
+openclaw gateway
+```
+
+If the gateway was already running before the update, you may need to stop the old process first. See the [Gateway won't start](#gateway-wont-start-gateway-already-running-or-port-is-already-in-use) section above.
+
 ## "not supported on android" error
 
 ```
