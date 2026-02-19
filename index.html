@@ -546,6 +546,41 @@
         <a id="dashLink" class="btn-open" href="#" target="_blank" data-i18n="openDashboard">Open Dashboard</a>
       </div>
   </div>
+
+    <div class="card-title" data-i18n="fileTransfer">File Transfer</div>
+  <div class="container">
+      <div class="divider"><span data-i18n="scpFile">Download File from Phone</span></div>
+      <div class="row">
+        <div class="form-group">
+          <label data-i18n="ftFrom">From (phone path)</label>
+          <input type="text" id="scpFileFrom" data-i18n-placeholder="phFtFrom" placeholder="~/example.txt">
+        </div>
+        <div class="form-group">
+          <label data-i18n="ftTo">To (PC path)</label>
+          <input type="text" id="scpFileTo" data-i18n-placeholder="phFtTo" placeholder="./">
+        </div>
+      </div>
+      <div class="command-box">
+        <span id="scpFileCmd"></span>
+        <button class="btn-copy disabled" id="scpFileCopyBtn" onclick="copyScpFile(this)" data-i18n="copy">Copy</button>
+      </div>
+
+      <div class="divider" style="margin-top:20px"><span data-i18n="scpFolder">Download Folder from Phone</span></div>
+      <div class="row">
+        <div class="form-group">
+          <label data-i18n="ftFrom">From (phone path)</label>
+          <input type="text" id="scpFolderFrom" data-i18n-placeholder="phFtFolderFrom" placeholder="~/myfolder">
+        </div>
+        <div class="form-group">
+          <label data-i18n="ftTo">To (PC path)</label>
+          <input type="text" id="scpFolderTo" data-i18n-placeholder="phFtTo" placeholder="./">
+        </div>
+      </div>
+      <div class="command-box">
+        <span id="scpFolderCmd"></span>
+        <button class="btn-copy disabled" id="scpFolderCopyBtn" onclick="copyScpFolder(this)" data-i18n="copy">Copy</button>
+      </div>
+  </div>
   </div>
     <div class="footer">
       <a href="https://hits.sh/aidanpark.github.io/openclaw-android/tools/connect.html/" target="_blank"><img src="https://hits.sh/aidanpark.github.io/openclaw-android/tools/connect.html.svg?label=views&color=555555&labelColor=333333" alt="views"></a>
@@ -588,6 +623,14 @@
       openDashboard: 'Open Dashboard',
       deleteConfirm: 'Delete "{name}"?',
       invalidFile: 'Invalid file format.',
+      fileTransfer: 'File Transfer',
+      scpFile: 'Download File from Phone',
+      scpFolder: 'Download Folder from Phone',
+      ftFrom: 'From (phone path)',
+      ftTo: 'To (PC path)',
+      phFtFrom: '~/example.txt',
+      phFtFolderFrom: '~/myfolder',
+      phFtTo: './',
     },
     ko: {
       savedConnections: '내 OpenClaw 연결',
@@ -621,6 +664,14 @@
       openDashboard: '대시보드 열기',
       deleteConfirm: '"{name}"을(를) 삭제할까요?',
       invalidFile: '잘못된 파일 형식입니다.',
+      fileTransfer: '파일 전송',
+      scpFile: '파일 가져오기',
+      scpFolder: '폴더 가져오기',
+      ftFrom: '출발 경로 (폰)',
+      ftTo: '도착 경로 (PC)',
+      phFtFrom: '~/example.txt',
+      phFtFolderFrom: '~/myfolder',
+      phFtTo: './',
     },
     zh: {
       savedConnections: '我的 OpenClaw 连接',
@@ -654,6 +705,14 @@
       openDashboard: '打开仪表板',
       deleteConfirm: '删除"{name}"？',
       invalidFile: '文件格式无效。',
+      fileTransfer: '文件传输',
+      scpFile: '从手机下载文件',
+      scpFolder: '从手机下载文件夹',
+      ftFrom: '来源（手机路径）',
+      ftTo: '目标（PC 路径）',
+      phFtFrom: '~/example.txt',
+      phFtFolderFrom: '~/myfolder',
+      phFtTo: './',
     },
     ja: {
       savedConnections: 'マイ OpenClaw 接続',
@@ -687,6 +746,14 @@
       openDashboard: 'ダッシュボードを開く',
       deleteConfirm: '「{name}」を削除しますか？',
       invalidFile: 'ファイル形式が無効です。',
+      fileTransfer: 'ファイル転送',
+      scpFile: '電話からファイルをダウンロード',
+      scpFolder: '電話からフォルダをダウンロード',
+      ftFrom: '送信元（電話のパス）',
+      ftTo: '送信先（PC のパス）',
+      phFtFrom: '~/example.txt',
+      phFtFolderFrom: '~/myfolder',
+      phFtTo: './',
     },
     es: {
       savedConnections: 'Mis conexiones OpenClaw',
@@ -720,6 +787,14 @@
       openDashboard: 'Abrir panel',
       deleteConfirm: '¿Eliminar "{name}"?',
       invalidFile: 'Formato de archivo inválido.',
+      fileTransfer: 'Transferencia de archivos',
+      scpFile: 'Descargar archivo del teléfono',
+      scpFolder: 'Descargar carpeta del teléfono',
+      ftFrom: 'Origen (ruta en el teléfono)',
+      ftTo: 'Destino (ruta en el PC)',
+      phFtFrom: '~/example.txt',
+      phFtFolderFrom: '~/myfolder',
+      phFtTo: './',
     },
     fr: {
       savedConnections: 'Mes connexions OpenClaw',
@@ -753,6 +828,14 @@
       openDashboard: 'Ouvrir le tableau de bord',
       deleteConfirm: 'Supprimer « {name} » ?',
       invalidFile: 'Format de fichier invalide.',
+      fileTransfer: 'Transfert de fichiers',
+      scpFile: 'Télécharger un fichier depuis le téléphone',
+      scpFolder: 'Télécharger un dossier depuis le téléphone',
+      ftFrom: 'Source (chemin sur le téléphone)',
+      ftTo: 'Destination (chemin sur le PC)',
+      phFtFrom: '~/example.txt',
+      phFtFolderFrom: '~/myfolder',
+      phFtTo: './',
     },
     de: {
       savedConnections: 'Meine OpenClaw-Verbindungen',
@@ -786,6 +869,14 @@
       openDashboard: 'Dashboard öffnen',
       deleteConfirm: '„{name}" löschen?',
       invalidFile: 'Ungültiges Dateiformat.',
+      fileTransfer: 'Dateiübertragung',
+      scpFile: 'Datei vom Telefon herunterladen',
+      scpFolder: 'Ordner vom Telefon herunterladen',
+      ftFrom: 'Quelle (Pfad auf dem Telefon)',
+      ftTo: 'Ziel (Pfad auf dem PC)',
+      phFtFrom: '~/example.txt',
+      phFtFolderFrom: '~/myfolder',
+      phFtTo: './',
     },
     pt: {
       savedConnections: 'Minhas conexões OpenClaw',
@@ -819,6 +910,14 @@
       openDashboard: 'Abrir painel',
       deleteConfirm: 'Excluir "{name}"?',
       invalidFile: 'Formato de arquivo inválido.',
+      fileTransfer: 'Transferência de arquivos',
+      scpFile: 'Baixar arquivo do telefone',
+      scpFolder: 'Baixar pasta do telefone',
+      ftFrom: 'Origem (caminho no telefone)',
+      ftTo: 'Destino (caminho no PC)',
+      phFtFrom: '~/example.txt',
+      phFtFolderFrom: '~/myfolder',
+      phFtTo: './',
     },
     ru: {
       savedConnections: 'Мои подключения OpenClaw',
@@ -852,6 +951,14 @@
       openDashboard: 'Открыть панель',
       deleteConfirm: 'Удалить «{name}»?',
       invalidFile: 'Неверный формат файла.',
+      fileTransfer: 'Передача файлов',
+      scpFile: 'Скачать файл с телефона',
+      scpFolder: 'Скачать папку с телефона',
+      ftFrom: 'Откуда (путь на телефоне)',
+      ftTo: 'Куда (путь на ПК)',
+      phFtFrom: '~/example.txt',
+      phFtFolderFrom: '~/myfolder',
+      phFtTo: './',
     },
     ar: {
       savedConnections: 'اتصالاتي OpenClaw',
@@ -885,6 +992,14 @@
       openDashboard: 'فتح لوحة التحكم',
       deleteConfirm: 'حذف "{name}"؟',
       invalidFile: 'تنسيق ملف غير صالح.',
+      fileTransfer: 'نقل الملفات',
+      scpFile: 'تحميل ملف من الهاتف',
+      scpFolder: 'تحميل مجلد من الهاتف',
+      ftFrom: 'المصدر (مسار الهاتف)',
+      ftTo: 'الوجهة (مسار الحاسوب)',
+      phFtFrom: '~/example.txt',
+      phFtFolderFrom: '~/myfolder',
+      phFtTo: './',
     },
   };
 
@@ -1024,6 +1139,41 @@
       btn.classList.toggle('disabled', !complete);
     });
     document.getElementById('resultSection').classList.remove('hidden');
+    renderScpCmds(d);
+  }
+
+  function renderScpCmds(d) {
+    const ip = d ? d.phoneIp : '';
+    const port = d ? (d.sshPort || '8022') : '8022';
+    const fileFrom = document.getElementById('scpFileFrom').value.trim();
+    const fileTo = document.getElementById('scpFileTo').value.trim() || './';
+    const folderFrom = document.getElementById('scpFolderFrom').value.trim();
+    const folderTo = document.getElementById('scpFolderTo').value.trim() || './';
+
+    document.getElementById('scpFileCmd').textContent = ip && fileFrom ? `scp -P ${port} ${ip}:${fileFrom} ${fileTo}` : '';
+    document.getElementById('scpFolderCmd').textContent = ip && folderFrom ? `scp -P ${port} -r ${ip}:${folderFrom} ${folderTo}` : '';
+    document.getElementById('scpFileCopyBtn').classList.toggle('disabled', !ip || !fileFrom);
+    document.getElementById('scpFolderCopyBtn').classList.toggle('disabled', !ip || !folderFrom);
+  }
+
+  function copyScpFile(btn) {
+    const text = document.getElementById('scpFileCmd').textContent;
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = t('copied');
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = t('copy'); btn.classList.remove('copied'); }, 1500);
+    });
+  }
+
+  function copyScpFolder(btn) {
+    const text = document.getElementById('scpFolderCmd').textContent;
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = t('copied');
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = t('copy'); btn.classList.remove('copied'); }, 1500);
+    });
   }
 
   function showForm(id) {
@@ -1142,6 +1292,14 @@
   formFields.forEach(f => {
     const el = document.getElementById(f);
     if (!el.disabled) el.addEventListener('input', autoSave);
+  });
+
+  // Re-render scp commands on path input change
+  ['scpFileFrom', 'scpFileTo', 'scpFolderFrom', 'scpFolderTo'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      const d = devices.find(x => x.id === editingId);
+      renderScpCmds(d || null);
+    });
   });
 
   // Init
