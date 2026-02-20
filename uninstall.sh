@@ -22,10 +22,10 @@ fi
 
 echo ""
 
-# 1. Uninstall OpenClaw npm package
-echo "Removing OpenClaw npm package..."
+# 1. Uninstall OpenClaw pnpm package
+echo "Removing OpenClaw pnpm package..."
 if command -v openclaw &>/dev/null; then
-    npm uninstall -g openclaw 2>/dev/null || true
+    pnpm uninstall -g openclaw 2>/dev/null || true
     echo -e "${GREEN}[OK]${NC}   openclaw package removed"
 else
     echo -e "${YELLOW}[SKIP]${NC} openclaw not installed"

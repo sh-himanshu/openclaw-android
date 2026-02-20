@@ -131,7 +131,7 @@ Error: Cannot find module '/data/data/com.termux/files/home/.openclaw-lite/patch
 업데이터를 실행하면 환경변수 블록이 갱신됩니다:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash && source ~/.bashrc
+curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/update.sh | bash && source ~/.bashrc
 ```
 
 또는 수동으로 수정:
@@ -167,7 +167,7 @@ openclaw gateway
 ## `openclaw update` 중 sharp 빌드 실패
 
 ```
-npm error gyp ERR! not ok
+pnpm error gyp ERR! not ok
 Update Result: ERROR
 Reason: global update
 ```
@@ -191,7 +191,7 @@ bash ~/.openclaw-android/scripts/build-sharp.sh
 또는 `openclaw update` 대신 `update.sh`를 사용하면, 필요한 환경변수를 자동으로 설정하고 sharp 빌드까지 처리합니다:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash
+curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/update.sh | bash
 ```
 
 ## "not supported on android" 에러
@@ -227,5 +227,5 @@ node -e "console.log(process.platform)"
 `android`가 출력되면 파일이 오래된 버전입니다. 재설치하세요:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/bootstrap.sh | bash
+curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/bootstrap.sh | bash
 ```

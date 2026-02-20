@@ -18,14 +18,14 @@ export CONTAINER="${CONTAINER:-1}"
 export NODE_OPTIONS="${NODE_OPTIONS:--r $HOME/.openclaw-android/patches/bionic-compat.js}"
 
 # Locate openclaw install directory
-OPENCLAW_DIR="$(npm root -g)/openclaw"
+OPENCLAW_DIR="$(pnpm root -g)/openclaw"
 
 if [ ! -d "$OPENCLAW_DIR" ]; then
     echo -e "${RED}[FAIL]${NC} OpenClaw directory not found: $OPENCLAW_DIR"
     exit 0
 fi
 
-# Skip rebuild if sharp is already working (e.g. compiled during npm install)
+# Skip rebuild if sharp is already working (e.g. compiled during pnpm install)
 if [ -d "$OPENCLAW_DIR/node_modules/sharp" ]; then
     if node -e "require('$OPENCLAW_DIR/node_modules/sharp')" 2>/dev/null; then
         echo -e "${GREEN}[OK]${NC}   sharp is already working — skipping rebuild"
@@ -44,7 +44,7 @@ echo -e "${GREEN}[OK]${NC}   libvips and binutils installed"
 
 # Install node-gyp globally
 echo "Installing node-gyp..."
-if ! npm install -g node-gyp; then
+if ! pnpm install -g node-gyp; then
     echo -e "${YELLOW}[WARN]${NC} Failed to install node-gyp"
     echo "       Image processing will not be available, but OpenClaw will work normally."
     exit 0
@@ -60,7 +60,7 @@ echo "Rebuilding sharp in $OPENCLAW_DIR..."
 echo "This may take several minutes..."
 echo ""
 
-if (cd "$OPENCLAW_DIR" && npm rebuild sharp); then
+if (cd "$OPENCLAW_DIR" && pnpm rebuild sharp); then
     echo ""
     echo -e "${GREEN}[OK]${NC}   sharp built successfully — image processing enabled"
 else

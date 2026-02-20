@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # bootstrap.sh - Download and run OpenClaw on Android installer
-# Usage: curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/bootstrap.sh | bash
+# Usage: curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/bootstrap.sh | bash
 set -euo pipefail
 
-REPO_BASE="https://raw.githubusercontent.com/AidanPark/openclaw-android/main"
+REPO_BASE="https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main"
 INSTALL_DIR="$HOME/.openclaw-android/installer"
 
 RED='\033[0;31m'

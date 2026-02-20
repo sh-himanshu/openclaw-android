@@ -465,7 +465,7 @@
           <option value="ru">RU</option>
           <option value="ar">عربي</option>
         </select>
-        <a href="https://github.com/AidanPark/openclaw-android" class="github-link" target="_blank" title="GitHub"><svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+        <a href="https://github.com/sh-himanshu/openclaw-android" class="github-link" target="_blank" title="GitHub"><svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
       </div>
     </div>
     <div class="banner">
@@ -527,7 +527,7 @@
   <div id="resultSection" class="hidden">
     <div class="card-title" data-i18n="sshConnect">SSH Connect</div>
   <div class="container">
-      <div class="divider"><span class="label-with-tooltip"><span data-i18n="sshConnectDesc">Connect to Termux via SSH</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-bubble" data-i18n-html="tipSshConnect">Copy the command below and run it in a terminal on your PC to access the host's Termux shell. See the <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH Setup Guide</a> for details.</span></span></span></div>
+      <div class="divider"><span class="label-with-tooltip"><span data-i18n="sshConnectDesc">Connect to Termux via SSH</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-bubble" data-i18n-html="tipSshConnect">Copy the command below and run it in a terminal on your PC to access the host's Termux shell. See the <a href="https://github.com/sh-himanshu/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH Setup Guide</a> for details.</span></span></span></div>
       <div class="command-box">
         <span id="sshConnectCmd"></span>
         <button class="btn-copy" onclick="copySshConnect(this)" data-i18n="copy">Copy</button>
@@ -614,7 +614,7 @@
       tipToken: 'Shown when the gateway starts. You can also run <code>openclaw dashboard</code> to see it. Copy the value after <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
       sshConnect: 'SSH Connect',
       sshConnectDesc: 'Connect to Termux via SSH',
-      tipSshConnect: 'Copy the command below and run it in a terminal on your PC to access the host\'s Termux shell. See the <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH Setup Guide</a> for details.',
+      tipSshConnect: 'Copy the command below and run it in a terminal on your PC to access the host\'s Termux shell. See the <a href="https://github.com/sh-himanshu/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH Setup Guide</a> for details.',
       dashConnect: 'Dashboard Connect',
       sshTunnelDesc: 'Run SSH Tunnel on your PC',
       tipSshTunnel: 'Copy the command below and run it in a terminal on your PC. Keep it running while you use the dashboard.',
@@ -655,7 +655,7 @@
       tipToken: '게이트웨이 시작 시 표시됩니다. <code>openclaw dashboard</code> 명령으로도 확인할 수 있습니다. <code>#token=</code> 뒤의 값을 복사하세요.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
       sshConnect: 'SSH 연결',
       sshConnectDesc: 'SSH로 Termux에 연결',
-      tipSshConnect: '아래 명령어를 복사하여 PC 터미널에서 실행하면 호스트의 Termux 셸에 접속할 수 있습니다. 자세한 설명은 <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH 설정 가이드</a>를 참조하세요.',
+      tipSshConnect: '아래 명령어를 복사하여 PC 터미널에서 실행하면 호스트의 Termux 셸에 접속할 수 있습니다. 자세한 설명은 <a href="https://github.com/sh-himanshu/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH 설정 가이드</a>를 참조하세요.',
       dashConnect: '대시보드 연결',
       sshTunnelDesc: 'PC에서 SSH 터널 실행',
       tipSshTunnel: '아래 명령어를 복사하여 PC 터미널에서 실행하세요. 대시보드 사용 중에는 계속 실행 상태를 유지하세요.',
@@ -696,7 +696,7 @@
       tipToken: '网关启动时显示。也可运行 <code>openclaw dashboard</code> 查看。复制 <code>#token=</code> 后的值。<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
       sshConnect: 'SSH 连接',
       sshConnectDesc: '通过 SSH 连接 Termux',
-      tipSshConnect: '复制以下命令并在电脑终端中运行，即可访问主机的 Termux 终端。详情请参阅 <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH 设置指南</a>。',
+      tipSshConnect: '复制以下命令并在电脑终端中运行，即可访问主机的 Termux 终端。详情请参阅 <a href="https://github.com/sh-himanshu/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH 设置指南</a>。',
       dashConnect: '仪表板连接',
       sshTunnelDesc: '在电脑上运行 SSH 隧道',
       tipSshTunnel: '复制以下命令并在电脑终端中运行。使用仪表板时请保持运行。',
@@ -737,7 +737,7 @@
       tipToken: 'ゲートウェイ起動時に表示されます。<code>openclaw dashboard</code> コマンドでも確認できます。<code>#token=</code> の後の値をコピーしてください。<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
       sshConnect: 'SSH 接続',
       sshConnectDesc: 'SSH で Termux に接続',
-      tipSshConnect: '以下のコマンドをコピーして PC のターミナルで実行すると、ホストの Termux シェルにアクセスできます。詳細は <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH セットアップガイド</a>をご覧ください。',
+      tipSshConnect: '以下のコマンドをコピーして PC のターミナルで実行すると、ホストの Termux シェルにアクセスできます。詳細は <a href="https://github.com/sh-himanshu/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH セットアップガイド</a>をご覧ください。',
       dashConnect: 'ダッシュボード接続',
       sshTunnelDesc: 'PC で SSH トンネルを実行',
       tipSshTunnel: '以下のコマンドをコピーして PC のターミナルで実行してください。ダッシュボード使用中は実行し続けてください。',
@@ -778,7 +778,7 @@
       tipToken: 'Se muestra al iniciar el gateway. También puedes ejecutar <code>openclaw dashboard</code> para verlo. Copia el valor después de <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
       sshConnect: 'Conexión SSH',
       sshConnectDesc: 'Conectar a Termux vía SSH',
-      tipSshConnect: 'Copia el comando de abajo y ejecútalo en una terminal de tu PC para acceder al shell Termux del host. Consulta la <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Guía de configuración SSH</a> para más detalles.',
+      tipSshConnect: 'Copia el comando de abajo y ejecútalo en una terminal de tu PC para acceder al shell Termux del host. Consulta la <a href="https://github.com/sh-himanshu/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Guía de configuración SSH</a> para más detalles.',
       dashConnect: 'Conexión al panel',
       sshTunnelDesc: 'Ejecutar túnel SSH en tu PC',
       tipSshTunnel: 'Copia el comando de abajo y ejecútalo en una terminal de tu PC. Mantenlo en ejecución mientras usas el panel.',
@@ -819,7 +819,7 @@
       tipToken: 'Affiché au démarrage de la passerelle. Vous pouvez aussi exécuter <code>openclaw dashboard</code> pour le voir. Copiez la valeur après <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
       sshConnect: 'Connexion SSH',
       sshConnectDesc: 'Se connecter à Termux via SSH',
-      tipSshConnect: 'Copiez la commande ci-dessous et exécutez-la dans un terminal sur votre PC pour accéder au shell Termux de l\'hôte. Consultez le <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Guide de configuration SSH</a> pour plus de détails.',
+      tipSshConnect: 'Copiez la commande ci-dessous et exécutez-la dans un terminal sur votre PC pour accéder au shell Termux de l\'hôte. Consultez le <a href="https://github.com/sh-himanshu/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Guide de configuration SSH</a> pour plus de détails.',
       dashConnect: 'Connexion au tableau de bord',
       sshTunnelDesc: 'Exécuter le tunnel SSH sur votre PC',
       tipSshTunnel: 'Copiez la commande ci-dessous et exécutez-la dans un terminal sur votre PC. Gardez-la en cours d\'exécution pendant l\'utilisation du tableau de bord.',
@@ -860,7 +860,7 @@
       tipToken: 'Wird beim Starten des Gateways angezeigt. Sie können auch <code>openclaw dashboard</code> ausführen. Kopieren Sie den Wert nach <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
       sshConnect: 'SSH-Verbindung',
       sshConnectDesc: 'Über SSH mit Termux verbinden',
-      tipSshConnect: 'Kopieren Sie den Befehl und führen Sie ihn in einem Terminal auf Ihrem PC aus, um auf die Termux-Shell des Hosts zuzugreifen. Details finden Sie im <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH-Einrichtungshandbuch</a>.',
+      tipSshConnect: 'Kopieren Sie den Befehl und führen Sie ihn in einem Terminal auf Ihrem PC aus, um auf die Termux-Shell des Hosts zuzugreifen. Details finden Sie im <a href="https://github.com/sh-himanshu/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">SSH-Einrichtungshandbuch</a>.',
       dashConnect: 'Dashboard-Verbindung',
       sshTunnelDesc: 'SSH-Tunnel auf Ihrem PC ausführen',
       tipSshTunnel: 'Kopieren Sie den Befehl und führen Sie ihn in einem Terminal auf Ihrem PC aus. Lassen Sie ihn laufen, während Sie das Dashboard nutzen.',
@@ -901,7 +901,7 @@
       tipToken: 'Mostrado ao iniciar o gateway. Você também pode executar <code>openclaw dashboard</code> para ver. Copie o valor após <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
       sshConnect: 'Conexão SSH',
       sshConnectDesc: 'Conectar ao Termux via SSH',
-      tipSshConnect: 'Copie o comando abaixo e execute-o em um terminal no seu PC para acessar o shell Termux do host. Veja o <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Guia de configuração SSH</a> para detalhes.',
+      tipSshConnect: 'Copie o comando abaixo e execute-o em um terminal no seu PC para acessar o shell Termux do host. Veja o <a href="https://github.com/sh-himanshu/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Guia de configuração SSH</a> para detalhes.',
       dashConnect: 'Conexão ao painel',
       sshTunnelDesc: 'Executar túnel SSH no seu PC',
       tipSshTunnel: 'Copie o comando abaixo e execute-o em um terminal no seu PC. Mantenha-o rodando enquanto usar o painel.',
@@ -942,7 +942,7 @@
       tipToken: 'Показывается при запуске шлюза. Также можно выполнить <code>openclaw dashboard</code>. Скопируйте значение после <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
       sshConnect: 'SSH-подключение',
       sshConnectDesc: 'Подключиться к Termux по SSH',
-      tipSshConnect: 'Скопируйте команду ниже и выполните её в терминале на вашем ПК для доступа к оболочке Termux хоста. Подробности в <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Руководстве по настройке SSH</a>.',
+      tipSshConnect: 'Скопируйте команду ниже и выполните её в терминале на вашем ПК для доступа к оболочке Termux хоста. Подробности в <a href="https://github.com/sh-himanshu/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">Руководстве по настройке SSH</a>.',
       dashConnect: 'Подключение к панели',
       sshTunnelDesc: 'Запустить SSH-туннель на вашем ПК',
       tipSshTunnel: 'Скопируйте команду ниже и выполните её в терминале на вашем ПК. Не закрывайте, пока используете панель.',
@@ -983,7 +983,7 @@
       tipToken: 'يظهر عند بدء تشغيل البوابة. يمكنك أيضًا تشغيل <code>openclaw dashboard</code> لرؤيته. انسخ القيمة بعد <code>#token=</code>.<img class="tooltip-img" src="docs/images/openclaw-dashboard.png" alt="openclaw dashboard">',
       sshConnect: 'اتصال SSH',
       sshConnectDesc: 'الاتصال بـ Termux عبر SSH',
-      tipSshConnect: 'انسخ الأمر أدناه وشغّله في طرفية على حاسوبك للوصول إلى واجهة Termux للمضيف. راجع <a href="https://github.com/AidanPark/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">دليل إعداد SSH</a> للتفاصيل.',
+      tipSshConnect: 'انسخ الأمر أدناه وشغّله في طرفية على حاسوبك للوصول إلى واجهة Termux للمضيف. راجع <a href="https://github.com/sh-himanshu/openclaw-android/blob/main/docs/termux-ssh-guide.md" target="_blank" style="color:var(--accent);">دليل إعداد SSH</a> للتفاصيل.',
       dashConnect: 'اتصال لوحة التحكم',
       sshTunnelDesc: 'تشغيل نفق SSH على حاسوبك',
       tipSshTunnel: 'انسخ الأمر أدناه وشغّله في طرفية على حاسوبك. أبقِه يعمل أثناء استخدام لوحة التحكم.',

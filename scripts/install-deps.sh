@@ -48,14 +48,14 @@ if [ "$NODE_MAJOR" -lt 22 ]; then
     exit 1
 fi
 
-# Verify npm
-if ! command -v npm &>/dev/null; then
-    echo -e "${RED}[FAIL]${NC} npm not found"
+# Verify pnpm
+if ! command -v pnpm &>/dev/null; then
+    echo -e "${RED}[FAIL]${NC} pnpm not found"
     exit 1
 fi
 
-NPM_VER=$(npm -v)
-echo -e "${GREEN}[OK]${NC}   npm $NPM_VER installed"
+NPM_VER=$(pnpm -v)
+echo -e "${GREEN}[OK]${NC}   pnpm $NPM_VER installed"
 
 # Install PyYAML (required for .skill packaging)
 echo "Installing PyYAML..."

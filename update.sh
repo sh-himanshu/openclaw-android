@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # update.sh - Lightweight updater for OpenClaw on Android (existing installations)
-# Usage: curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash
+# Usage: curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/update.sh | bash
 set -euo pipefail
 
 RED='\033[0;31m'
@@ -9,7 +9,7 @@ YELLOW='\033[1;33m'
 BOLD='\033[1m'
 NC='\033[0m'
 
-REPO_BASE="https://raw.githubusercontent.com/AidanPark/openclaw-android/main"
+REPO_BASE="https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main"
 OPENCLAW_DIR="$HOME/.openclaw-android"
 
 echo ""
@@ -183,7 +183,7 @@ export CPATH="$PREFIX/include/glib-2.0:$PREFIX/lib/glib-2.0/include"
 step 5 "Updating OpenClaw Package"
 
 # Install build dependencies required for sharp's native compilation.
-# This must happen before npm install so that libvips headers are
+# This must happen before pnpm install so that libvips headers are
 # available when node-gyp compiles sharp as a dependency of openclaw.
 echo "Installing build dependencies..."
 if pkg install -y libvips binutils; then
@@ -194,15 +194,15 @@ else
 fi
 
 # CXXFLAGS, GYP_DEFINES, and CPATH were exported in step 4.
-# npm runs as a child process of this script and inherits those
+# pnpm runs as a child process of this script and inherits those
 # env vars, so sharp's node-gyp build succeeds here — unlike in
-# 'openclaw update', which spawns npm without these env vars set.
-echo "Updating openclaw npm package..."
-if npm install -g openclaw@latest --no-fund --no-audit; then
+# 'openclaw update', which spawns pnpm without these env vars set.
+echo "Updating openclaw pnpm package..."
+if pnpm install -g openclaw@latest --no-fund --no-audit; then
     echo -e "${GREEN}[OK]${NC}   openclaw package updated"
 else
     echo -e "${YELLOW}[WARN]${NC} Package update failed (non-critical)"
-    echo "       Retry manually: npm install -g openclaw@latest"
+    echo "       Retry manually: pnpm install -g openclaw@latest"
 fi
 
 # ─────────────────────────────────────────────

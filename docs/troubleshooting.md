@@ -131,7 +131,7 @@ The `NODE_OPTIONS` environment variable in `~/.bashrc` still references the old 
 Run the updater to refresh the environment variable block:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash && source ~/.bashrc
+curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/update.sh | bash && source ~/.bashrc
 ```
 
 Or manually fix it:
@@ -167,14 +167,14 @@ If the gateway was already running before the update, you may need to stop the o
 ## sharp build fails during `openclaw update`
 
 ```
-npm error gyp ERR! not ok
+pnpm error gyp ERR! not ok
 Update Result: ERROR
 Reason: global update
 ```
 
 ### Cause
 
-When `openclaw update` runs npm to update the package, it spawns npm as a subprocess. The Termux-specific build environment variables required to compile `sharp`'s native module (`CXXFLAGS`, `GYP_DEFINES`, `CPATH`) are set in `~/.bashrc` but are not automatically available in that subprocess context.
+When `openclaw update` runs pnpm to update the package, it spawns pnpm as a subprocess. The Termux-specific build environment variables required to compile `sharp`'s native module (`CXXFLAGS`, `GYP_DEFINES`, `CPATH`) are set in `~/.bashrc` but are not automatically available in that subprocess context.
 
 ### Impact
 
@@ -191,7 +191,7 @@ bash ~/.openclaw-android/scripts/build-sharp.sh
 Alternatively, use `update.sh` instead of `openclaw update` — it sets the required environment variables and rebuilds sharp automatically:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash
+curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/update.sh | bash
 ```
 
 ## "not supported on android" error
@@ -227,5 +227,5 @@ node -e "console.log(process.platform)"
 If it prints `android`, the file is outdated. Reinstall:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/bootstrap.sh | bash
+curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/bootstrap.sh | bash
 ```

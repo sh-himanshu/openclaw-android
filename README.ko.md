@@ -5,8 +5,8 @@
 ![Android 7.0+](https://img.shields.io/badge/Android-7.0%2B-brightgreen)
 ![Termux](https://img.shields.io/badge/Termux-Required-orange)
 ![No proot](https://img.shields.io/badge/proot--distro-Not%20Required-blue)
-![License MIT](https://img.shields.io/github/license/AidanPark/openclaw-android)
-![GitHub Stars](https://img.shields.io/github/stars/AidanPark/openclaw-android)
+![License MIT](https://img.shields.io/github/license/sh-himanshu/openclaw-android)
+![GitHub Stars](https://img.shields.io/github/stars/sh-himanshu/openclaw-android)
 
 나야, [OpenClaw](https://github.com/openclaw). 근데,, 이제 Android-Termux 를 곁들인...
 
@@ -116,7 +116,7 @@ pkg update -y && pkg upgrade -y && pkg install -y curl && termux-wake-lock
 Termux에 아래 명령어를 붙여넣으세요.
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/bootstrap.sh | bash && source ~/.bashrc
+curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/bootstrap.sh | bash && source ~/.bashrc
 ```
 
 명령어 하나로 모든 설치가 자동으로 진행됩니다. 3~10분 정도 소요되며 (네트워크 속도와 기기 성능에 따라 다름), Wi-Fi 환경을 권장합니다.
@@ -181,9 +181,9 @@ ssh -N -L 18789:127.0.0.1:18789 -p 8022 <폰IP>
 
 | 도구 | 설치 |
 |------|------|
-| [Claude Code](https://github.com/anthropics/claude-code) (Anthropic) | `npm i -g @anthropic-ai/claude-code` |
-| [Gemini CLI](https://github.com/google-gemini/gemini-cli) (Google) | `npm i -g @google/gemini-cli` |
-| [Codex CLI](https://github.com/openai/codex) (OpenAI) | `npm i -g @openai/codex` |
+| [Claude Code](https://github.com/anthropics/claude-code) (Anthropic) | `pnpm i -g @anthropic-ai/claude-code` |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli) (Google) | `pnpm i -g @google/gemini-cli` |
+| [Codex CLI](https://github.com/openai/codex) (OpenAI) | `pnpm i -g @openai/codex` |
 
 OpenClaw on Android를 먼저 설치한 후 위 도구를 설치하면 패치가 자동으로 적용됩니다.
 
@@ -198,7 +198,7 @@ OpenClaw on Android를 먼저 설치한 후 위 도구를 설치하면 패치가
 이미 OpenClaw on Android가 설치되어 있고, 최신 패치와 환경 설정을 적용하고 싶다면:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash && source ~/.bashrc
+curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/update.sh | bash && source ~/.bashrc
 ```
 
 전체 재설치 없이 환경변수와 패치만 갱신하는 경량 업데이터입니다. 여러 번 실행해도 안전합니다.
@@ -287,8 +287,8 @@ OpenClaw 빌드 및 실행에 필요한 Termux 패키지를 설치합니다.
 
 | 패키지 | 역할 | 필요한 이유 |
 |--------|------|------------|
-| `nodejs-lts` | Node.js LTS 런타임 (>= 22) + npm 패키지 매니저 | OpenClaw 자체가 Node.js 애플리케이션. `npm install -g openclaw`로 설치하므로 Node.js와 npm이 필수. LTS 버전을 사용하는 이유는 OpenClaw가 Node >= 22.12.0을 요구하기 때문 |
-| `git` | 분산 버전 관리 시스템 | 일부 npm 패키지가 설치 과정에서 git 의존성을 가짐. OpenClaw의 하위 의존성 중 git URL로 참조되는 패키지가 있을 수 있으며, 이 저장소 자체를 `git clone`으로 받을 때도 필요 |
+| `nodejs-lts` | Node.js LTS 런타임 (>= 22) + pnpm 패키지 매니저 | OpenClaw 자체가 Node.js 애플리케이션. `pnpm install -g openclaw`로 설치하므로 Node.js와 npm이 필수. LTS 버전을 사용하는 이유는 OpenClaw가 Node >= 22.12.0을 요구하기 때문 |
+| `git` | 분산 버전 관리 시스템 | 일부 pnpm 패키지가 설치 과정에서 git 의존성을 가짐. OpenClaw의 하위 의존성 중 git URL로 참조되는 패키지가 있을 수 있으며, 이 저장소 자체를 `git clone`으로 받을 때도 필요 |
 | `python` | Python 인터프리터 | `node-gyp`가 네이티브 C/C++ 애드온을 빌드할 때 Python을 빌드 스크립트 실행에 사용. OpenClaw 의존성 트리에 네이티브 모듈(예: `better-sqlite3`, `bcrypt`)이 포함될 경우 필수 |
 | `make` | 빌드 자동화 도구 | `node-gyp`가 생성한 Makefile을 실행하여 네이티브 모듈을 컴파일하는 데 사용. `python`과 함께 네이티브 빌드 파이프라인의 핵심 |
 | `cmake` | 크로스 플랫폼 빌드 시스템 | 일부 네이티브 모듈이 Makefile 대신 CMake 기반 빌드를 사용. 특히 암호화 관련 라이브러리(`argon2` 등)가 CMakeLists.txt를 포함하는 경우가 많음 |
@@ -297,7 +297,7 @@ OpenClaw 빌드 및 실행에 필요한 Termux 패키지를 설치합니다.
 | `ttyd` | 웹 터미널 | 터미널을 웹으로 공유하는 도구. [My OpenClaw Hub](https://myopenclawhub.com)에서 브라우저 기반 터미널 접속을 제공하는 데 사용 |
 | `pyyaml` (pip) | Python용 YAML 파서 | OpenClaw의 `.skill` 패키징에 필요. Termux 패키지 설치 후 `pip install pyyaml`로 설치 |
 
-- 설치 후 Node.js >= 22 버전 및 npm 존재 여부를 검증. 실패 시 종료
+- 설치 후 Node.js >= 22 버전 및 pnpm 존재 여부를 검증. 실패 시 종료
 
 ### [3/7] 경로 설정 — `scripts/setup-paths.sh`
 
@@ -323,15 +323,15 @@ Termux에서 필요한 디렉토리 구조를 생성합니다.
   - `GYP_DEFINES="OS=linux ..."` — node-gyp의 OS 감지를 Android에 맞게 오버라이드
   - `CPATH="...glib-2.0..."` — sharp 빌드에 필요한 glib 헤더 경로 제공
 
-### [5/7] OpenClaw 설치 및 패치 — `npm install` + `patches/apply-patches.sh`
+### [5/7] OpenClaw 설치 및 패치 — `pnpm install` + `patches/apply-patches.sh`
 
 OpenClaw을 글로벌로 설치하고 Termux 호환 패치를 적용합니다.
 
 1. 호환 패치 파일을 `~/.openclaw-android/patches/`에 복사:
-   - `bionic-compat.js` — Node.js 런타임 패치 (npm install 과정에서도 필요)
+   - `bionic-compat.js` — Node.js 런타임 패치 (pnpm install 과정에서도 필요)
    - `termux-compat.h` — C/C++ 빌드 호환 심 (renameat2 syscall 래퍼)
    - `spawn.h` → `$PREFIX/include/spawn.h` — POSIX spawn 스텁 헤더 (없는 경우 설치)
-2. `npm install -g openclaw@latest` 실행
+2. `pnpm install -g openclaw@latest` 실행
 3. `patches/apply-patches.sh`가 패치를 일괄 적용:
    - `bionic-compat.js` 최종 복사 확인
    - `patches/patch-paths.sh` 실행 — 설치된 OpenClaw JS 파일 내 하드코딩된 경로를 sed로 치환:
@@ -344,7 +344,7 @@ OpenClaw을 글로벌로 설치하고 Termux 호환 패치를 적용합니다.
    - `libvips`와 `binutils` 패키지 설치
    - `node-gyp` 글로벌 설치
    - Android/Termux 크로스 컴파일을 위한 `GYP_DEFINES`와 `CPATH` 설정
-   - OpenClaw 디렉토리에서 `npm rebuild sharp` 실행
+   - OpenClaw 디렉토리에서 `pnpm rebuild sharp` 실행
    - 빌드 실패 시 경고만 출력하고 계속 진행 — 이미지 처리는 안 되지만 게이트웨이는 정상 동작
 
 ### [6/7] 설치 검증 — `tests/verify-install.sh`
@@ -354,7 +354,7 @@ OpenClaw을 글로벌로 설치하고 Termux 호환 패치를 적용합니다.
 | 검증 항목 | PASS 조건 |
 |-----------|----------|
 | Node.js 버전 | `node -v` >= 22 |
-| npm | `npm` 명령어 존재 |
+| pnpm | `pnpm` 명령어 존재 |
 | openclaw | `openclaw --version` 성공 |
 | TMPDIR | 환경변수 설정됨 |
 | NODE_OPTIONS | 환경변수 설정됨 |

@@ -52,7 +52,7 @@ export CPATH="$PREFIX/include/glib-2.0:$PREFIX/lib/glib-2.0/include"
 # ─────────────────────────────────────────────
 step 5 "Installing OpenClaw"
 
-# Apply bionic-compat.js first (needed for npm install)
+# Apply bionic-compat.js first (needed for pnpm install)
 echo "Copying compatibility patches..."
 mkdir -p "$HOME/.openclaw-android/patches"
 cp "$SCRIPT_DIR/patches/bionic-compat.js" "$HOME/.openclaw-android/patches/bionic-compat.js"
@@ -75,7 +75,7 @@ chmod +x "$HOME/.openclaw-android/update.sh"
 echo -e "${GREEN}[OK]${NC}   update.sh installed"
 
 echo ""
-echo "Running: npm install -g openclaw@latest"
+echo "Running: pnpm install -g openclaw@latest"
 echo "This may take several minutes..."
 echo ""
 
@@ -112,6 +112,6 @@ echo ""
 echo "Next step:"
 echo "  Run 'openclaw onboard' to start setup."
 echo ""
-echo "To update:    curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash"
+echo "To update:    curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/update.sh | bash"
 echo "To uninstall: bash ~/.openclaw-android/uninstall.sh"
 echo ""

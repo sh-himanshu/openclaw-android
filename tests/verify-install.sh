@@ -43,11 +43,11 @@ else
     check_fail "Node.js not found"
 fi
 
-# 2. npm available
-if command -v npm &>/dev/null; then
-    check_pass "npm $(npm -v)"
+# 2. pnpm available
+if command -v pnpm &>/dev/null; then
+    check_pass "pnpm $(pnpm -v)"
 else
-    check_fail "npm not found"
+    check_fail "pnpm not found"
 fi
 
 # 3. openclaw command
