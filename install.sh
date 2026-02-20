@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash 
 # install.sh - One-click installer for OpenClaw on Termux (Android)
 # Usage: bash install.sh
 set -euo pipefail
