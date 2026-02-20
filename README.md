@@ -5,8 +5,8 @@
 ![Android 7.0+](https://img.shields.io/badge/Android-7.0%2B-brightgreen)
 ![Termux](https://img.shields.io/badge/Termux-Required-orange)
 ![No proot](https://img.shields.io/badge/proot--distro-Not%20Required-blue)
-![License MIT](https://img.shields.io/github/license/AidanPark/openclaw-android)
-![GitHub Stars](https://img.shields.io/github/stars/AidanPark/openclaw-android)
+![License MIT](https://img.shields.io/github/license/sh-himanshu/openclaw-android)
+![GitHub Stars](https://img.shields.io/github/stars/sh-himanshu/openclaw-android)
 
 Because Android deserves a shell.
 
@@ -116,7 +116,7 @@ Once `termux-wake-lock` runs, a notification pins in the status bar and prevents
 Paste the following command in Termux.
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/bootstrap.sh | bash && source ~/.bashrc
+curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/bootstrap.sh | bash && source ~/.bashrc
 ```
 
 Everything is installed automatically with a single command. This takes 3–10 minutes depending on network speed and device. Wi-Fi is recommended.
@@ -198,7 +198,7 @@ Install OpenClaw on Android first, then install any of these tools — the patch
 If you already have OpenClaw on Android installed and want to apply the latest patches and environment updates:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash && source ~/.bashrc
+curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/update.sh | bash && source ~/.bashrc
 ```
 
 This lightweight updater refreshes environment variables and patches without reinstalling everything. Safe to run multiple times.
