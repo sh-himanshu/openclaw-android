@@ -79,7 +79,7 @@ echo "Running: npm install -g openclaw@latest"
 echo "This may take several minutes..."
 echo ""
 
-npm install -g openclaw@latest
+pnpm install -g openclaw@latest
 
 echo ""
 echo -e "${GREEN}[OK]${NC}   OpenClaw installed"
