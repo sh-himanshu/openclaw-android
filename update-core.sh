@@ -78,6 +78,18 @@ else
     fi
 fi
 
+# Install dufs if not already installed
+if command -v dufs &>/dev/null; then
+    echo -e "${GREEN}[OK]${NC}   dufs already installed ($(dufs --version 2>/dev/null || echo ""))"
+else
+    echo "Installing dufs..."
+    if pkg install -y dufs; then
+        echo -e "${GREEN}[OK]${NC}   dufs installed"
+    else
+        echo -e "${YELLOW}[WARN]${NC} Failed to install dufs (non-critical)"
+    fi
+fi
+
 # Install PyYAML if not already installed (required for .skill packaging)
 if python -c "import yaml" 2>/dev/null; then
     echo -e "${GREEN}[OK]${NC}   PyYAML already installed"

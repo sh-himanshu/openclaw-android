@@ -25,6 +25,7 @@ PACKAGES=(
     binutils
     tmux
     ttyd
+    dufs
 )
 
 echo "Installing packages: ${PACKAGES[*]}"

@@ -304,6 +304,7 @@ OpenClaw 빌드 및 실행에 필요한 Termux 패키지를 설치합니다.
 | `binutils` | 바이너리 유틸리티 (ar, strip 등) | 네이티브 모듈 빌드 시 정적 아카이브 생성에 필요한 `llvm-ar` 제공. 많은 빌드 시스템이 `ar` 명령을 기대하므로 `ar → llvm-ar` 심볼릭 링크도 생성 |
 | `tmux` | 터미널 멀티플렉서 | OpenClaw 서버를 백그라운드 세션에서 실행할 수 있게 해줌. Termux에서는 앱이 백그라운드로 가면 프로세스가 중단될 수 있으므로, tmux 세션 안에서 실행하면 안정적으로 유지 가능 |
 | `ttyd` | 웹 터미널 | 터미널을 웹으로 공유하는 도구. [My OpenClaw Hub](https://myopenclawhub.com)에서 브라우저 기반 터미널 접속을 제공하는 데 사용 |
+| `dufs` | HTTP/WebDAV 파일 서버 | 브라우저로 파일 업로드/다운로드를 제공하는 도구. [My OpenClaw Hub](https://myopenclawhub.com)에서 호스트의 파일 관리에 사용 |
 | `pyyaml` (pip) | Python용 YAML 파서 | OpenClaw의 `.skill` 패키징에 필요. Termux 패키지 설치 후 `pip install pyyaml`로 설치 |
 
 - 설치 후 Node.js >= 22 버전 및 npm 존재 여부를 검증. 실패 시 종료
@@ -402,6 +403,7 @@ OpenClaw을 글로벌로 설치하고 Termux 호환 패치를 적용합니다.
 초기 설치 이후 추가된 패키지를 보충 설치합니다.
 
 - `ttyd` — 브라우저 기반 터미널 접속을 위한 웹 터미널. 이미 설치되어 있으면 스킵
+- `dufs` — 브라우저 기반 파일 관리를 위한 HTTP/WebDAV 파일 서버. 이미 설치되어 있으면 스킵
 - `PyYAML` — `.skill` 패키징용 YAML 파서. 이미 설치되어 있으면 스킵
 
 둘 다 비필수 — 실패 시 경고만 출력하고 업데이트를 중단하지 않습니다.

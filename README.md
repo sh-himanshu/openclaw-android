@@ -304,6 +304,7 @@ Installs Termux packages required for building and running OpenClaw.
 | `binutils` | Binary utilities (ar, strip, etc.) | Provides `llvm-ar` for creating static archives during native module builds. The installer also creates an `ar → llvm-ar` symlink since many build systems expect a plain `ar` command |
 | `tmux` | Terminal multiplexer | Allows running the OpenClaw server in a background session. In Termux, apps going to background may suspend processes, so running inside a tmux session keeps it stable |
 | `ttyd` | Web terminal | Shares a terminal over the web. Used by [My OpenClaw Hub](https://myopenclawhub.com) to provide browser-based terminal access to the host |
+| `dufs` | HTTP/WebDAV file server | Provides file upload/download via browser. Used by [My OpenClaw Hub](https://myopenclawhub.com) for file management on the host |
 | `pyyaml` (pip) | YAML parser for Python | Required for `.skill` packaging in OpenClaw. Installed via `pip install pyyaml` after the Termux packages |
 
 - After installation, verifies Node.js >= 22 and npm presence. Exits on failure
@@ -402,6 +403,7 @@ Validates the minimum conditions for updating.
 Installs packages that may have been added since the user's initial installation.
 
 - `ttyd` — Web terminal for browser-based access. Skipped if already installed
+- `dufs` — HTTP/WebDAV file server for browser-based file management. Skipped if already installed
 - `PyYAML` — YAML parser for `.skill` packaging. Skipped if already installed
 
 Both are non-critical — failures print a warning but don't stop the update.
