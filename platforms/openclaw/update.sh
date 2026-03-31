@@ -45,6 +45,10 @@ fi
 
 bash "$SCRIPT_DIR/patches/openclaw-apply-patches.sh"
 
+# Disable mDNS/Bonjour on Android — multicast sockets are not available in Termux
+# Without this, gateway logs "Announcement failed as of socket errors!" repeatedly
+openclaw config set discovery.mdns.mode off 2>/dev/null || true
+
 if [ "$OPENCLAW_UPDATED" = true ]; then
     bash "$SCRIPT_DIR/patches/openclaw-build-sharp.sh" || true
 else

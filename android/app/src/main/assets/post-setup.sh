@@ -442,6 +442,9 @@ command -v python &>/dev/null && { python -c "import yaml" 2>/dev/null || pip in
 echo "  Running: openclaw update (this may take 5-10 minutes)..."
 openclaw update || true
 
+# Disable mDNS/Bonjour — multicast sockets are not available in Termux
+openclaw config set discovery.mdns.mode off 2>/dev/null || true
+
 # ─── [5/7] Patches ──────────────────────────
 echo -e "▸ ${YELLOW}[5/7]${NC} Applying patches..."
 

@@ -70,3 +70,6 @@ echo "Running: openclaw update"
 echo "  (This includes building native modules and may take 5-10 minutes)"
 echo ""
 openclaw update || true
+
+# Disable mDNS/Bonjour — multicast sockets are not available in Termux
+openclaw config set discovery.mdns.mode off 2>/dev/null || true
