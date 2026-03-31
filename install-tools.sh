@@ -15,7 +15,7 @@ NC='\033[0m'
 
 PROJECT_DIR="$HOME/.openclaw-android"
 PLATFORM_MARKER="$PROJECT_DIR/.platform"
-OA_VERSION="1.0.10"
+OA_VERSION="1.0.13"
 REPO_TARBALL="https://github.com/AidanPark/openclaw-android/archive/refs/heads/main.tar.gz"
 
 echo ""
@@ -77,6 +77,13 @@ check_tool "ttyd" "ttyd"
 check_tool "dufs" "dufs"
 check_tool "android-tools" "adb"
 check_tool "Chromium" "chromium-browser"
+if command -v npm &>/dev/null && npm list -g playwright-core &>/dev/null 2>&1; then
+    TOOL_STATUS["Playwright"]="installed"
+    echo -e "  ${GREEN}[INSTALLED]${NC} Playwright"
+else
+    TOOL_STATUS["Playwright"]="not_installed"
+    echo -e "  ${YELLOW}[NOT INSTALLED]${NC} Playwright"
+fi
 check_tool "code-server" "code-server"
 if [ "$IS_GLIBC" = true ]; then
     check_tool "OpenCode" "opencode"
@@ -116,12 +123,14 @@ INSTALL_CLAUDE_CODE=false
 INSTALL_GEMINI_CLI=false
 INSTALL_CODEX_CLI=false
 INSTALL_CHROMIUM=false
+INSTALL_PLAYWRIGHT=false
 
 if [ "${TOOL_STATUS[tmux]}" = "not_installed" ] && ask_yn "  Install tmux (terminal multiplexer)?"; then INSTALL_TMUX=true; fi
 if [ "${TOOL_STATUS[ttyd]}" = "not_installed" ] && ask_yn "  Install ttyd (web terminal)?"; then INSTALL_TTYD=true; fi
 if [ "${TOOL_STATUS[dufs]}" = "not_installed" ] && ask_yn "  Install dufs (file server)?"; then INSTALL_DUFS=true; fi
 if [ "${TOOL_STATUS[android-tools]}" = "not_installed" ] && ask_yn "  Install android-tools (adb)?"; then INSTALL_ANDROID_TOOLS=true; fi
 if [ "${TOOL_STATUS[Chromium]}" = "not_installed" ] && ask_yn "  Install Chromium (browser automation, ~400MB)?"; then INSTALL_CHROMIUM=true; fi
+if [ "${TOOL_STATUS[Playwright]}" = "not_installed" ] && ask_yn "  Install Playwright (browser automation library, requires Chromium)?"; then INSTALL_PLAYWRIGHT=true; fi
 if [ "${TOOL_STATUS[code-server]}" = "not_installed" ] && ask_yn "  Install code-server (browser IDE)?"; then INSTALL_CODE_SERVER=true; fi
 if [ "$IS_GLIBC" = true ] && [ "${TOOL_STATUS[OpenCode]}" = "not_installed" ]; then
     if ask_yn "  Install OpenCode (AI coding assistant)?"; then INSTALL_OPENCODE=true; fi
@@ -133,8 +142,8 @@ if [ "${TOOL_STATUS[Codex CLI]}" = "not_installed" ] && ask_yn "  Install Codex 
 # --- Check if anything selected ---
 ANYTHING_SELECTED=false
 for var in INSTALL_TMUX INSTALL_TTYD INSTALL_DUFS INSTALL_ANDROID_TOOLS \
-           INSTALL_CHROMIUM INSTALL_CODE_SERVER INSTALL_OPENCODE INSTALL_CLAUDE_CODE \
-           INSTALL_GEMINI_CLI INSTALL_CODEX_CLI; do
+           INSTALL_CHROMIUM INSTALL_PLAYWRIGHT INSTALL_CODE_SERVER INSTALL_OPENCODE \
+           INSTALL_CLAUDE_CODE INSTALL_GEMINI_CLI INSTALL_CODEX_CLI; do
     if [ "${!var}" = true ]; then
         ANYTHING_SELECTED=true
         break
@@ -149,7 +158,7 @@ fi
 
 # --- Download scripts (needed for code-server and OpenCode) ---
 NEEDS_TARBALL=false
-if [ "$INSTALL_CODE_SERVER" = true ] || [ "$INSTALL_OPENCODE" = true ] || [ "$INSTALL_CHROMIUM" = true ]; then
+if [ "$INSTALL_CODE_SERVER" = true ] || [ "$INSTALL_OPENCODE" = true ] || [ "$INSTALL_CHROMIUM" = true ] || [ "$INSTALL_PLAYWRIGHT" = true ]; then
     NEEDS_TARBALL=true
 fi
 
@@ -204,6 +213,14 @@ if [ "$INSTALL_CHROMIUM" = true ]; then
         echo -e "${GREEN}[OK]${NC}   Chromium installed"
     else
         echo -e "${YELLOW}[WARN]${NC} Chromium installation failed (non-critical)"
+    fi
+fi
+
+if [ "$INSTALL_PLAYWRIGHT" = true ]; then
+    if bash "$RELEASE_TMP/scripts/install-playwright.sh" install; then
+        echo -e "${GREEN}[OK]${NC}   Playwright installed"
+    else
+        echo -e "${YELLOW}[WARN]${NC} Playwright installation failed (non-critical)"
     fi
 fi
 

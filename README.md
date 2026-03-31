@@ -306,6 +306,7 @@ Each tool is offered via an individual Y/n prompt. You choose which ones to inst
 | [code-server](https://github.com/coder/code-server) | Browser-based VS Code IDE | Direct download from GitHub |
 | [OpenCode](https://opencode.ai/) | AI coding assistant (TUI). Auto-installs [Bun](https://bun.sh/) and [proot](https://proot-me.github.io/) as dependencies | `bun install -g` |
 | [Chromium](https://www.chromium.org/) | Browser automation for OpenClaw (~400MB) | Custom install script |
+| [Playwright](https://playwright.dev/) | Browser automation library (requires Chromium). Auto-configures `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` | Custom install script |
 | [Claude Code](https://github.com/anthropics/claude-code) (Anthropic) | AI CLI tool | `npm install -g` |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli) (Google) | AI CLI tool | `npm install -g` |
 | [Codex CLI](https://github.com/openai/codex) (OpenAI) | AI CLI tool | `npm install -g` |
@@ -339,6 +340,7 @@ openclaw-android/
 │   ├── backup.sh               # Backup and restore OpenClaw data (oa --backup/--restore)
 │   ├── build-sharp.sh          # Build sharp native module (image processing)
 │   ├── install-chromium.sh     # Install Chromium for browser automation
+│   ├── install-playwright.sh   # Install Playwright browser automation library
 │   ├── install-code-server.sh  # Install/update code-server (browser IDE)
 │   ├── install-opencode.sh     # Install OpenCode
 │   ├── setup-env.sh            # Configure environment variables
@@ -431,10 +433,11 @@ Loads the platform's `config.env` via `load_platform_config()` from `scripts/lib
 
 ### [3/8] Optional Tools Selection (L3)
 
-Presents 10 individual Y/n prompts (via `/dev/tty`) for optional tools:
+Presents 11 individual Y/n prompts (via `/dev/tty`) for optional tools:
 
 - tmux, ttyd, dufs, android-tools
-- code-server, OpenCode, Chromium
+- Chromium, Playwright
+- code-server, OpenCode
 - Claude Code, Gemini CLI, Codex CLI
 
 All selections are collected upfront before any installation begins. This allows the user to make all decisions at once and walk away during the install.
@@ -493,6 +496,7 @@ Installs the tools selected in Step 3:
 - **code-server**: Browser-based VS Code IDE with Termux-specific workarounds (replace bundled node, patch argon2, handle hard link failures)
 - **OpenCode**: AI coding assistant using proot + ld.so concatenation for Bun standalone binaries
 - **Chromium**: Browser automation support for OpenClaw (~400MB)
+- **Playwright**: Browser automation library (`playwright-core` via npm). Auto-sets `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` and `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD` environment variables. Installs Chromium automatically if not already present
 - **AI CLI tools**: Claude Code, Gemini CLI, Codex CLI — installed via `npm install -g`
 
 ### [8/8] Verification — `tests/verify-install.sh`

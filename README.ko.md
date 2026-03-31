@@ -304,6 +304,7 @@ OpenClaw은 [node-llama-cpp](https://github.com/withcatai/node-llama-cpp)를 통
 | [code-server](https://github.com/coder/code-server) | 브라우저 기반 VS Code IDE | GitHub에서 직접 다운로드 |
 | [OpenCode](https://opencode.ai/) | AI 코딩 어시스턴트 (TUI). [Bun](https://bun.sh/)과 [proot](https://proot-me.github.io/)을 의존성으로 자동 설치 | `bun install -g` |
 | [Chromium](https://www.chromium.org/) | OpenClaw 브라우저 자동화 (~400MB) | 전용 설치 스크립트 |
+| [Playwright](https://playwright.dev/) | 브라우저 자동화 라이브러리 (Chromium 필요). `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` 자동 설정 | 전용 설치 스크립트 |
 | [Claude Code](https://github.com/anthropics/claude-code) (Anthropic) | AI CLI 도구 | `npm install -g` |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli) (Google) | AI CLI 도구 | `npm install -g` |
 | [Codex CLI](https://github.com/openai/codex) (OpenAI) | AI CLI 도구 | `npm install -g` |
@@ -337,6 +338,7 @@ openclaw-android/
 │   ├── backup.sh               # OpenClaw 데이터 백업/복구 (oa --backup/--restore)
 │   ├── build-sharp.sh          # sharp 네이티브 모듈 빌드 (이미지 처리)
 │   ├── install-chromium.sh     # 브라우저 자동화용 Chromium 설치
+│   ├── install-playwright.sh   # Playwright 브라우저 자동화 라이브러리 설치
 │   ├── install-code-server.sh  # code-server 설치/업데이트 (브라우저 IDE)
 │   ├── install-opencode.sh     # OpenCode 설치
 │   ├── setup-env.sh            # 환경변수 설정
@@ -429,10 +431,11 @@ PLATFORM_NEEDS_BUILD_TOOLS=true
 
 ### [3/8] 선택적 도구 선택 (L3)
 
-10개의 개별 Y/n 프롬프트(`/dev/tty` 사용)로 선택적 도구를 선택합니다:
+11개의 개별 Y/n 프롬프트(`/dev/tty` 사용)로 선택적 도구를 선택합니다:
 
 - tmux, ttyd, dufs, android-tools
-- code-server, OpenCode, Chromium
+- Chromium, Playwright
+- code-server, OpenCode
 - Claude Code, Gemini CLI, Codex CLI
 
 모든 선택은 설치 시작 전에 한 번에 수집됩니다. 사용자가 모든 결정을 마치면 설치 중 자리를 비울 수 있습니다.
@@ -491,6 +494,7 @@ PLATFORM_NEEDS_BUILD_TOOLS=true
 - **code-server**: 브라우저 기반 VS Code IDE. Termux 전용 워커라운드 포함 (번들 node 교체, argon2 패치, 하드 링크 실패 처리)
 - **OpenCode**: AI 코딩 어시스턴트. proot + ld.so 결합 방식으로 Bun 독립 실행 바이너리 지원
 - **Chromium**: OpenClaw 브라우저 자동화 지원 (~400MB)
+- **Playwright**: 브라우저 자동화 라이브러리 (`playwright-core` npm 설치). `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` 및 `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD` 환경변수 자동 설정. Chromium 미설치 시 자동 설치
 - **AI CLI 도구**: Claude Code, Gemini CLI, Codex CLI — `npm install -g`로 설치
 
 ### [8/8] 검증 — `tests/verify-install.sh`

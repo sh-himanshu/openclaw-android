@@ -514,7 +514,7 @@ if [ -f "$TOOL_CONF" ]; then
     source "$TOOL_CONF"
 
     HAS_TOOLS=false
-    for var in INSTALL_TMUX INSTALL_TTYD INSTALL_DUFS INSTALL_CODE_SERVER INSTALL_CLAUDE_CODE INSTALL_GEMINI_CLI INSTALL_CODEX_CLI; do
+    for var in INSTALL_TMUX INSTALL_TTYD INSTALL_DUFS INSTALL_CODE_SERVER INSTALL_PLAYWRIGHT INSTALL_CLAUDE_CODE INSTALL_GEMINI_CLI INSTALL_CODEX_CLI; do
         eval "val=\${$var:-false}"
         # shellcheck disable=SC2154
         [ "$val" = "true" ] && HAS_TOOLS=true && break
@@ -570,6 +570,31 @@ if [ -f "$TOOL_CONF" ]; then
             echo "  Installing code-server (this may take a while)..."
             npm install -g code-server 2>&1 || true
             echo -e "  ${GREEN}✓${NC} code-server"
+        }
+        [ "${INSTALL_PLAYWRIGHT:-false}" = "true" ] && {
+            echo "  Installing Playwright (playwright-core)..."
+            npm install -g playwright-core 2>&1 || true
+            # Set Playwright environment variables if Chromium is available
+            CHROMIUM_BIN=""
+            for bin in "$PREFIX/bin/chromium-browser" "$PREFIX/bin/chromium"; do
+                [ -x "$bin" ] && CHROMIUM_BIN="$bin" && break
+            done
+            if [ -n "$CHROMIUM_BIN" ]; then
+                PW_MARKER_START="# >>> Playwright >>>"
+                PW_MARKER_END="# <<< Playwright <<<"
+                if ! grep -qF "$PW_MARKER_START" "$HOME/.bashrc"; then
+                    cat >> "$HOME/.bashrc" << PWENV
+
+${PW_MARKER_START}
+export PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH="$CHROMIUM_BIN"
+export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+${PW_MARKER_END}
+PWENV
+                fi
+                echo -e "  ${GREEN}✓${NC} Playwright (env: PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$CHROMIUM_BIN)"
+            else
+                echo -e "  ${GREEN}✓${NC} Playwright (install Chromium later via 'oa --install' for full setup)"
+            fi
         }
         [ "${INSTALL_CLAUDE_CODE:-false}" = "true" ] && {
             echo "  Installing Claude Code..."
