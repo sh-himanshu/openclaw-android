@@ -13,28 +13,28 @@ step() {
     echo "----------------------------------------"
 }
 
-step 1 "OpenClaw npm package"
-if command -v npm &>/dev/null; then
-    if npm list -g openclaw &>/dev/null; then
-        npm uninstall -g openclaw
+step 1 "OpenClaw package"
+if command -v pnpm &>/dev/null; then
+    if pnpm list -g openclaw &>/dev/null; then
+        pnpm remove -g openclaw
         echo -e "${GREEN}[OK]${NC}   openclaw package removed"
     else
         echo -e "${YELLOW}[SKIP]${NC} openclaw not installed"
     fi
 else
-    echo -e "${YELLOW}[SKIP]${NC} npm not found"
+    echo -e "${YELLOW}[SKIP]${NC} pnpm not found"
 fi
 
-step 2 "clawdhub npm package"
-if command -v npm &>/dev/null; then
-    if npm list -g clawdhub &>/dev/null; then
-        npm uninstall -g clawdhub
+step 2 "clawdhub package"
+if command -v pnpm &>/dev/null; then
+    if pnpm list -g clawdhub &>/dev/null; then
+        pnpm remove -g clawdhub
         echo -e "${GREEN}[OK]${NC}   clawdhub package removed"
     else
         echo -e "${YELLOW}[SKIP]${NC} clawdhub not installed"
     fi
 else
-    echo -e "${YELLOW}[SKIP]${NC} npm not found"
+    echo -e "${YELLOW}[SKIP]${NC} pnpm not found"
 fi
 
 step 3 "OpenCode"
@@ -115,7 +115,7 @@ else
     read -rp "Remove these AI CLI tools? [y/N] " reply < /dev/tty
     if [[ "$reply" =~ ^[Yy]$ ]]; then
         for pkg in "${AI_TOOLS_FOUND[@]}"; do
-            if npm uninstall -g "$pkg"; then
+            if pnpm remove -g "$pkg"; then
                 echo -e "${GREEN}[OK]${NC}   Removed $pkg"
             else
                 echo -e "${YELLOW}[WARN]${NC} Failed to remove $pkg"

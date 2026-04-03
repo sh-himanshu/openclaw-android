@@ -43,8 +43,8 @@ if [ -z "${PREFIX:-}" ]; then
     fail_warn "Not running in Termux (\$PREFIX not set)"
 fi
 
-if ! command -v npm &>/dev/null; then
-    fail_warn "npm not found — Node.js is required for Playwright"
+if ! command -v pnpm &>/dev/null; then
+    fail_warn "pnpm not found — Node.js and pnpm are required for Playwright"
 fi
 
 # ── Step 1: Ensure Chromium is installed ──────
@@ -70,18 +70,18 @@ echo -e "${GREEN}[OK]${NC}   Chromium found: $CHROMIUM_BIN"
 # ── Step 2: Install playwright-core ───────────
 
 if [ "$MODE" = "install" ]; then
-    if npm list -g playwright-core &>/dev/null; then
+    if pnpm list -g playwright-core &>/dev/null; then
         echo -e "${GREEN}[SKIP]${NC} playwright-core already installed"
     else
         echo "Installing playwright-core..."
-        if ! npm install -g playwright-core; then
+        if ! pnpm add -g playwright-core; then
             fail_warn "Failed to install playwright-core"
         fi
         echo -e "${GREEN}[OK]${NC}   playwright-core installed"
     fi
 elif [ "$MODE" = "update" ]; then
     echo "Updating playwright-core..."
-    if ! npm install -g playwright-core@latest; then
+    if ! pnpm add -g playwright-core@latest; then
         fail_warn "Failed to update playwright-core"
     fi
     echo -e "${GREEN}[OK]${NC}   playwright-core updated"
@@ -116,7 +116,7 @@ echo -e "${BOLD}  Playwright is ready!${NC}"
 echo ""
 echo "  To use in your project:"
 echo ""
-echo "    npm install playwright-core    # add to your project"
+echo "    pnpm add playwright-core    # add to your project"
 echo ""
 echo "  Example code:"
 echo ""

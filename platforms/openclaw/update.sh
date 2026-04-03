@@ -14,32 +14,32 @@ if [ ! -e "$PREFIX/bin/ar" ] && [ -x "$PREFIX/bin/llvm-ar" ]; then
     ln -s "$PREFIX/bin/llvm-ar" "$PREFIX/bin/ar"
 fi
 
-CURRENT_VER=$(npm list -g openclaw 2>/dev/null | grep 'openclaw@' | sed 's/.*openclaw@//' | tr -d '[:space:]')
-LATEST_VER=$(npm view openclaw version 2>/dev/null || echo "")
+CURRENT_VER=$(pnpm list -g openclaw 2>/dev/null | grep 'openclaw@' | sed 's/.*openclaw@//' | tr -d '[:space:]')
+LATEST_VER=$(pnpm view openclaw version 2>/dev/null || echo "")
 OPENCLAW_UPDATED=false
 
 if [ -n "$CURRENT_VER" ] && [ -n "$LATEST_VER" ] && [ "$CURRENT_VER" = "$LATEST_VER" ]; then
     echo -e "${GREEN}[OK]${NC}   openclaw $CURRENT_VER is already the latest"
 else
-    echo "Updating openclaw npm package... ($CURRENT_VER → $LATEST_VER)"
+    echo "Updating openclaw package... ($CURRENT_VER → $LATEST_VER)"
     echo "  (This may take several minutes depending on network speed)"
-    if npm install -g openclaw@latest --no-fund --no-audit --ignore-scripts; then
+    if pnpm add -g openclaw@latest --ignore-scripts; then
         echo -e "${GREEN}[OK]${NC}   openclaw $LATEST_VER updated"
         OPENCLAW_UPDATED=true
     else
         echo -e "${YELLOW}[WARN]${NC} Package update failed (non-critical)"
-        echo "       Retry manually: npm install -g openclaw@latest"
+        echo "       Retry manually: pnpm add -g openclaw@latest"
     fi
 fi
 
-# Fix native bindings broken by --ignore-scripts (npm/cli#4828 workaround)
+# Fix native bindings broken by --ignore-scripts
 # Packages like @snazzah/davey use platform-specific optional deps that get
 # skipped when --ignore-scripts is used. Reinstall them without the flag.
-OPENCLAW_DIR="$(npm root -g)/openclaw"
+OPENCLAW_DIR="$(pnpm root -g)/openclaw"
 if [ -d "$OPENCLAW_DIR/node_modules/@snazzah/davey" ]; then
     if ! node -e "require('$OPENCLAW_DIR/node_modules/@snazzah/davey')" 2>/dev/null; then
         echo "Fixing native bindings for @snazzah/davey..."
-        (cd "$OPENCLAW_DIR" && npm install @snazzah/davey --no-fund --no-audit --no-save 2>/dev/null) || true
+        (cd "$OPENCLAW_DIR" && pnpm add @snazzah/davey 2>/dev/null) || true
     fi
 fi
 
@@ -48,17 +48,17 @@ bash "$SCRIPT_DIR/patches/openclaw-apply-patches.sh"
 if [ "$OPENCLAW_UPDATED" = true ]; then
     bash "$SCRIPT_DIR/patches/openclaw-build-sharp.sh" || true
 else
-    echo -e "${GREEN}[SKIP]${NC} openclaw $CURRENT_VER unchanged \u2014 sharp rebuild not needed"
+    echo -e "${GREEN}[SKIP]${NC} openclaw $CURRENT_VER unchanged — sharp rebuild not needed"
 fi
 
 if command -v clawdhub &>/dev/null; then
-    CLAWDHUB_CURRENT_VER=$(npm list -g clawdhub 2>/dev/null | grep 'clawdhub@' | sed 's/.*clawdhub@//' | tr -d '[:space:]')
-    CLAWDHUB_LATEST_VER=$(npm view clawdhub version 2>/dev/null || echo "")
+    CLAWDHUB_CURRENT_VER=$(pnpm list -g clawdhub 2>/dev/null | grep 'clawdhub@' | sed 's/.*clawdhub@//' | tr -d '[:space:]')
+    CLAWDHUB_LATEST_VER=$(pnpm view clawdhub version 2>/dev/null || echo "")
     if [ -n "$CLAWDHUB_CURRENT_VER" ] && [ -n "$CLAWDHUB_LATEST_VER" ] && [ "$CLAWDHUB_CURRENT_VER" = "$CLAWDHUB_LATEST_VER" ]; then
         echo -e "${GREEN}[OK]${NC}   clawdhub $CLAWDHUB_CURRENT_VER is already the latest"
     elif [ -n "$CLAWDHUB_LATEST_VER" ]; then
         echo "Updating clawdhub... ($CLAWDHUB_CURRENT_VER → $CLAWDHUB_LATEST_VER)"
-        if npm install -g clawdhub@latest --no-fund --no-audit; then
+        if pnpm add -g clawdhub@latest; then
             echo -e "${GREEN}[OK]${NC}   clawdhub $CLAWDHUB_LATEST_VER updated"
         else
             echo -e "${YELLOW}[WARN]${NC} clawdhub update failed (non-critical)"
@@ -69,7 +69,7 @@ if command -v clawdhub &>/dev/null; then
 else
     if ask_yn "clawdhub (skill manager) is not installed. Install it?"; then
         echo "Installing clawdhub..."
-        if npm install -g clawdhub --no-fund --no-audit; then
+        if pnpm add -g clawdhub; then
             echo -e "${GREEN}[OK]${NC}   clawdhub installed"
         else
             echo -e "${YELLOW}[WARN]${NC} clawdhub installation failed (non-critical)"
@@ -79,10 +79,10 @@ else
     fi
 fi
 
-CLAWHUB_DIR="$(npm root -g)/clawdhub"
+CLAWHUB_DIR="$(pnpm root -g)/clawdhub"
 if [ -d "$CLAWHUB_DIR" ] && ! (cd "$CLAWHUB_DIR" && node -e "require('undici')" 2>/dev/null); then
     echo "Installing undici dependency for clawdhub..."
-    if (cd "$CLAWHUB_DIR" && npm install undici --no-fund --no-audit); then
+    if (cd "$CLAWHUB_DIR" && pnpm add undici); then
         echo -e "${GREEN}[OK]${NC}   undici installed for clawdhub"
     else
         echo -e "${YELLOW}[WARN]${NC} undici installation failed"

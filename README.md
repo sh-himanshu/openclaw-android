@@ -122,7 +122,7 @@ pkg update -y && pkg install -y curl
 Paste the following command in Termux.
 
 ```bash
-curl -sL myopenclawhub.com/install | bash && source ~/.bashrc
+curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/refs/heads/main/start.sh | bash && source ~/.bashrc
 ```
 
 Everything is installed automatically with a single command. This takes 3–10 minutes depending on network speed and device. Wi-Fi is recommended.
@@ -171,7 +171,7 @@ See the [Termux SSH Setup Guide](docs/termux-ssh-guide.md) for SSH access and da
 
 ## Managing Multiple Devices
 
-If you run OpenClaw on multiple devices on the same network, use the <a href="https://myopenclawhub.com" target="_blank">Dashboard Connect</a> tool to manage them from your PC.
+If you run OpenClaw on multiple devices on the same network, use the Dashboard Connect tool to manage them from your PC.
 
 - Save connection settings (IP, token, ports) for each device with a nickname
 - Generates the SSH tunnel command and dashboard URL automatically
@@ -210,7 +210,7 @@ Already up-to-date components are skipped. Components you haven't installed are 
 
 > If the `oa` command is not available (older installations), run it with curl:
 > ```bash
-> curl -sL myopenclawhub.com/update | bash && source ~/.bashrc
+> curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/refs/heads/main/update.sh | bash && source ~/.bashrc
 > ```
 
 ## Backup & Restore
@@ -254,7 +254,7 @@ However, there are practical constraints:
 
 For experimentation, small models like TinyLlama 1.1B (Q4, ~670MB) can run on the phone. For production use, cloud LLM providers are recommended.
 
-> **Why `--ignore-scripts`?** The installer uses `npm install -g openclaw@latest --ignore-scripts` because node-llama-cpp's postinstall script attempts to compile llama.cpp from source via cmake — a process that takes 30+ minutes on a phone and fails due to toolchain incompatibilities. The prebuilt binaries work without this compilation step, so the postinstall is safely skipped.
+> **Why `--ignore-scripts`?** The installer uses `pnpm add -g openclaw@latest --ignore-scripts` because node-llama-cpp's postinstall script attempts to compile llama.cpp from source via cmake — a process that takes 30+ minutes on a phone and fails due to toolchain incompatibilities. The prebuilt binaries work without this compilation step, so the postinstall is safely skipped.
 
 <details>
 <summary>Technical Documentation for Developers</summary>
@@ -267,7 +267,7 @@ The installer sets up infrastructure, platform packages, and optional tools acro
 
 | Component | Role | Install Method |
 |-----------|------|----------------|
-| git | Version control, npm git dependencies | `pkg install` |
+| git | Version control, pnpm/npm git dependencies | `pkg install` |
 
 ### Agent Platform Runtime Dependencies
 
@@ -288,8 +288,8 @@ These are controlled by the platform's `config.env` flags. For OpenClaw, all are
 
 | Component | Role | Install Method |
 |-----------|------|----------------|
-| [OpenClaw](https://github.com/openclaw/openclaw) | AI agent platform (core) | `npm install -g` |
-| [clawdhub](https://github.com/sh-himanshu/clawdhub) | Skill manager for OpenClaw | `npm install -g` |
+| [OpenClaw](https://github.com/openclaw/openclaw) | AI agent platform (core) | `pnpm add -g` |
+| [clawdhub](https://github.com/sh-himanshu/clawdhub) | Skill manager for OpenClaw | `pnpm add -g` |
 | [PyYAML](https://pyyaml.org/) | YAML parser for `.skill` packaging | `pip install` |
 | libvips | Image processing headers for sharp build | `pkg install` (on update) |
 
@@ -307,15 +307,15 @@ Each tool is offered via an individual Y/n prompt. You choose which ones to inst
 | [OpenCode](https://opencode.ai/) | AI coding assistant (TUI). Auto-installs [Bun](https://bun.sh/) and [proot](https://proot-me.github.io/) as dependencies | `bun install -g` |
 | [Chromium](https://www.chromium.org/) | Browser automation for OpenClaw (~400MB) | Custom install script |
 | [Playwright](https://playwright.dev/) | Browser automation library (requires Chromium). Auto-configures `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` | Custom install script |
-| [Claude Code](https://github.com/anthropics/claude-code) (Anthropic) | AI CLI tool | `npm install -g` |
-| [Gemini CLI](https://github.com/google-gemini/gemini-cli) (Google) | AI CLI tool | `npm install -g` |
-| [Codex CLI](https://github.com/openai/codex) (OpenAI) | AI CLI tool | `npm install -g` |
+| [Claude Code](https://github.com/anthropics/claude-code) (Anthropic) | AI CLI tool | `pnpm add -g` |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli) (Google) | AI CLI tool | `pnpm add -g` |
+| [Codex CLI](https://github.com/openai/codex) (OpenAI) | AI CLI tool | `pnpm add -g` |
 
 ## Project Structure
 
 ```
 openclaw-android/
-├── bootstrap.sh                # curl | bash one-liner installer (downloader)
+├── start.sh                    # curl | bash one-liner installer (downloader)
 ├── install.sh                  # Platform-aware installer (entry point)
 ├── oa.sh                       # Unified CLI (installed as $PREFIX/bin/oa)
 ├── post-setup.sh               # Claw App post-bootstrap setup (OTA delivery)
@@ -349,7 +349,7 @@ openclaw-android/
 │   ├── openclaw/               # OpenClaw platform plugin
 │   │   ├── config.env          # Platform metadata and dependency declarations
 │   │   ├── env.sh              # Platform-specific environment variables
-│   │   ├── install.sh          # Platform package install (npm, patches, clawdhub)
+│   │   ├── install.sh          # Platform package install (pnpm, patches, clawdhub)
 │   │   ├── update.sh           # Platform package update
 │   │   ├── uninstall.sh        # Platform package removal
 │   │   ├── status.sh           # Platform status display
@@ -461,7 +461,7 @@ Conditionally installs runtime dependencies based on the platform's `config.env`
 | Flag | Script | What it installs |
 |------|--------|-----------------|
 | `PLATFORM_NEEDS_GLIBC=true` | `scripts/install-glibc.sh` | pacman, glibc-runner (provides `ld-linux-aarch64.so.1`) |
-| `PLATFORM_NEEDS_NODEJS=true` | `scripts/install-nodejs.sh` | Node.js v22 LTS linux-arm64, grun-style wrapper scripts |
+| `PLATFORM_NEEDS_NODEJS=true` | `scripts/install-nodejs.sh` | Node.js v22 LTS linux-arm64, grun-style wrapper scripts, pnpm via corepack |
 | `PLATFORM_NEEDS_BUILD_TOOLS=true` | `scripts/install-build-tools.sh` | python, make, cmake, clang, binutils |
 
 Each script is self-contained with pre-checks and idempotent behavior (skips if already installed).
@@ -474,7 +474,7 @@ Delegates to the platform's own install script. For OpenClaw, this:
 2. Installs PyYAML via pip (for `.skill` packaging)
 3. Copies `glibc-compat.js` to `~/.openclaw-android/patches/`
 4. Installs `systemctl` stub to `$PREFIX/bin/`
-5. Runs `npm install -g openclaw@latest --ignore-scripts`
+5. Runs `pnpm add -g openclaw@latest --ignore-scripts`
 6. Applies platform-specific patches via `openclaw-apply-patches.sh`
 7. Installs `clawdhub` (skill manager) and `undici` dependency if needed
 8. Runs `openclaw update` (includes building native modules like sharp)
@@ -496,8 +496,8 @@ Installs the tools selected in Step 3:
 - **code-server**: Browser-based VS Code IDE with Termux-specific workarounds (replace bundled node, patch argon2, handle hard link failures)
 - **OpenCode**: AI coding assistant using proot + ld.so concatenation for Bun standalone binaries
 - **Chromium**: Browser automation support for OpenClaw (~400MB)
-- **Playwright**: Browser automation library (`playwright-core` via npm). Auto-sets `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` and `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD` environment variables. Installs Chromium automatically if not already present
-- **AI CLI tools**: Claude Code, Gemini CLI, Codex CLI — installed via `npm install -g`
+- **Playwright**: Browser automation library (`playwright-core` via pnpm). Auto-sets `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` and `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD` environment variables. Installs Chromium automatically if not already present
+- **AI CLI tools**: Claude Code, Gemini CLI, Codex CLI — installed via `pnpm add -g`
 
 ### [8/8] Verification — `tests/verify-install.sh`
 
@@ -508,13 +508,13 @@ Runs a two-tier verification:
 | Check Item | PASS Condition |
 |------------|---------------|
 | Node.js version | `node -v` >= 22 |
-| npm | `npm` command exists |
+| pnpm | `pnpm` command exists |
 | TMPDIR | Environment variable is set |
 | OA_GLIBC | Set to `1` |
 | glibc-compat.js | File exists in `~/.openclaw-android/patches/` |
 | .glibc-arch | Marker file exists |
 | glibc dynamic linker | `ld-linux-aarch64.so.1` exists |
-| glibc node wrapper | Wrapper script at `~/.openclaw-android/node/bin/node` |
+| glibc node wrapper | Wrapper script at `~/.openclaw-android/bin/node` |
 | Directories | `~/.openclaw-android`, `$PREFIX/tmp` exist |
 | .bashrc | Contains environment variable block |
 
@@ -577,7 +577,7 @@ Updates shared files used by the updater, uninstaller, and CLI:
 Delegates to `platforms/<platform>/update.sh`. For OpenClaw, this:
 
 - Installs build dependencies (`libvips`, `binutils`)
-- Updates `openclaw` npm package to latest version
+- Updates `openclaw` package to latest version
 - Re-applies platform-specific patches
 - Rebuilds sharp native module if openclaw was updated
 - Updates/installs `clawdhub` (skill manager)
@@ -592,7 +592,7 @@ Updates tools that are already installed:
 - **code-server**: Runs `install-code-server.sh` in update mode. Skipped if not installed
 - **OpenCode**: Updates if installed; offers to install if not. Requires glibc architecture
 - **Chromium**: Updates if installed. Skipped if not installed
-- **AI CLI tools** (Claude Code, Gemini CLI, Codex CLI): Compares installed vs latest npm version, updates if needed. Tools not installed are not offered for installation
+- **AI CLI tools** (Claude Code, Gemini CLI, Codex CLI): Compares installed vs latest version, updates if needed. Tools not installed are not offered for installation
 
 </details>
 

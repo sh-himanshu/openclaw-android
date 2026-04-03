@@ -19,10 +19,10 @@ else
     echo -e "  Node.js:     ${RED}not installed${NC}"
 fi
 
-if command -v npm &>/dev/null; then
-    echo "  npm:         $(npm -v 2>/dev/null)"
+if command -v pnpm &>/dev/null; then
+    echo "  pnpm:        $(pnpm -v 2>/dev/null)"
 else
-    echo -e "  npm:         ${RED}not installed${NC}"
+    echo -e "  pnpm:        ${RED}not installed${NC}"
 fi
 
 if command -v clawdhub &>/dev/null; then

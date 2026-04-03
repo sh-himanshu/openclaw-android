@@ -129,6 +129,29 @@ NPXWRAP
                 sed -i "1s|#!/usr/bin/env node|#!$BIN_DIR/node|" "$NODE_DIR/bin/corepack"
                 _any_fixed=true
             fi
+            # Ensure pnpm wrapper exists in BIN_DIR
+            if [ ! -x "$BIN_DIR/pnpm" ]; then
+                _PNPM_ENTRY=""
+                for _candidate in \
+                    "$NODE_DIR/lib/node_modules/corepack/dist/pnpm.js" \
+                    "$NODE_DIR/lib/node_modules/pnpm/bin/pnpm.cjs" \
+                    "$NODE_DIR/bin/pnpm"; do
+                    if [ -f "$_candidate" ]; then
+                        _PNPM_ENTRY="$_candidate"
+                        break
+                    fi
+                done
+                if [ -n "$_PNPM_ENTRY" ]; then
+                    cat > "$BIN_DIR/pnpm" << PNPMWRAP
+#!${PREFIX}/bin/bash
+export PNPM_HOME="$OPENCLAW_DIR/pnpm-global"
+export PATH="\$PNPM_HOME:\$PATH"
+"$BIN_DIR/node" "$_PNPM_ENTRY" "\$@"
+PNPMWRAP
+                    chmod +x "$BIN_DIR/pnpm"
+                    _any_fixed=true
+                fi
+            fi
             if [ "$_any_fixed" = true ]; then
                 echo -e "${YELLOW}[FIX]${NC}  wrappers repaired in $BIN_DIR"
             fi
@@ -291,6 +314,76 @@ NPM_VER=$("$BIN_DIR/npm" --version 2>/dev/null) || {
 }
 if [ -n "${NPM_VER:-}" ]; then
     echo -e "${GREEN}[OK]${NC}   npm $NPM_VER"
+fi
+
+# ── Step 4.5: Enable corepack + install pnpm ──────────────────────
+
+echo ""
+echo "Enabling corepack and installing pnpm..."
+
+# Set PNPM_HOME so pnpm global bins go to a known location
+export PNPM_HOME="$OPENCLAW_DIR/pnpm-global"
+mkdir -p "$PNPM_HOME"
+
+# Enable corepack (ships with Node.js, manages pnpm/yarn versions)
+"$BIN_DIR/node" "$NODE_DIR/bin/corepack" enable --install-directory "$BIN_DIR" 2>/dev/null || true
+
+# Prepare pnpm via corepack (downloads the latest stable pnpm)
+if "$BIN_DIR/node" "$NODE_DIR/bin/corepack" prepare pnpm@latest --activate 2>/dev/null; then
+    echo -e "${GREEN}[OK]${NC}   corepack enabled, pnpm activated"
+else
+    echo -e "${YELLOW}[WARN]${NC} corepack prepare failed — falling back to npm install"
+    "$BIN_DIR/npm" install -g pnpm 2>/dev/null || true
+fi
+
+# Create pnpm wrapper in BIN_DIR (uses our glibc node wrapper)
+# corepack enable may have created a shim, but we need a full wrapper
+# that goes through our glibc ld.so node
+_PNPM_ENTRY=""
+for _candidate in \
+    "$NODE_DIR/lib/node_modules/corepack/dist/pnpm.js" \
+    "$NODE_DIR/lib/node_modules/pnpm/bin/pnpm.cjs" \
+    "$NODE_DIR/bin/pnpm"; do
+    if [ -f "$_candidate" ]; then
+        _PNPM_ENTRY="$_candidate"
+        break
+    fi
+done
+
+if [ -n "$_PNPM_ENTRY" ]; then
+    cat > "$BIN_DIR/pnpm" << PNPMWRAP
+#!${PREFIX}/bin/bash
+export PNPM_HOME="$PNPM_HOME"
+export PATH="\$PNPM_HOME:\$PATH"
+"$BIN_DIR/node" "$_PNPM_ENTRY" "\$@"
+_pnpm_exit=\$?
+# Re-patch openclaw CLI wrapper after global install/update
+case "\$*" in *-g*openclaw*|*--global*openclaw*|*openclaw*-g*|*openclaw*--global*)
+    _pnpm_root=\$("$BIN_DIR/node" "$_PNPM_ENTRY" root -g 2>/dev/null)
+    _oc_mjs="\${_pnpm_root}/openclaw/openclaw.mjs"
+    _oc_bin="$PREFIX/bin/openclaw"
+    if [ -f "\$_oc_mjs" ]; then
+        printf '#!$PREFIX/bin/bash\nexec "$BIN_DIR/node" "%s" "\$@"\n' "\$_oc_mjs" > "\$_oc_bin"
+        chmod +x "\$_oc_bin"
+    fi
+    ;;
+esac
+exit \$_pnpm_exit
+PNPMWRAP
+    chmod +x "$BIN_DIR/pnpm"
+    echo -e "${GREEN}[OK]${NC}   pnpm wrapper created ($BIN_DIR/pnpm)"
+fi
+
+# Configure pnpm global bin and store directories
+"$BIN_DIR/pnpm" config set global-bin-dir "$PNPM_HOME" 2>/dev/null || true
+"$BIN_DIR/pnpm" config set store-dir "$OPENCLAW_DIR/pnpm-store" 2>/dev/null || true
+echo -e "${GREEN}[OK]${NC}   pnpm global-bin-dir set to $PNPM_HOME"
+
+PNPM_VER=$("$BIN_DIR/pnpm" --version 2>/dev/null) || true
+if [ -n "${PNPM_VER:-}" ]; then
+    echo -e "${GREEN}[OK]${NC}   pnpm $PNPM_VER"
+else
+    echo -e "${YELLOW}[WARN]${NC} pnpm verification failed"
 fi
 
 # Quick platform check

@@ -39,10 +39,10 @@ else
     check_fail "Node.js not found"
 fi
 
-if command -v npm &>/dev/null; then
-    check_pass "npm $(npm -v)"
+if command -v pnpm &>/dev/null; then
+    check_pass "pnpm $(pnpm -v)"
 else
-    check_fail "npm not found"
+    check_fail "pnpm not found"
 fi
 
 if [ -n "${TMPDIR:-}" ]; then

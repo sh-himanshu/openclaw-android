@@ -349,6 +349,57 @@ NPXWRAP
     export PATH="$BIN_DIR:$NODE_DIR/bin:$PATH"
     "$BIN_DIR/npm" config set script-shell "$PREFIX/bin/sh" 2>/dev/null || true
 
+    # Enable corepack + install pnpm
+    echo "  Enabling corepack and installing pnpm..."
+    export PNPM_HOME="$PROJECT_DIR/pnpm-global"
+    mkdir -p "$PNPM_HOME"
+
+    "$BIN_DIR/node" "$NODE_DIR/bin/corepack" enable --install-directory "$BIN_DIR" 2>/dev/null || true
+    if "$BIN_DIR/node" "$NODE_DIR/bin/corepack" prepare pnpm@latest --activate 2>/dev/null; then
+        echo -e "  ${GREEN}✓${NC} corepack enabled, pnpm activated"
+    else
+        echo -e "  ${YELLOW}[WARN]${NC} corepack prepare failed — falling back to npm install"
+        "$BIN_DIR/npm" install -g pnpm 2>/dev/null || true
+    fi
+
+    # Create pnpm wrapper in BIN_DIR (uses our glibc node wrapper)
+    _PNPM_ENTRY=""
+    for _candidate in \
+        "$NODE_DIR/lib/node_modules/corepack/dist/pnpm.js" \
+        "$NODE_DIR/lib/node_modules/pnpm/bin/pnpm.cjs" \
+        "$NODE_DIR/bin/pnpm"; do
+        if [ -f "$_candidate" ]; then
+            _PNPM_ENTRY="$_candidate"
+            break
+        fi
+    done
+    if [ -n "$_PNPM_ENTRY" ]; then
+        cat > "$BIN_DIR/pnpm" << PNPMWRAP
+#!${PREFIX}/bin/bash
+export PNPM_HOME="$PNPM_HOME"
+export PATH="\$PNPM_HOME:\$PATH"
+"$BIN_DIR/node" "$_PNPM_ENTRY" "\$@"
+_pnpm_exit=\$?
+case "\$*" in *-g*openclaw*|*--global*openclaw*|*openclaw*-g*|*openclaw*--global*)
+    _pnpm_root=\$("$BIN_DIR/node" "$_PNPM_ENTRY" root -g 2>/dev/null)
+    _oc_mjs="\${_pnpm_root}/openclaw/openclaw.mjs"
+    _oc_bin="$PREFIX/bin/openclaw"
+    if [ -f "\$_oc_mjs" ]; then
+        printf '#!$PREFIX/bin/bash\nexec "$BIN_DIR/node" "%s" "\$@"\n' "\$_oc_mjs" > "\$_oc_bin"
+        chmod +x "\$_oc_bin"
+    fi
+    ;;
+esac
+exit \$_pnpm_exit
+PNPMWRAP
+        chmod +x "$BIN_DIR/pnpm"
+        echo -e "  ${GREEN}✓${NC} pnpm wrapper created"
+    fi
+
+    # Configure pnpm global directories
+    "$BIN_DIR/pnpm" config set global-bin-dir "$PNPM_HOME" 2>/dev/null || true
+    "$BIN_DIR/pnpm" config set store-dir "$PROJECT_DIR/pnpm-store" 2>/dev/null || true
+
     # Verify
     NODE_VER=$("$BIN_DIR/node" --version 2>/dev/null) || {
         echo -e "  ${RED}✗${NC} Node.js verification failed"
@@ -429,26 +480,26 @@ if command -v openclaw &>/dev/null 2>&1; then
 else
     # Clean npm cache tmp dir (leftover from previous failed installs)
     rm -rf "$HOME/.npm/_cacache/tmp" 2>/dev/null || true
-    npm install -g openclaw@latest --ignore-scripts 2>&1
+    pnpm add -g openclaw@latest --ignore-scripts 2>&1
     OC_VER=$(openclaw --version 2>/dev/null || echo "installed")
     echo -e "  ${GREEN}✓${NC} OpenClaw $OC_VER"
 fi
 
 # Fix native bindings broken by --ignore-scripts
-OPENCLAW_DIR="$(npm root -g)/openclaw"
+OPENCLAW_DIR="$(pnpm root -g)/openclaw"
 if [ -d "$OPENCLAW_DIR/node_modules/@snazzah/davey" ]; then
     echo "  Installing native bindings for @snazzah/davey..."
-    (cd "$OPENCLAW_DIR" && npm install @snazzah/davey --no-fund --no-audit --no-save 2>/dev/null) || true
+    (cd "$OPENCLAW_DIR" && pnpm add @snazzah/davey 2>/dev/null) || true
 fi
 
 # Install clawdhub (skill manager)
 echo "  Installing clawdhub..."
-if npm install -g clawdhub --no-fund --no-audit; then
+if pnpm add -g clawdhub; then
     echo -e "  ${GREEN}✓${NC} clawdhub installed"
-    CLAWHUB_DIR="$(npm root -g)/clawdhub"
+    CLAWHUB_DIR="$(pnpm root -g)/clawdhub"
     if [ -d "$CLAWHUB_DIR" ] && ! (cd "$CLAWHUB_DIR" && node -e "require('undici')" 2>/dev/null); then
         echo "  Installing undici dependency for clawdhub..."
-        (cd "$CLAWHUB_DIR" && npm install undici --no-fund --no-audit) || true
+        (cd "$CLAWHUB_DIR" && pnpm add undici) || true
     fi
 else
     echo -e "  ${YELLOW}[WARN]${NC} clawdhub installation failed (non-critical)"
@@ -482,7 +533,7 @@ chmod +x "$PREFIX/bin/systemctl"
 if [ -d "$OPENCLAW_DIR/node_modules/sharp" ]; then
     if ! node -e "require('$OPENCLAW_DIR/node_modules/sharp')" 2>/dev/null; then
         echo "  Installing sharp WebAssembly runtime..."
-        (cd "$OPENCLAW_DIR" && npm install @img/sharp-wasm32 --force --no-audit --no-fund 2>&1 | tail -3) || true
+        (cd "$OPENCLAW_DIR" && pnpm add @img/sharp-wasm32 --force 2>&1 | tail -3) || true
     fi
 fi
 
@@ -587,12 +638,12 @@ if [ -f "$TOOL_CONF" ]; then
         # npm packages
         [ "${INSTALL_CODE_SERVER:-false}" = "true" ] && {
             echo "  Installing code-server (this may take a while)..."
-            npm install -g code-server 2>&1 || true
+            pnpm add -g code-server 2>&1 || true
             echo -e "  ${GREEN}✓${NC} code-server"
         }
         [ "${INSTALL_PLAYWRIGHT:-false}" = "true" ] && {
             echo "  Installing Playwright (playwright-core)..."
-            npm install -g playwright-core 2>&1 || true
+            pnpm add -g playwright-core 2>&1 || true
             # Set Playwright environment variables if Chromium is available
             CHROMIUM_BIN=""
             for bin in "$PREFIX/bin/chromium-browser" "$PREFIX/bin/chromium"; do
@@ -617,17 +668,17 @@ PWENV
         }
         [ "${INSTALL_CLAUDE_CODE:-false}" = "true" ] && {
             echo "  Installing Claude Code..."
-            npm install -g @anthropic-ai/claude-code 2>&1 || true
+            pnpm add -g @anthropic-ai/claude-code 2>&1 || true
             echo -e "  ${GREEN}✓${NC} Claude Code"
         }
         [ "${INSTALL_GEMINI_CLI:-false}" = "true" ] && {
             echo "  Installing Gemini CLI..."
-            npm install -g @google/gemini-cli 2>&1 || true
+            pnpm add -g @google/gemini-cli 2>&1 || true
             echo -e "  ${GREEN}✓${NC} Gemini CLI"
         }
         [ "${INSTALL_CODEX_CLI:-false}" = "true" ] && {
             echo "  Installing Codex CLI..."
-            npm install -g @openai/codex 2>&1 || true
+            pnpm add -g @openai/codex 2>&1 || true
             echo -e "  ${GREEN}✓${NC} Codex CLI"
         }
     else

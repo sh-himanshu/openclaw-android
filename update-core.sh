@@ -235,7 +235,7 @@ else
 
     if [ "$OPENCODE_INSTALLED" = true ]; then
         CURRENT_OC_VER=$(opencode --version 2>/dev/null || echo "")
-        LATEST_OC_VER=$(npm view opencode-ai version 2>/dev/null || echo "")
+        LATEST_OC_VER=$(pnpm view opencode-ai version 2>/dev/null || echo "")
 
         if [ -n "$CURRENT_OC_VER" ] && [ -n "$LATEST_OC_VER" ] && [ "$CURRENT_OC_VER" = "$LATEST_OC_VER" ]; then
             echo -e "${GREEN}[OK]${NC}   OpenCode $CURRENT_OC_VER is already the latest"
@@ -265,15 +265,15 @@ update_ai_tool() {
     fi
 
     local current_ver latest_ver
-    current_ver=$(npm list -g "$pkg" 2>/dev/null | grep "${pkg##*/}@" | sed 's/.*@//' | tr -d '[:space:]')
-    latest_ver=$(npm view "$pkg" version 2>/dev/null || echo "")
+    current_ver=$(pnpm list -g "$pkg" 2>/dev/null | grep "${pkg##*/}@" | sed 's/.*@//' | tr -d '[:space:]')
+    latest_ver=$(pnpm view "$pkg" version 2>/dev/null || echo "")
 
     if [ -n "$current_ver" ] && [ -n "$latest_ver" ] && [ "$current_ver" = "$latest_ver" ]; then
         echo -e "${GREEN}[OK]${NC}   $label $current_ver is already the latest"
     elif [ -n "$latest_ver" ]; then
         echo "Updating $label... ($current_ver -> $latest_ver)"
         echo "  (This may take a few minutes depending on network speed)"
-        if npm install -g "$pkg@latest" --no-fund --no-audit --ignore-scripts; then
+        if pnpm add -g "$pkg@latest" --ignore-scripts; then
             echo -e "${GREEN}[OK]${NC}   $label $latest_ver updated"
         else
             echo -e "${YELLOW}[WARN]${NC} $label update failed (non-critical)"

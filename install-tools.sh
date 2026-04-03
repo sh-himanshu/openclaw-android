@@ -77,7 +77,7 @@ check_tool "ttyd" "ttyd"
 check_tool "dufs" "dufs"
 check_tool "android-tools" "adb"
 check_tool "Chromium" "chromium-browser"
-if command -v npm &>/dev/null && npm list -g playwright-core &>/dev/null 2>&1; then
+if command -v pnpm &>/dev/null && pnpm list -g playwright-core &>/dev/null 2>&1; then
     TOOL_STATUS["Playwright"]="installed"
     echo -e "  ${GREEN}[INSTALLED]${NC} Playwright"
 else
@@ -224,9 +224,9 @@ if [ "$INSTALL_PLAYWRIGHT" = true ]; then
     fi
 fi
 
-if [ "$INSTALL_CLAUDE_CODE" = true ]; then echo "Installing Claude Code..."; if npm install -g @anthropic-ai/claude-code; then echo -e "${GREEN}[OK]${NC}   Claude Code installed"; fi; fi
-if [ "$INSTALL_GEMINI_CLI" = true ]; then echo "Installing Gemini CLI..."; if npm install -g @google/gemini-cli; then echo -e "${GREEN}[OK]${NC}   Gemini CLI installed"; fi; fi
-if [ "$INSTALL_CODEX_CLI" = true ]; then echo "Installing Codex CLI..."; if npm install -g @openai/codex; then echo -e "${GREEN}[OK]${NC}   Codex CLI installed"; fi; fi
+if [ "$INSTALL_CLAUDE_CODE" = true ]; then echo "Installing Claude Code..."; if pnpm add -g @anthropic-ai/claude-code; then echo -e "${GREEN}[OK]${NC}   Claude Code installed"; fi; fi
+if [ "$INSTALL_GEMINI_CLI" = true ]; then echo "Installing Gemini CLI..."; if pnpm add -g @google/gemini-cli; then echo -e "${GREEN}[OK]${NC}   Gemini CLI installed"; fi; fi
+if [ "$INSTALL_CODEX_CLI" = true ]; then echo "Installing Codex CLI..."; if pnpm add -g @openai/codex; then echo -e "${GREEN}[OK]${NC}   Codex CLI installed"; fi; fi
 
 echo ""
 echo -e "${GREEN}${BOLD}  Installation Complete!${NC}"

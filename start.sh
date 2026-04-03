@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# bootstrap.sh - Download and run OpenClaw on Android installer
-# Usage: curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/bootstrap.sh | bash
+# start.sh - Download and run OpenClaw on Android installer
+# Usage: curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/refs/heads/main/start.sh | bash && source ~/.bashrc
 set -euo pipefail
 
 REPO_TARBALL="https://github.com/sh-himanshu/openclaw-android/archive/refs/heads/main.tar.gz"

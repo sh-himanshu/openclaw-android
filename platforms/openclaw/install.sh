@@ -18,41 +18,41 @@ cp "$SCRIPT_DIR/../../patches/systemctl" "$PREFIX/bin/systemctl"
 chmod +x "$PREFIX/bin/systemctl"
 
 # Clean up existing installation for smooth reinstall
-if npm list -g openclaw &>/dev/null 2>&1 || [ -d "$PREFIX/lib/node_modules/openclaw" ]; then
-    echo "Existing installation detected \u2014 cleaning up for reinstall..."
-    npm uninstall -g openclaw 2>/dev/null || true
+if pnpm list -g openclaw &>/dev/null 2>&1 || [ -d "$PREFIX/lib/node_modules/openclaw" ]; then
+    echo "Existing installation detected — cleaning up for reinstall..."
+    pnpm remove -g openclaw 2>/dev/null || true
     rm -rf "$PREFIX/lib/node_modules/openclaw" 2>/dev/null || true
-    npm uninstall -g clawdhub 2>/dev/null || true
+    pnpm remove -g clawdhub 2>/dev/null || true
     rm -rf "$PREFIX/lib/node_modules/clawdhub" 2>/dev/null || true
     rm -rf "$HOME/.npm/_cacache" 2>/dev/null || true
     echo -e "${GREEN}[OK]${NC}   Previous installation cleaned"
 fi
 
-echo "Running: npm install -g openclaw@latest --ignore-scripts"
+echo "Running: pnpm add -g openclaw@latest --ignore-scripts"
 echo "This may take several minutes..."
 echo ""
-npm install -g openclaw@latest --ignore-scripts
+pnpm add -g openclaw@latest --ignore-scripts
 
 echo ""
 echo -e "${GREEN}[OK]${NC}   OpenClaw installed"
 
-# Fix native bindings broken by --ignore-scripts (npm/cli#4828 workaround)
-OPENCLAW_DIR="$(npm root -g)/openclaw"
+# Fix native bindings broken by --ignore-scripts
+OPENCLAW_DIR="$(pnpm root -g)/openclaw"
 if [ -d "$OPENCLAW_DIR/node_modules/@snazzah/davey" ]; then
     echo "Installing native bindings for @snazzah/davey..."
-    (cd "$OPENCLAW_DIR" && npm install @snazzah/davey --no-fund --no-audit --no-save 2>/dev/null) || true
+    (cd "$OPENCLAW_DIR" && pnpm add @snazzah/davey 2>/dev/null) || true
 fi
 
 bash "$SCRIPT_DIR/patches/openclaw-apply-patches.sh"
 
 echo ""
 echo "Installing clawdhub (skill manager)..."
-if npm install -g clawdhub --no-fund --no-audit; then
+if pnpm add -g clawdhub; then
     echo -e "${GREEN}[OK]${NC}   clawdhub installed"
-    CLAWHUB_DIR="$(npm root -g)/clawdhub"
+    CLAWHUB_DIR="$(pnpm root -g)/clawdhub"
     if [ -d "$CLAWHUB_DIR" ] && ! (cd "$CLAWHUB_DIR" && node -e "require('undici')" 2>/dev/null); then
         echo "Installing undici dependency for clawdhub..."
-        if (cd "$CLAWHUB_DIR" && npm install undici --no-fund --no-audit); then
+        if (cd "$CLAWHUB_DIR" && pnpm add undici); then
             echo -e "${GREEN}[OK]${NC}   undici installed for clawdhub"
         else
             echo -e "${YELLOW}[WARN]${NC} undici installation failed (clawdhub may not work)"
@@ -60,7 +60,7 @@ if npm install -g clawdhub --no-fund --no-audit; then
     fi
 else
     echo -e "${YELLOW}[WARN]${NC} clawdhub installation failed (non-critical)"
-    echo "       Retry manually: npm i -g clawdhub"
+    echo "       Retry manually: pnpm add -g clawdhub"
 fi
 
 mkdir -p "$HOME/.openclaw"

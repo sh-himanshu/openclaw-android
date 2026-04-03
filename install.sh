@@ -115,9 +115,9 @@ if [ "$INSTALL_CODE_SERVER" = true ]; then mkdir -p "$PROJECT_DIR/patches" && cp
 
 if [ "$INSTALL_OPENCODE" = true ]; then bash "$SCRIPT_DIR/scripts/install-opencode.sh" install; fi
 
-if [ "$INSTALL_CLAUDE_CODE" = true ]; then npm install -g @anthropic-ai/claude-code; fi
-if [ "$INSTALL_GEMINI_CLI" = true ]; then npm install -g @google/gemini-cli; fi
-if [ "$INSTALL_CODEX_CLI" = true ]; then npm install -g @openai/codex; fi
+if [ "$INSTALL_CLAUDE_CODE" = true ]; then pnpm add -g @anthropic-ai/claude-code; fi
+if [ "$INSTALL_GEMINI_CLI" = true ]; then pnpm add -g @google/gemini-cli; fi
+if [ "$INSTALL_CODEX_CLI" = true ]; then pnpm add -g @openai/codex; fi
 
 step 8 "Verification"
 bash "$SCRIPT_DIR/tests/verify-install.sh"

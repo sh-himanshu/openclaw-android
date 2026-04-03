@@ -26,7 +26,7 @@ export TEMP="$TMPDIR"
 export CONTAINER="${CONTAINER:-1}"
 
 # Locate openclaw install directory
-OPENCLAW_DIR="$(npm root -g)/openclaw"
+OPENCLAW_DIR="$(pnpm root -g)/openclaw"
 
 if [ ! -d "$OPENCLAW_DIR" ]; then
     echo -e "${RED}[FAIL]${NC} OpenClaw directory not found: $OPENCLAW_DIR"
@@ -50,7 +50,7 @@ fi
 # By installing @img/sharp-wasm32, path 4 catches the fallback automatically.
 
 echo "Installing sharp WebAssembly runtime..."
-if (cd "$OPENCLAW_DIR" && npm install @img/sharp-wasm32 --force --no-audit --no-fund 2>&1 | tail -3); then
+if (cd "$OPENCLAW_DIR" && pnpm add @img/sharp-wasm32 --force 2>&1 | tail -3); then
     if node -e "require('$OPENCLAW_DIR/node_modules/sharp')" 2>/dev/null; then
         echo ""
         echo -e "${GREEN}[OK]${NC}   sharp enabled via WebAssembly — image processing ready"
@@ -84,7 +84,7 @@ fi
 
 # Install node-gyp globally
 echo "Installing node-gyp..."
-if ! npm install -g node-gyp; then
+if ! pnpm add -g node-gyp; then
     echo -e "${YELLOW}[WARN]${NC} Failed to install node-gyp"
     echo "       Image processing will not be available, but OpenClaw will work normally."
     exit 0
@@ -105,7 +105,7 @@ echo "Rebuilding sharp in $OPENCLAW_DIR..."
 echo "This may take several minutes..."
 echo ""
 
-if (cd "$OPENCLAW_DIR" && npm rebuild sharp); then
+if (cd "$OPENCLAW_DIR" && pnpm rebuild sharp); then
     echo ""
     echo -e "${GREEN}[OK]${NC}   sharp built successfully — image processing enabled"
 else

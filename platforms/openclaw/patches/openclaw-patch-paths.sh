@@ -14,8 +14,8 @@ echo ""
 export TMPDIR="${TMPDIR:-$PREFIX/tmp}"
 
 # Find OpenClaw installation directory
-NPM_ROOT=$(npm root -g 2>/dev/null)
-OPENCLAW_DIR="$NPM_ROOT/openclaw"
+PNPM_ROOT=$(pnpm root -g 2>/dev/null)
+OPENCLAW_DIR="$PNPM_ROOT/openclaw"
 
 if [ ! -d "$OPENCLAW_DIR" ]; then
     echo -e "${RED}[FAIL]${NC} OpenClaw not found at $OPENCLAW_DIR"
