@@ -125,16 +125,12 @@ NPXWRAP
                 chmod +x "$BIN_DIR/npx"
                 _any_fixed=true
             fi
-            if [ -f "$NODE_DIR/bin/corepack" ] && head -1 "$NODE_DIR/bin/corepack" 2>/dev/null | grep -q '#!/usr/bin/env node'; then
-                sed -i "1s|#!/usr/bin/env node|#!$BIN_DIR/node|" "$NODE_DIR/bin/corepack"
-                _any_fixed=true
-            fi
             # Ensure pnpm wrapper exists in BIN_DIR
             if [ ! -x "$BIN_DIR/pnpm" ]; then
                 _PNPM_ENTRY=""
                 for _candidate in \
-                    "$NODE_DIR/lib/node_modules/corepack/dist/pnpm.js" \
                     "$NODE_DIR/lib/node_modules/pnpm/bin/pnpm.cjs" \
+                    "$NODE_DIR/lib/node_modules/pnpm/dist/pnpm.cjs" \
                     "$NODE_DIR/bin/pnpm"; do
                     if [ -f "$_candidate" ]; then
                         _PNPM_ENTRY="$_candidate"
@@ -316,33 +312,29 @@ if [ -n "${NPM_VER:-}" ]; then
     echo -e "${GREEN}[OK]${NC}   npm $NPM_VER"
 fi
 
-# ── Step 4.5: Enable corepack + install pnpm ──────────────────────
+# ── Step 4.5: Install pnpm ──────────────────────────────────────────
 
 echo ""
-echo "Enabling corepack and installing pnpm..."
+echo "Installing pnpm..."
 
 # Set PNPM_HOME so pnpm global bins go to a known location
 export PNPM_HOME="$OPENCLAW_DIR/pnpm-global"
 mkdir -p "$PNPM_HOME"
 
-# Enable corepack (ships with Node.js, manages pnpm/yarn versions)
-"$BIN_DIR/node" "$NODE_DIR/bin/corepack" enable --install-directory "$BIN_DIR" 2>/dev/null || true
-
-# Prepare pnpm via corepack (downloads the latest stable pnpm)
-if "$BIN_DIR/node" "$NODE_DIR/bin/corepack" prepare pnpm@latest --activate 2>/dev/null; then
-    echo -e "${GREEN}[OK]${NC}   corepack enabled, pnpm activated"
+# Install pnpm via npm (most reliable on Android/Termux glibc environment)
+if "$BIN_DIR/npm" install -g pnpm; then
+    echo -e "${GREEN}[OK]${NC}   pnpm installed via npm"
 else
-    echo -e "${YELLOW}[WARN]${NC} corepack prepare failed — falling back to npm install"
-    "$BIN_DIR/npm" install -g pnpm 2>/dev/null || true
+    echo -e "${RED}[FAIL]${NC} pnpm installation failed"
+    echo "       Try manually: $BIN_DIR/npm install -g pnpm"
+    exit 1
 fi
 
 # Create pnpm wrapper in BIN_DIR (uses our glibc node wrapper)
-# corepack enable may have created a shim, but we need a full wrapper
-# that goes through our glibc ld.so node
 _PNPM_ENTRY=""
 for _candidate in \
-    "$NODE_DIR/lib/node_modules/corepack/dist/pnpm.js" \
     "$NODE_DIR/lib/node_modules/pnpm/bin/pnpm.cjs" \
+    "$NODE_DIR/lib/node_modules/pnpm/dist/pnpm.cjs" \
     "$NODE_DIR/bin/pnpm"; do
     if [ -f "$_candidate" ]; then
         _PNPM_ENTRY="$_candidate"
@@ -372,6 +364,10 @@ exit \$_pnpm_exit
 PNPMWRAP
     chmod +x "$BIN_DIR/pnpm"
     echo -e "${GREEN}[OK]${NC}   pnpm wrapper created ($BIN_DIR/pnpm)"
+else
+    echo -e "${RED}[FAIL]${NC} Could not find pnpm entry point after install"
+    echo "       Expected at: $NODE_DIR/lib/node_modules/pnpm/bin/pnpm.cjs"
+    exit 1
 fi
 
 # Configure pnpm global bin and store directories
