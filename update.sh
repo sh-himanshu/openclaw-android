@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # update.sh - Thin wrapper that downloads and runs update-core.sh
-# Usage: curl -sL https://raw.githubusercontent.com/AidanPark/openclaw-android/main/update.sh | bash
+# Usage: curl -sL https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main/update.sh | bash
 #   or:  oaupdate  (after initial install)
 set -euo pipefail
 
@@ -8,7 +8,7 @@ RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-REPO_BASE_ORIGIN="https://raw.githubusercontent.com/AidanPark/openclaw-android/main"
+REPO_BASE_ORIGIN="https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main"
 REPO_BASE="$REPO_BASE_ORIGIN"
 LOGFILE="$HOME/.openclaw-android/update.log"
 

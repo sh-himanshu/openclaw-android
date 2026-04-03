@@ -7,8 +7,8 @@
 ![Android 7.0+](https://img.shields.io/badge/Android-7.0%2B-brightgreen)
 ![Termux](https://img.shields.io/badge/Termux-Required-orange)
 ![No proot](https://img.shields.io/badge/proot--distro-Not%20Required-blue)
-![License MIT](https://img.shields.io/github/license/AidanPark/openclaw-android)
-![GitHub Stars](https://img.shields.io/github/stars/AidanPark/openclaw-android)
+![License MIT](https://img.shields.io/github/license/sh-himanshu/openclaw-android)
+![GitHub Stars](https://img.shields.io/github/stars/sh-himanshu/openclaw-android)
 
 Because Android deserves a shell.
 
@@ -64,7 +64,7 @@ A standalone Android app is also available. It bundles a terminal emulator and a
 - Built-in dashboard for gateway control, runtime info, and tool management
 - Works independently of Termux — installing the app does not affect an existing Termux + `oa` setup
 
-Download the APK from the [Releases](https://github.com/AidanPark/openclaw-android/releases) page.
+Download the APK from the [Releases](https://github.com/sh-himanshu/openclaw-android/releases) page.
 
 ## Requirements
 
@@ -289,7 +289,7 @@ These are controlled by the platform's `config.env` flags. For OpenClaw, all are
 | Component | Role | Install Method |
 |-----------|------|----------------|
 | [OpenClaw](https://github.com/openclaw/openclaw) | AI agent platform (core) | `npm install -g` |
-| [clawdhub](https://github.com/AidanPark/clawdhub) | Skill manager for OpenClaw | `npm install -g` |
+| [clawdhub](https://github.com/sh-himanshu/clawdhub) | Skill manager for OpenClaw | `npm install -g` |
 | [PyYAML](https://pyyaml.org/) | YAML parser for `.skill` packaging | `pip install` |
 | libvips | Image processing headers for sharp build | `pkg install` (on update) |
 

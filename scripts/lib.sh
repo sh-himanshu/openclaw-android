@@ -14,11 +14,11 @@ NC='\033[0m'
 PROJECT_DIR="$HOME/.openclaw-android"
 BIN_DIR="$PROJECT_DIR/bin"
 PLATFORM_MARKER="$PROJECT_DIR/.platform"
-REPO_BASE_ORIGIN="https://raw.githubusercontent.com/AidanPark/openclaw-android/main"
+REPO_BASE_ORIGIN="https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main"
 REPO_BASE_MIRRORS=(
-    "https://ghfast.top/https://raw.githubusercontent.com/AidanPark/openclaw-android/main"
-    "https://ghproxy.net/https://raw.githubusercontent.com/AidanPark/openclaw-android/main"
-    "https://mirror.ghproxy.com/https://raw.githubusercontent.com/AidanPark/openclaw-android/main"
+    "https://ghfast.top/https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main"
+    "https://ghproxy.net/https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main"
+    "https://mirror.ghproxy.com/https://raw.githubusercontent.com/sh-himanshu/openclaw-android/main"
 )
 
 # Detect reachable REPO_BASE (origin first, then mirrors)
