@@ -363,11 +363,20 @@ NPXWRAP
     fi
 
     # Create pnpm wrapper in BIN_DIR (uses our glibc node wrapper)
+    # npm's global prefix derives from process.execPath (BIN_DIR/node),
+    # so global modules land in OPENCLAW_DIR/lib/node_modules/, not NODE_DIR/lib/
+    _NPM_GLOBAL_ROOT=$("$BIN_DIR/npm" root -g 2>/dev/null) || _NPM_GLOBAL_ROOT=""
     _PNPM_ENTRY=""
     for _candidate in \
+        "${_NPM_GLOBAL_ROOT:+$_NPM_GLOBAL_ROOT/pnpm/bin/pnpm.cjs}" \
+        "${_NPM_GLOBAL_ROOT:+$_NPM_GLOBAL_ROOT/pnpm/dist/pnpm.cjs}" \
         "$NODE_DIR/lib/node_modules/corepack/dist/pnpm.js" \
         "$NODE_DIR/lib/node_modules/pnpm/bin/pnpm.cjs" \
+        "$NODE_DIR/lib/node_modules/pnpm/dist/pnpm.cjs" \
+        "$PROJECT_DIR/lib/node_modules/pnpm/bin/pnpm.cjs" \
+        "$PROJECT_DIR/lib/node_modules/pnpm/dist/pnpm.cjs" \
         "$NODE_DIR/bin/pnpm"; do
+        [ -z "$_candidate" ] && continue
         if [ -f "$_candidate" ]; then
             _PNPM_ENTRY="$_candidate"
             break

@@ -127,11 +127,17 @@ NPXWRAP
             fi
             # Ensure pnpm wrapper exists in BIN_DIR
             if [ ! -x "$BIN_DIR/pnpm" ]; then
+                _NPM_GLOBAL_ROOT=$("$BIN_DIR/npm" root -g 2>/dev/null) || _NPM_GLOBAL_ROOT=""
                 _PNPM_ENTRY=""
                 for _candidate in \
+                    "${_NPM_GLOBAL_ROOT:+$_NPM_GLOBAL_ROOT/pnpm/bin/pnpm.cjs}" \
+                    "${_NPM_GLOBAL_ROOT:+$_NPM_GLOBAL_ROOT/pnpm/dist/pnpm.cjs}" \
                     "$NODE_DIR/lib/node_modules/pnpm/bin/pnpm.cjs" \
                     "$NODE_DIR/lib/node_modules/pnpm/dist/pnpm.cjs" \
+                    "$OPENCLAW_DIR/lib/node_modules/pnpm/bin/pnpm.cjs" \
+                    "$OPENCLAW_DIR/lib/node_modules/pnpm/dist/pnpm.cjs" \
                     "$NODE_DIR/bin/pnpm"; do
+                    [ -z "$_candidate" ] && continue
                     if [ -f "$_candidate" ]; then
                         _PNPM_ENTRY="$_candidate"
                         break
@@ -331,11 +337,19 @@ else
 fi
 
 # Create pnpm wrapper in BIN_DIR (uses our glibc node wrapper)
+# Determine where npm actually installed global modules — process.execPath
+# points to BIN_DIR/node, so npm's prefix is OPENCLAW_DIR (not NODE_DIR).
+_NPM_GLOBAL_ROOT=$("$BIN_DIR/npm" root -g 2>/dev/null) || _NPM_GLOBAL_ROOT=""
 _PNPM_ENTRY=""
 for _candidate in \
+    "${_NPM_GLOBAL_ROOT:+$_NPM_GLOBAL_ROOT/pnpm/bin/pnpm.cjs}" \
+    "${_NPM_GLOBAL_ROOT:+$_NPM_GLOBAL_ROOT/pnpm/dist/pnpm.cjs}" \
     "$NODE_DIR/lib/node_modules/pnpm/bin/pnpm.cjs" \
     "$NODE_DIR/lib/node_modules/pnpm/dist/pnpm.cjs" \
+    "$OPENCLAW_DIR/lib/node_modules/pnpm/bin/pnpm.cjs" \
+    "$OPENCLAW_DIR/lib/node_modules/pnpm/dist/pnpm.cjs" \
     "$NODE_DIR/bin/pnpm"; do
+    [ -z "$_candidate" ] && continue
     if [ -f "$_candidate" ]; then
         _PNPM_ENTRY="$_candidate"
         break
@@ -366,7 +380,8 @@ PNPMWRAP
     echo -e "${GREEN}[OK]${NC}   pnpm wrapper created ($BIN_DIR/pnpm)"
 else
     echo -e "${RED}[FAIL]${NC} Could not find pnpm entry point after install"
-    echo "       Expected at: $NODE_DIR/lib/node_modules/pnpm/bin/pnpm.cjs"
+    echo "       npm global root: ${_NPM_GLOBAL_ROOT:-unknown}"
+    echo "       Searched: \$NPM_ROOT/pnpm/bin/pnpm.cjs, .../dist/pnpm.cjs, $NODE_DIR/lib/..., $OPENCLAW_DIR/lib/..."
     exit 1
 fi
 
